@@ -363,7 +363,7 @@ class OculusBuff(Buff):
 def oculus():
 	item = Item()
 	item.name = "Oculus"
-	item.description = "你的所有咒语获得 15 点射程且无需视野，持续 10 回合。"
+	item.description = "你的所有咒语获得 15 点射程且无需视线，持续 10 回合。"
 	item.set_spell(PotionSpell(OculusBuff, 10))
 	return item
 

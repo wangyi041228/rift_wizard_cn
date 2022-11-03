@@ -4266,7 +4266,7 @@ class PyGameView(object):
 		elif spell.range:
 			fmt = "射程 %d" % spell.get_stat('range')
 			if not spell.requires_los:
-				fmt += "（无需视野）"
+				fmt += "（无需视线）"
 			self.draw_string(fmt, self.examine_display, cur_x, cur_y)
 			cur_y += self.linesize
 
