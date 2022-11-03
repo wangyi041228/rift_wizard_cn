@@ -6,7 +6,6 @@ import bisect
 import tcod as libtcod
 import time
 import os
-import loc
 
 logger = None
 
@@ -1145,8 +1144,7 @@ class SpellUpgrade(Upgrade):
 		self.amount = amount
 		self.exc_class = exc_class
 		if exc_class:
-			_name = loc.dic.get(exc_class, exc_class)
-			self.description += "\n%s 只能选择一种 %s 升级" % (spell.name, _name)
+			self.description += "\n%s can be upgraded with only 1 %s upgrade" % (spell.name, exc_class)
 
 class Immobilize(Buff):
 
