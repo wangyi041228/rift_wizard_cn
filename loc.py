@@ -175,13 +175,13 @@ dic = {
     'Gold Drake': '黄金幼龙',
     "Heaven's Wrath": '天堂之怒',
     'Imp Swarm': '小鬼群',
-    'Mystic Memory': '神秘记忆',
+    'Mystic Memory': '神秘回忆',
     'Searing Orb': '灼热法球',
     'Twilight Gaze': '暮光凝视',
     'Knightly Oath': '骑士誓言',
     'Meteor Shower': '陨石雨',
     'Multicast': '多重施法',
-    'Spikeball Factory': '刺球厂',
+    'Spikeball Factory': '钉球工厂',
     'Word of Beauty': '美丽真言',
     'Word of Chaos': '混沌真言',
     'Word of Ice': '寒冰真言',
@@ -291,8 +291,14 @@ dic = {
 
     'Goblin': '哥布林',
     'Bat': '蝙蝠',
+
+    'Bag of Bugs': '一袋虫子',
+    'Rolling Spike Ball': '滚动钉球',
     '': '',
-    '': '',
+
+    'Gate': '大门',
+
+    'Memory Orb': '回忆法珠',
 }
 tag_dic = {
     'Fire': 'F火焰',
