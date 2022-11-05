@@ -70,7 +70,9 @@ def are_hostile(unit1, unit2):
 	return False
 
 def format_attr(attr):
-
+	# 汉化 属性格式化
+	if attr in loc.attr_dic:
+		return loc.attr_dic[attr]
 	if is_stat_pct(attr):
 		attr = "% " + attr
 
@@ -1145,8 +1147,9 @@ class SpellUpgrade(Upgrade):
 		self.amount = amount
 		self.exc_class = exc_class
 		if exc_class:
-			_name = loc.dic.get(exc_class, exc_class)
-			self.description += "\n%s 只能选择一种 %s 升级" % (spell.name, _name)
+			_name0 = loc.dic.get(spell.name, spell.name)
+			_name1 = loc.attr_dic.get(exc_class, exc_class)
+			self.description += "\n%s只能选择一种%s升级" % (_name0, _name1)
 
 class Immobilize(Buff):
 

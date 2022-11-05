@@ -29,8 +29,9 @@ victory_text = """胜利
 welcome_text = """你好
 欢迎来到《裂隙巫师》的世界。
 按 H 以查看帮助说明，了解操作方式。
-鼠标悬浮在物件上以查看详情。
-按 S 以学习咒语。"""
+鼠标悬浮在物件上来查看详情。
+按 S 来学习咒语。
+至多学习 20 个咒语。"""
 
 deploy_text = """你半脚踏进了裂隙。
 你可以选择在下个世界中的任何一个地块现身（回车，左键单击），
@@ -78,12 +79,12 @@ Shift + Up/Down（角色表）：更改所选咒语的快捷键"""
 advanced_tips = """状态效果
 
 击晕：无法行动。
-中度：每回合受到 1 点毒性伤害，无法治疗。
+中毒：每回合受到 1 点毒性伤害，无法治疗。
 石化：无法行动，获得 100 寒冰和闪电抗性，获得 75 物理和火焰抗性。
 璃化：无法行动，获得 100 寒冰和闪电抗性，75 火焰抗性，失去 100 物理抗性。
 冻结：无法行动。受到火焰或物理伤害时结束。100 寒冰抗性的单位免收影响。
 狂暴：变得对所有其他单位敌对。会攻击友军，并会被友军攻击。
-蔽目：所有法术的射程降低到 1。
+致盲：所有法术的射程降低到 1。
 引导：若未采取其他行动，对相同目标施放之前的咒语。
 护盾（SH）：具有护盾的单位将受伤时，改为失去 1 点护盾。"""
 
@@ -91,15 +92,15 @@ endings = ["乌托邦", "涅槃", "诸神黄昏"]
 
 frozen_desc = "[Frozen] 无法行动。受到 [fire] 或 [physical] 伤害时结束。"
 petrify_desc = ("[Petrified] 的单位无法行动。\n"
-				"[Petrified] 的单位获得 [100_ice:ice] 抗性。\n"
-				"[Petrified] 的单位获得 [100_lightning:lightning] 抗性。\n"
-				"[Petrified] 的单位获得 [75_physical:physical] 抗性。\n"
-				"[Petrified] 的单位获得 [75_fire:fire] 抗性。")
+				"[Petrified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
+				"[Petrified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
+				"[Petrified] 的单位获得 [_75_点物理:physical] 抗性。\n"
+				"[Petrified] 的单位获得 [_75_点火焰:fire] 抗性。")
 glassify_desc = ("[Glassified] 的单位无法行动。\n"
-				"[Glassified] 的单位获得 [-100_physical:physical] 抗性。\n"
-				"[Glassified] 的单位获得 [100_ice:ice] 抗性。\n"
-				"[Glassified] 的单位获得 [100_lightning:lightning] 抗性。\n"
-				"[Glassified] 的单位获得 [75_fire:fire] 抗性。")
+				"[Glassified] 的单位获得 [_-100_点物理:physical] 抗性。\n"
+				"[Glassified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
+				"[Glassified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
+				"[Glassified] 的单位获得 [_75_点火焰:fire] 抗性。")
 stun_desc = "[Stunned] 的单位无法行动。"
 berserk_desc = "[Berserk] 变得对所有其他单位敌对，会攻击友军，并会被友军攻击。"
 poison_desc = "[Poisoned] 每回合受到 1 点 [poison] 伤害"

@@ -317,7 +317,7 @@ class YouthElixerBuff(Buff):
 def youth_elixer():
 	item = Item()
 	item.name = "Elixir of Youth"
-	item.description = "所有咒语消耗的充能立刻返还，持续 7 回合。"
+	item.description = "所有咒语消耗的充能立刻得到返还，持续 7 回合。"
 	item.set_spell(PotionSpell(YouthElixerBuff, 7))
 	return item
 
@@ -371,7 +371,7 @@ class MemoryEnhancement(Buff):
 
 	def on_init(self):
 		self.name = "Memory Enhancement"
-		self.description = "回忆法珠的效果翻倍。"
+		self.description = "记忆法珠的效果翻倍。"
 		self.owner_triggers[EventOnItemPickup] = self.on_pickup
 
 	def on_pickup(self, evt):
@@ -381,7 +381,7 @@ class MemoryEnhancement(Buff):
 def memory_draught():
 	item = Item()
 	item.name = "Draught of Memories"
-	item.description = "你拾起的回忆法珠效果翻倍，持续 10 回合。"
+	item.description = "你拾起的记忆法珠效果翻倍，持续 10 回合。"
 	item.set_spell(PotionSpell(MemoryEnhancement, 10))
 	return item
 
