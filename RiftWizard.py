@@ -167,7 +167,8 @@ TITLE_SELECTION_BESTIARY = 4
 TITLE_SELECTION_DISCORD = 5
 TITLE_SELECTION_EXIT = 6
 TITLE_SELECTION_QQ = 7
-TITLE_SELECTION_MAX = TITLE_SELECTION_EXIT
+TITLE_SELECTION_INSTRUCTIONS = 8
+TITLE_SELECTION_MAX = TITLE_SELECTION_INSTRUCTIONS
 
 OPTION_HELP = 0
 OPTION_SOUND_VOLUME = 1
@@ -2915,7 +2916,7 @@ class PyGameView(object):
 
 		if not shoptions:
 			if self.shop_type == SHOP_TYPE_SHOP:
-				self.draw_string("没有可在此祭祠升级的咒语。", self.middle_menu_display, 0, cur_y, content_width=self.middle_menu_display.get_width(), center=True)
+				self.draw_string("没有可在此神殿升级的咒语。", self.middle_menu_display, 0, cur_y, content_width=self.middle_menu_display.get_width(), center=True)
 			elif self.shop_type in [SHOP_TYPE_SPELLS, SHOP_TYPE_SPELLS]:
 				self.draw_string("没有满足筛选条件的咒语", self.middle_menu_display, cur_x, cur_y, HIGHLIGHT_COLOR)
 
@@ -4123,7 +4124,7 @@ class PyGameView(object):
 		cur_y += linesize
 
 		color = self.game.p1.discount_tag.color.to_tup() if self.game.p1.discount_tag else (255, 255, 255)
-		self.draw_string("角色表 (C)", self.character_display, cur_x, cur_y, color=color, mouse_content=CHAR_SHEET_TARGET)
+		self.draw_string("角色 (C)", self.character_display, cur_x, cur_y, color=color, mouse_content=CHAR_SHEET_TARGET)
 
 		self.screen.blit(self.character_display, (0, 0))
 
@@ -4698,6 +4699,7 @@ class PyGameView(object):
 			opts.append((TITLE_SELECTION_NEW, "开始游戏"))
 
 		opts.extend([(TITLE_SELECTION_OPTIONS, "选项设置"),
+					 (TITLE_SELECTION_INSTRUCTIONS, "游戏规则"),
 					 (TITLE_SELECTION_BESTIARY, "怪物图鉴"),
 					 (TITLE_SELECTION_DISCORD, "DISCORD"),
 					 (TITLE_SELECTION_QQ, "QQ群"),
@@ -4779,8 +4781,10 @@ class PyGameView(object):
 				self.load_game()
 		if selection == TITLE_SELECTION_DISCORD:
 			webbrowser.open("https://discord.gg/NngFZ7B")
-		if selection == TITLE_SELECTION_DISCORD:
+		if selection == TITLE_SELECTION_QQ:
 			webbrowser.open("https://jq.qq.com/?_wv=1027&k=C1ejcsdb")
+		if selection == TITLE_SELECTION_INSTRUCTIONS:
+			self.show_help()
 		if selection == TITLE_SELECTION_EXIT:
 			self.running = False
 		if selection == TITLE_SELECTION_BESTIARY:
@@ -4792,7 +4796,7 @@ class PyGameView(object):
 				("每周挑战", GAME_MODE_WEEKLY)]
 
 		rect_w = self.font.size("魔导师的试炼")[0]
-		cur_x = self.screen.get_width() // 2 - (self.font.size("大法师试炼")[0] // 2)
+		cur_x = self.screen.get_width() // 2 - (self.font.size("魔导师的试炼")[0] // 2)
 		cur_y = self.screen.get_height() // 2 - self.linesize * 4
 
 		cur_color = (255, 255, 255)
@@ -5000,7 +5004,7 @@ class PyGameView(object):
 			cur_y += self.linesize
 
 		else:
-			self.draw_string("返回跳题画面", self.screen, cur_x, cur_y, mouse_content=OPTION_EXIT, content_width=rect_w)
+			self.draw_string("返回标题画面", self.screen, cur_x, cur_y, mouse_content=OPTION_EXIT, content_width=rect_w)
 			cur_y += self.linesize
 
 
@@ -5212,7 +5216,7 @@ class PyGameView(object):
 
 		log_fn = os.path.join('saves', str(self.game.run_number), 'log', str(level), 'combat_log.%d.txt' % turn)
 		if os.path.exists(log_fn):
-			with open(log_fn, 'r') as logfile:
+			with open(log_fn, 'r', encoding='utf8') as logfile:
 				self.combat_log_lines = [s.strip() for s in logfile.readlines()]
 
 	def draw_combat_log(self):
@@ -5363,7 +5367,7 @@ class PyGameView(object):
 		if self.game.level_cache:
 			lines = self.game.level_cache
 		else:
-			with open(stats_filename, 'r') as statfile:
+			with open(stats_filename, 'r', encoding='utf8') as statfile:
 				lines = [s.strip() for s in statfile.readlines()]
 				self.game.level_cache = lines
 
@@ -5713,7 +5717,7 @@ except:
 		for mod in loaded_mods:
 			print(mod)
 
-	with open('crash.txt', 'w') as file:
+	with open('crash.txt', 'w', encoding='utf8') as file:
 		traceback.print_exc(file=file)
 		if loaded_mods:
 			file.write("Loaded mods:\n")

@@ -265,7 +265,7 @@ class DisruptShrinesSpell(Spell):
 def shrine_disruptor():
 	item = Item()
 	item.name = "Shrine Disruptor"
-	item.description = "重制当前关卡中的所有祭祠。"
+	item.description = "重制当前关卡中的所有神殿。"
 	item.set_spell(DisruptShrinesSpell())
 	return item
 

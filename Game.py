@@ -1,3 +1,4 @@
+import loc
 from Level import *
 from LevelGen import *
 import sys
@@ -140,53 +141,58 @@ class Game():
 		if not os.path.exists(dirname):
 			os.makedirs(dirname)
 
-		with open(filename, 'w') as stats:
-			stats.write("Realm %d\n" % self.level_num)
+		with open(filename, 'w', encoding='utf8') as stats:
+			stats.write("第 %d 关\n" % self.level_num)
 			if self.trial_name:
 				stats.write(self.trial_name + "\n")
-			stats.write("Outcome: %s\n" % ("VICTORY" if victory else "DEFEAT"))
-			stats.write("\nTurns taken:\n")
-			stats.write("%d (L)\n" % self.cur_level.turn_no)
-			stats.write("%d (G)\n" % self.total_turns)
+			stats.write("结果：%s\n" % ("胜利" if victory else "失败"))
+			stats.write("\n回合数：\n")
+			stats.write("%d（本关）\n" % self.cur_level.turn_no)
+			stats.write("%d（全部）\n" % self.total_turns)
 
 			counts = sorted(self.cur_level.spell_counts.items(), key=lambda t: -t[1])
 
 			spell_counts = [(s, c) for (s, c) in counts if not s.item]
 			if spell_counts:
-				stats.write("\nSpell Casts:\n")
+				stats.write("\n施放法术：\n")
 				for s, c in spell_counts:
-					stats.write("%s: %d\n" % (s.name, c))
+					_name = loc.dic.get(s.name, s.name)
+					stats.write("%s：%d\n" % (_name, c))
 
 			dealers = sorted(self.cur_level.damage_dealt_sources.items(), key=lambda t: -t[1])
 			if dealers:
-				stats.write("\nDamage to Enemies:\n")
+				stats.write("\n对敌伤害：\n")
 				for s, d in dealers[:5]:
-					stats.write("%d %s\n" % (d, s))
+					_name = loc.dic.get(s, s)
+					stats.write("%d %s\n" % (d, _name))
 				if len(dealers) > 6:
 					total_other = sum(d for s,d in dealers[5:])
-					stats.write("%d Other\n" % total_other)
+					stats.write("%d 其他\n" % total_other)
 
 			sources = sorted(self.cur_level.damage_taken_sources.items(), key=lambda t: -t[1])
 			if sources:
-				stats.write("\nDamage to Wizard:\n")				
+				stats.write("\n受到伤害：\n")
 				for s, d in sources[:5]:
-					stats.write("%d %s\n" % (d, s))
+					_name = loc.dic.get(s, s)
+					stats.write("%d %s\n" % (d, _name))
 				if len(sources) > 6:
 					total_other = sum(d for s,d in sources[5:])
-					stats.write("%d Other\n" % total_other)
+					stats.write("%d 其他\n" % total_other)
 
 			item_counts = [(s, c) for (s, c) in counts if s.item]
 			if item_counts:
-				stats.write("\nItems Used:\n")
+				stats.write("\n使用物品：\n")
 				for s, c in item_counts:
-					stats.write("%s: %d\n" % (s.name, c))
+					_name = loc.dic.get(s.name, s.name)
+					stats.write("%s：%d\n" % (_name, c))
 
 			if self.recent_upgrades:
-				stats.write("\nPurchases:\n")
+				stats.write("\n习得技能：\n")
 				for u in self.recent_upgrades:
-					fmt = u.name
+					fmt = loc.dic.get(u.name, u.name)
 					if getattr(u, 'prereq', None):
-						fmt = "%s %s" % (u.prereq.name, u.name)
+						_name1 = loc.dic.get(u.prereq.name, u.prereq.name)
+						fmt = "%s：%s" % (_name1, fmt)
 					stats.write("%s\n" % fmt)
 			self.level_cache = None
 			self.recent_upgrades.clear()
@@ -556,7 +562,7 @@ class Game():
 		self.save_game()
 
 		if self.cur_level.gen_params:
-			logging.getLogger("Level").debug("\nEntering level %d, id=%d" % (self.level_num, self.cur_level.gen_params.level_id))
+			logging.getLogger("Level").debug("\n进入第 %d 关，id=%d" % (self.level_num, self.cur_level.gen_params.level_id))
 
 		return True
 

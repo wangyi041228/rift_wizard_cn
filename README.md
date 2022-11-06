@@ -29,7 +29,7 @@
   * [咒语](Spells.py)
   * [被动](Upgrades.py)
   * [通用](CommonContent.py)
-  * [祭祠](Shrines.py)
+  * [神殿](Shrines.py)
   * [变体规则](Mutators.py)
   * [游戏](Game.py)
 * 字体、大小和界面等。

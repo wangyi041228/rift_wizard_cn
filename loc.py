@@ -522,7 +522,7 @@ dic = {
     'Earthquake Orb': '地震法球',
     'Dragon Horn': '巨龙号角',
     'Portal Disruptor': '传送门干扰器',
-    'Shrine Disruptor': '祭祠干扰器',
+    'Shrine Disruptor': '神殿干扰器',
     'Portal Key': '传送门钥匙',
     'Orb of Corruption': '腐败法球',
     'Elixir of Youth': '不老琼浆',
