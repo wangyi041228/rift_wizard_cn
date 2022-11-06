@@ -3855,7 +3855,7 @@ class PyGameView(object):
 						_name = loc.dic.get(word, word)
 						if all((i.isascii() for i in _name)):  # i in '0123456789+-%'
 							_name += ' '
-						if _needspace and _name[0] in '0123456789+-':
+						if _needspace and _name[0] in '0123456789+-%':
 							_name = ' ' + _name
 						while _name:
 							_len = len(_name)
@@ -4185,7 +4185,8 @@ class PyGameView(object):
 			for tag in Tags:
 				if tag not in self.examine_target.tags:
 					continue
-				self.draw_string(tag.name, self.examine_display, cur_x, cur_y, (tag.color.r, tag.color.g, tag.color.b))
+				_name = loc.dic.get(tag.name, tag.name)
+				self.draw_string(_name, self.examine_display, cur_x, cur_y, (tag.color.r, tag.color.g, tag.color.b))
 				cur_y += self.linesize
 			cur_y += self.linesize
 
@@ -4201,7 +4202,9 @@ class PyGameView(object):
 		for tag, bonuses in self.examine_target.tag_bonuses.items():
 			for attr, val in bonuses.items():
 				#cur_color = tag.color
-				fmt = "%s 咒语和被动获得 [_%s_%s:%s]。" % (tag.name, val, attr, attr)
+				_namge = loc.dic.get(tag.name, tag.name)
+				_attr = loc.attrc_dic.get(attr, '') + loc.attr_dic.get(attr, attr)
+				fmt = "%s咒语和被动获得 [_%s_%s:%s]。" % (_namge, val, _attr, attr)
 				lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, width=width)
 				cur_y += (lines+1) * self.linesize
 			cur_y += self.linesize
@@ -4216,13 +4219,12 @@ class PyGameView(object):
 
 			for attr, val in useful_bonuses:
 				_name = loc.dic.get(spell_ex.name, spell_ex.name)
-				_attr = loc.attr_dic.get(attr, attr)
-				_attrc = loc.attrc_dic.get(attr, '')
+				_attr = loc.attrc_dic.get(attr, '') + loc.attr_dic.get(attr, attr)
 				# 汉化 量词
 				if attr in tooltip_colors:
-					fmt = "%s 获得 [%s_%s%s:%s]" % (_name, val, _attrc, _attr, attr)
+					fmt = "%s 获得 [_%s_%s:%s]" % (_name, val, _attr, attr)
 				else:
-					fmt = "%s 获得 %d %s%s" % (_name, val, _attrc, format_attr(attr))
+					fmt = "%s 获得 %d %s" % (_name, val, _attr)
 				lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, width=width)
 				cur_y += (lines+1) * self.linesize
 			cur_y += self.linesize
@@ -4239,7 +4241,8 @@ class PyGameView(object):
 		for tag in Tags:
 			if tag not in self.examine_target.resists:
 				continue
-			self.draw_string('%d%% %s 抵抗' % (self.examine_target.resists[tag], tag.name), self.examine_display, cur_x, cur_y, tag.color.to_tup())
+			_name = loc.dic.get(tag.name, tag.name)
+			self.draw_string('%d%% %s抵抗' % (self.examine_target.resists[tag], _name), self.examine_display, cur_x, cur_y, tag.color.to_tup())
 			has_resists = True
 			cur_y += self.linesize
 
@@ -4256,7 +4259,7 @@ class PyGameView(object):
 			if existing:
 				if not desc:
 					desc = ""
-				desc += "\nWARNING: Will replace %s" % existing[0].name
+				desc += "\n警告：将替代 %s" % existing[0].name
 
 		if desc:
 			self.draw_wrapped_string(desc, self.examine_display, cur_x, cur_y, width, extra_space=True)
@@ -4427,9 +4430,8 @@ class PyGameView(object):
 			scaledimage = pygame.transform.scale(sprite, (32, 32))
 
 			self.examine_display.blit(scaledimage, (cur_x, cur_y))
-			if len(name) > 20:
-				name = name[0:18] + '..'
-			self.draw_string(name, self.examine_display, cur_x + 36, cur_y + 10, color)
+			_name = loc.dic.get(name, name)
+			self.draw_string(_name, self.examine_display, cur_x + 36, cur_y + 10, color)
 			cur_y += 32 + 4
 
 		cur_y += linesize
@@ -4446,7 +4448,8 @@ class PyGameView(object):
 
 			self.examine_display.blit(scaledimage, (cur_x, cur_y))
 
-			self.draw_string(gen_params.shrine.name, self.examine_display, 64 + border_margin, cur_y + 24, content_width=width)
+			_name = loc.dic.get(gen_params.shrine.name, gen_params.shrine.name)
+			self.draw_string(_name, self.examine_display, 64 + border_margin, cur_y + 24, content_width=width)
 
 			cur_y += 64 + linesize
 
@@ -4463,7 +4466,8 @@ class PyGameView(object):
 			scaledimage = pygame.transform.scale(subimage, (32, 32))
 
 			self.examine_display.blit(scaledimage, (cur_x, cur_y))
-			self.draw_string(item.name, self.examine_display, cur_x + 38, cur_y+8)
+			_name = loc.dic.get(item.name, item.name)
+			self.draw_string(_name, self.examine_display, cur_x + 38, cur_y+8)
 
 			cur_y += 32
 
@@ -4482,7 +4486,6 @@ class PyGameView(object):
 			cur_y += 32
 
 		cur_x = border_margin
-
 
 
 	def draw_examine_unit(self):
@@ -4505,7 +4508,8 @@ class PyGameView(object):
 		linesize = self.linesize
 		unit = self.examine_target
 
-		lines = self.draw_wrapped_string(unit.name, self.examine_display, cur_x, cur_y, width=17*16)
+		_name = loc.dic.get(unit.name, unit.name)
+		lines = self.draw_wrapped_string(_name, self.examine_display, cur_x, cur_y, width=17*16)
 		cur_y += (lines+1) * linesize
 
 		if unit.team == TEAM_PLAYER:

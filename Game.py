@@ -154,7 +154,7 @@ class Game():
 
 			spell_counts = [(s, c) for (s, c) in counts if not s.item]
 			if spell_counts:
-				stats.write("\n施放法术：\n")
+				stats.write("\n施放咒语：\n")
 				for s, c in spell_counts:
 					_name = loc.dic.get(s.name, s.name)
 					stats.write("%s：%d\n" % (_name, c))

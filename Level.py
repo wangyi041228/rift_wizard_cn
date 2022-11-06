@@ -750,7 +750,7 @@ class Item(object):
 		self.sprite = Sprite("!", Color(255, 255, 255))
 		self.buff = None
 		self.name = "Unnamed Item"
-		self.description = "Undescribed Item"
+		self.description = "无描述的物品"
 		self.cost = 1
 		self.visible = True
 		self.spell = None
@@ -1170,7 +1170,7 @@ class SiegeWeaponBuff(Buff):
 	def on_init(self):
 		self.name = "Siege Machine"
 		self.buff_type = BUFF_TYPE_PASSIVE
-		self.description = "Must be operated by an adjacent %s." % self.operator_name
+		self.description = "必须由相邻对的 %s 操作。" % loc.dic.get(self.operator_name, self.operator_name)
 
 class BlindBuff(Buff):
 
@@ -1179,7 +1179,7 @@ class BlindBuff(Buff):
 		self.stack_type	= STACK_REPLACE
 		self.buff_type = BUFF_TYPE_CURSE
 		self.asset = ['status', 'blind']
-		self.description = "All spells reduced to melee range"
+		self.description = "所有咒语降为近战射程。"
 
 
 class BerserkBuff(Buff):
@@ -1200,7 +1200,7 @@ class Stun(Buff):
 		self.name = "Stunned"
 		self.color = Color(220, 220, 220)
 		self.asset = ['status', 'stun']
-		self.description = "Cannot move or cast spells."
+		self.description = "无法移动或施放咒语。"
 
 	def on_attempt_advance(self):
 		return False
@@ -1226,7 +1226,7 @@ class StunImmune(Buff):
 		self.name = "Clarity"
 
 	def get_tooltip(self):
-		return "Immune to disabling debuffs"
+		return "免疫减益效果。"
 
 class CowardBuff(Buff):
 
@@ -1251,7 +1251,7 @@ class Unit(object):
 		self.clarity = 0
 		self.spells = []
 		self.name = "Unnamed"
-		self.description = "Undescribed"
+		self.description = "无描述"
 		self.mana = 0
 		self.resists = defaultdict(lambda : 0)
 		self.cool_downs = {}
@@ -1807,7 +1807,7 @@ class Tile(object):
 		self.prop = None
 		self.cloud = None
 		self.name = "Tile"
-		self.description = "Tile"
+		self.description = "地块"
 		self.x = x
 		self.y = y
 		self.is_chasm = False
@@ -2029,7 +2029,7 @@ class HealDot(Prop):
 	def __init__(self):
 		self.sprite = Sprite(chr(7), color=Color(255, 100, 100))
 		self.name = "Heal Dot"
-		self.description = "Restores max health"
+		self.description = "治疗到生命上限。"
 
 	def on_player_enter(self, player):
 
@@ -2042,7 +2042,7 @@ class ManaDot(Prop):
 	def __init__(self):
 		self.name = "Memory Orb"
 		self.sprite = Sprite(chr(249), color=COLOR_MANA)
-		self.description = "Grants 1 SP"
+		self.description = "获得 1 点技能点。"
 		self.asset = ['tiles', 'items', 'animated', 'mana_orb']
 
 	def on_player_enter(self, player):
@@ -2056,19 +2056,21 @@ class ChargeDot(Prop):
 		self.name = "Spell Recharge"
 		self.sprite = Sprite(chr(7), color=COLOR_MANA)
 		self.mana = 100
-		self.description = "Restores all spell charges"
+		self.description = "所有咒语补满充能。"
 
 	def on_player_enter(self, player):
 		for spell in player.spells:
 			spell.cur_charges = spell.max_charges
 		self.level.remove_prop(self)
 
-class SpellScroll(Prop):
 
+class SpellScroll(Prop):
 	def __init__(self, spell):
 		self.spell = spell
-		self.name = 'Scroll: %s' % spell.name
-		self.description = 'Decrease the cost to learn %s by 1 SP' % spell.name
+		_name = loc.dic.get(spell.name, spell.name)
+		# 汉化 唯一改动name的地方
+		self.name = '卷轴：%s' % _name
+		self.description = '学习 %s 的技能点降低 1 点' % _name
 		self.asset = ['tiles', 'library', 'library_white']
 
 	def on_player_enter(self, player):
@@ -2082,7 +2084,7 @@ class HeartDot(Prop):
 	def __init__(self, bonus=10):
 		self.name = "Ruby Heart"
 		self.bonus = bonus
-		self.description = "Increase max hp by %d" % self.bonus
+		self.description = "提升 %d 点生命上限。" % self.bonus
 		self.sprite = Sprite(chr(3), Color(255, 0, 0))
 		self.asset = ['tiles', 'items', 'animated', 'ruby_heart']
 
@@ -2097,7 +2099,7 @@ class GoldDot(Prop):
 		self.name = "Gold"
 		self.sprite = Sprite(chr(249), color=Color(252, 186, 3))
 		self.gold = 1
-		self.description = "%d gold seeking a worthy owner" % self.gold
+		self.description = "%d 块黄金等待明主。" % self.gold
 
 	def on_player_enter(self, player):
 		player.gold += self.gold
@@ -2115,7 +2117,7 @@ class PlaceOfPower(Prop):
 		self.tag = tag
 		self.name = "%s Circle" % self.tag.name
 		self.sprite = Sprite(chr(247), self.tag.color)
-		self.description = '%s spells, spell upgrades, and passive skills are 1SP cheaper here' % self.tag.name
+		self.description = '在这里学习 %s 咒语、咒语升级和被动少付 1 点技能点。' % self.tag.name
 		self.asset = ['tiles', 'circleofpower', 'circleofpower']
 
 	def on_player_enter(self, player):
@@ -2155,7 +2157,7 @@ class Shop(Prop):
 		self.items = []
 
 		self.name = "Shop"
-		self.description = "What wonders could be contained for sale within?"
+		self.description = "里面会有什么奇迹？"
 		self.currency = CURRENCY_PICK
 
 		# For now...
@@ -3494,7 +3496,7 @@ attr_colors = {
 	'num_summons': COLOR_CHARGES,
 	'num_targets': COLOR_CHARGES,
 	'shields': COLOR_SHIELD,
-	'shot_cooldown': Tags.Enchantment.color, # TODO- different color?
+	'shot_cooldown': Tags.Enchantment.color,  # TODO- different color?
 	'strikechance': Tags.Sorcery.color,
 	'cooldown': Tags.Enchantment.color,
 	'cascade_range': COLOR_CHARGES,

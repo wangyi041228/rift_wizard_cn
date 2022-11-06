@@ -2234,7 +2234,7 @@ class EyeOfRageSpell(Spell):
 		self.upgrades['shot_cooldown'] = (-1, 1)
 		self.upgrades['duration'] = 15
 		self.upgrades['berserk_duration'] = 2
-		self.upgrades['lycanthrophy'] = (1, 5, "Lycanthropy", "When Eye of Rage targets a [living] unit with 25 or less HP, that unit is instantly killed and raised as friendly Werewolf.  That Werewolf is berserked for 14 turns.")
+		self.upgrades['lycanthrophy'] = (1, 5, "Lycanthropy", "当愤怒之眼以生命不超过 25 的 [living] 单位为目标时，立刻消灭该单位并将其复活为友方的狼人。该狼人 [berserke] 14 回合。")
 
 		self.tags = [Tags.Nature, Tags.Enchantment, Tags.Eye]
 		self.level = 2
@@ -2291,9 +2291,9 @@ class NightmareSpell(Spell):
 		self.upgrades['duration'] = 15
 		self.upgrades['max_charges'] = (4, 2)
 
-		self.upgrades['dark_dream'] = (1, 5, "Dark Dream", "结束时，基于法术的总伤害临时召唤乌鸦、狼人和老巫婆。", "dream")
-		self.upgrades['electric_dream'] = (1, 5, "Electric Dream", "结束时，基于法术的总伤害临时召唤火花灵魂、雷鸟和精灵。", "dream")
-		self.upgrades['fever_dream'] = (1, 5, "Fever Dream", "结束时，基于法术的总伤害临时召唤火蜥蜴、火灵魂和女巫。", "dream")
+		self.upgrades['dark_dream'] = (1, 5, "Dark Dream", "结束时，基于咒语的总伤害临时召唤乌鸦、狼人和老巫婆。", "dream")
+		self.upgrades['electric_dream'] = (1, 5, "Electric Dream", "结束时，基于咒语的总伤害临时召唤火花灵魂、雷鸟和精灵。", "dream")
+		self.upgrades['fever_dream'] = (1, 5, "Fever Dream", "结束时，基于咒语的总伤害临时召唤火蜥蜴、火灵魂和女巫。", "dream")
 
 		self.tags = [Tags.Enchantment, Tags.Dark, Tags.Arcane]
 		self.level = 3
@@ -2308,7 +2308,7 @@ class NightmareSpell(Spell):
 
 	def get_description(self):
 		return ("每回合对 [{radius}_格:radius] 半径内的所有敌人各随机造成 [{aura_damage}_点奥术:arcane] 或 [{aura_damage}_点黑暗:dark] 伤害。\n"
-				"此伤害数值固定，无法用神殿、被动或增益提升。\n"
+				"此伤害值固定，无法用神殿、被动或增益提升。\n"
 				"持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 class CockatriceSkinSpell(Spell):
@@ -2475,7 +2475,7 @@ class ImpGateSpell(Spell):
 		return ("每回合在施法者旁召唤 [{num_summons}_个小鬼:num_summons]。\n"
 				"小鬼有 [{minion_health}_点生命:minion_health]，可飞行。\n"
 				"小鬼的远程攻击造成 [{minion_damage}_点伤害:minion_damage]，射程 [{minion_range}_格:minion_range]。\n"
-				"小鬼分别可能是 [fire]、[iron:physical] 或 [spark:lightning] 小鬼。\n"
+				"小鬼分别可能是 [fire]、[钢铁:physical] 或 [火花:lightning] 小鬼。\n"
 				"小鬼分别持续 [{minion_duration}_回合:minion_duration]。此效果持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 class LightningHaloBuff(Buff):
@@ -2727,7 +2727,7 @@ class FlameBurstSpell(Spell):
 				self.caster.level.show_effect(p.x, p.y, Tags.Fire)
 
 	def get_description(self):
-		return ("在施法者 [{radius}_格:radius] 冲程内造成[{damage}_点火焰:fire] 伤害。").format(**self.fmt_dict())
+		return ("在施法者 [{radius}_格:radius] 冲程内造成 [{damage}_点火焰:fire] 伤害。").format(**self.fmt_dict())
 
 class SummonFireDrakeSpell(Spell):
 
@@ -3779,7 +3779,7 @@ class BoneBarrageSpell(Spell):
 		self.level = 4
 		self.max_charges = 7
 
-		self.upgrades['beam'] = (1, 6, "Bone Spears", "白骨弹幕对从小兵到目标一束上的所有目标造成伤害。 damages all targets in a beam from the minion to the target")
+		self.upgrades['beam'] = (1, 6, "Bone Spears", "白骨弹幕对从小兵到目标一束上的所有目标造成伤害。")
 		self.upgrades['dark'] = (1, 5, "Cursed Bones", "白骨弹幕还造成一次 [dark] 伤害。")
 		self.upgrades['animation'] = (1, 7, "Shambler Assembly", "白骨弹幕可以空地块为目标。\n若如此，在该地块上生成一个白骨蹒跚者，其生命为造成的伤害。")
 
@@ -5782,7 +5782,7 @@ class SummonGoldDrakeSpell(Spell):
 
 	def get_description(self):
 		return ("召唤一个黄金巨龙\n"
-				"黄金巨龙有 [{minion_health}_点生命:minion_health], [100_点神圣:holy] resist, and can fly.\n"
+				"黄金巨龙有 [{minion_health}_点生命:minion_health] 和 [100_点神圣:holy] 抗性，可飞行。\n"
 				"黄金巨龙的吐息武器造成 [{breath_damage}_点神圣:holy] 伤害，治疗友军 [{breath_damage}_点生命:heal]。\n"
 				"黄金巨龙的近战攻击造成 [{minion_damage}_点物理:physical] 伤害。").format(**self.fmt_dict())
 
@@ -7189,7 +7189,7 @@ class Iceball(Spell):
 		self.upgrades['radius'] = (1, 2)
 		self.upgrades['duration'] = (2, 2)
 		self.upgrades['damage'] = (10, 2)
-		self.upgrades['icecrush'] = (1, 6, "Ice Crush", "Units inside of the area of effect which are already frozen take physical damage before being refrozen.")
+		self.upgrades['icecrush'] = (1, 6, "Ice Crush", "受影响区域内已被 [frozen] 的单位在被再次冻结前受到 [physical] 伤害。")
 
 
 	def get_description(self):
@@ -7471,7 +7471,7 @@ class SummonIcePhoenix(Spell):
 		return ("召唤一个寒冰凤凰。\n"
 				"凤凰有 [{minion_health}_点生命:minion_health]，可飞行，死亡时复活一次。\n"
 				"凤凰的远程攻击造成 [{minion_damage}_点寒冰:ice] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
-				"当凤凰死去时，它会爆炸，在 [6_格:radius] 冲程内对敌人造成 [25_点寒冰:ice] 伤害，给友军 [2_点护盾:shields] 。"
+				"当凤凰死亡时，它会爆炸，在 [6_格:radius] 冲程内对敌人造成 [25_点寒冰:ice] 伤害，给友军 [2_点护盾:shields] 。"
 			).format(**self.fmt_dict())
 
 	def cast_instant(self, x, y):
@@ -8152,7 +8152,7 @@ class RestlessDeadBuff(Buff):
 		yield
 
 	def get_description(self):
-		return ("每当 [living] 敌人死去时，将其复活为骷髅妖。")
+		return ("每当 [living] 敌人死亡时，将其复活为骷髅妖。")
 
 class RestlessDead(Spell):
 
@@ -8169,11 +8169,11 @@ class RestlessDead(Spell):
 		self.upgrades['duration'] = (15, 2)
 		self.upgrades['max_charges'] = (2, 2)
 
-		self.upgrades['salvage'] = (1, 3, "Junk Golems", "每当敌方的 [constructs] 死去时，将其复活为废料魔像。")
-		self.upgrades['spirit_catcher'] = (1, 5, "Elemental Spirits", "每当敌方的 [fire]、[ice] 或 [lightning] 单位死去时，随机一个召唤的友军获得 100 点该元素抗性，可进行该元素的远程攻击。每个友军只能获得一个此增益。")
+		self.upgrades['salvage'] = (1, 3, "Junk Golems", "每当敌方的 [constructs] 死亡时，将其复活为废料魔像。")
+		self.upgrades['spirit_catcher'] = (1, 5, "Elemental Spirits", "每当敌方的 [fire]、[ice] 或 [lightning] 单位死亡时，随机一个召唤的友军获得 100 点该元素抗性，可进行该元素的远程攻击。每个友军只能获得一个此增益。")
 
 	def get_description(self):
-		return ("每当 [living] 敌人死去时，将其复活为骷髅妖。\n"
+		return ("每当 [living] 敌人死亡时，将其复活为骷髅妖。\n"
 				"骷髅妖的生命上限等于被击杀的单位，近战攻击造成 [{minion_damage}_点物理:physical] 伤害。\n"
 				"飞行单位的骷髅妖可飞行。\n"
 				"此效果持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
@@ -8447,7 +8447,7 @@ class MercurizeSpell(Spell):
 
 	def get_description(self):
 		return("汞化目标。目标每回合受到 [{damage}_点毒性:poison] 和 [{damage}_点物理:physical] 伤害，持续 [{duration}_回合:duration]。\n"
-			   "若目标被诅咒时死去，将其复活为水银游魂。\n"
+			   "若目标被诅咒时死亡，将其复活为水银游魂。\n"
 			   "水银游魂是可飞行的 [undead] [metallic] 单位，有诸多抗性和免疫。\n"
 			   "水银游魂的生命上限等于被诅咒的单位，践踏攻击造成 [{minion_damage}_点物理:physical] 伤害。\n".format(**self.fmt_dict()))
 

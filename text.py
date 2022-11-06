@@ -28,9 +28,9 @@ victory_text = """胜利
 
 welcome_text = """你好
 欢迎来到《裂隙巫师》的世界。
-按 H 查看帮助说明，了解操作方式。
+按 [_H] 查看帮助说明，了解操作方式。
 鼠标悬浮在物件上来查看详情。
-按 S 学习咒语。
+按 [_S] 学习咒语。
 至多学习 20 个咒语。"""
 
 deploy_text = """你半脚踏进了裂隙。
@@ -44,7 +44,7 @@ how_to_play = """游戏规则
 完成一个关卡后，走到一个裂缝上可以朝里偷看。通过单击任何空白图块传送通过裂隙，或使用逃生中止传送。
 传送到关卡后，在完成之前不能离开。传送需谨慎。
 咒语和被动都可以通过支付角色表中的技能点 (SP) 学习。
-可以使用 SP 从角色界面单独升级咒语，也可以在世界上发现的神殿中单独升级咒语。
+可以使用 [_SP] 从角色界面单独升级咒语，也可以在世界上发现的神殿中单独升级咒语。
 咒语的充能有限。施放一个咒语会消耗该咒语的一次充能。通过饮用法力药水来恢复充能，在某些关卡中可以在地面上找到。
 
 【控制方式】
@@ -84,24 +84,24 @@ advanced_tips = """状态效果
 璃化：无法行动，获得 100 寒冰和闪电抗性，75 火焰抗性，失去 100 物理抗性。
 冻结：无法行动。受到火焰或物理伤害时结束。100 寒冰抗性的单位免收影响。
 狂暴：变得对所有其他单位敌对。会攻击友军，并会被友军攻击。
-致盲：所有法术的射程降低到 1。
+致盲：所有咒语的射程降低到 1。
 引导：若未采取其他行动，对相同目标施放之前的咒语。
 护盾（SH）：具有护盾的单位将受伤时，改为失去 1 点护盾。"""
 
 endings = ["乌托邦", "涅槃", "诸神黄昏"]
 
-frozen_desc = "[Frozen] 无法行动。受到 [fire] 或 [physical] 伤害时结束。"
-petrify_desc = ("[Petrified] 的单位无法行动。\n"
-				"[Petrified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
-				"[Petrified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
-				"[Petrified] 的单位获得 [_75_点物理:physical] 抗性。\n"
-				"[Petrified] 的单位获得 [_75_点火焰:fire] 抗性。")
-glassify_desc = ("[Glassified] 的单位无法行动。\n"
-				"[Glassified] 的单位获得 [_-100_点物理:physical] 抗性。\n"
-				"[Glassified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
-				"[Glassified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
-				"[Glassified] 的单位获得 [_75_点火焰:fire] 抗性。")
-stun_desc = "[Stunned] 的单位无法行动。"
+frozen_desc = "被 [Frozen] 无法行动。受到 [fire] 或 [physical] 伤害时结束。"
+petrify_desc = ("被 [Petrified] 的单位无法行动。\n"
+				"被 [Petrified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
+				"被 [Petrified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
+				"被 [Petrified] 的单位获得 [_75_点物理:physical] 抗性。\n"
+				"被 [Petrified] 的单位获得 [_75_点火焰:fire] 抗性。")
+glassify_desc = ("被 [Glassified] 的单位无法行动。\n"
+				"被 [Glassified] 的单位获得 [_-100_点物理:physical] 抗性。\n"
+				"被 [Glassified] 的单位获得 [_100_点寒冰:ice] 抗性。\n"
+				"被 [Glassified] 的单位获得 [_100_点闪电:lightning] 抗性。\n"
+				"被 [Glassified] 的单位获得 [_75_点火焰:fire] 抗性。")
+stun_desc = "被 [Stunned] 的单位无法行动。"
 berserk_desc = "[Berserk] 变得对所有其他单位敌对，会攻击友军，并会被友军攻击。"
 poison_desc = "[Poisoned] 每回合受到 1 点 [poison] 伤害"
-blind_desc = "[Blind] 单位所有法术的射程降低到 1。"
+blind_desc = "被 [Blind] 的单位所有咒语的射程降低到 1。"

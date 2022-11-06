@@ -1562,7 +1562,8 @@ class Generator2Buff(Buff):
 			self.turns = random.randint(self.min_turns, self.max_turns)
 
 	def get_tooltip(self):
-		return "每 %d to %d 回合生成 1 个%s\n\n距离下次: %d 回合" % (self.min_turns, self.max_turns, self.example_monster.name, self.turns)
+		_name = loc.dic.get(self.example_monster.name, self.example_monster.name)
+		return "每 %d 到 %d 回合生成 1 个%s\n\n生成倒计时：%d 回合" % (self.min_turns, self.max_turns, _name, self.turns)
 
 def MonsterSpawner(spawn_func):
 	unit = Unit()
@@ -1832,8 +1833,8 @@ class TeleportyBuff(Buff):
 		randomly_teleport(self.owner, self.radius, requires_los=self.hop)
 
 	def get_tooltip(self):
-		moveword = "hop" if self.hop else "blink"
-		return "每回合有 %d%% 的几率%s到距离 %d 格的随机位置" % (int(self.chance * 100), moveword, self.radius)
+		moveword = "跳跃" if self.hop else "扑闪"
+		return "每回合有 %d%% 的几率 %s 到距离 %d 格的随机位置" % (int(self.chance * 100), moveword, self.radius)
 
 	def get_tooltip_color(self):
 		return Tags.Sorcery.color

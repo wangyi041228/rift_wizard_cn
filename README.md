@@ -19,20 +19,24 @@
 
 ## TODO
 
-* 以下文件的翻译
-  * [主文件 ????/5000+](RiftWizard.py)
-  * [怪物 0/5365](Monsters.py)
-  * [稀有怪物 0/3079](RareMonsters.py)
-  * [关卡 0/3498](Level.py)
-  * [NPCs 0/25](NPCs.py)
-* 以下文件的润色、修正
-  * [咒语](Spells.py)
-  * [被动](Upgrades.py)
-  * [通用](CommonContent.py)
-  * [神殿](Shrines.py)
-  * [变体规则](Mutators.py)
-  * [游戏](Game.py)
-* 字体、大小和界面等。
+|模块|文件|进度|备注|
+|----|----|----|----|
+|主文件|[RiftWizard.py](RiftWizard.py)|99%|润色和修正|
+|咒语|[Spells.py](Spells.py)|99%|润色和修正|
+|被动|[Upgrades.py](Upgrades.py)|99%|润色和修正|
+|游戏|[Game.py](Game.py)|99%|润色和修正|
+|物品|[Cunsumables.py](Consumables.py)|99%|润色和修正|
+|关卡|[Level.py](Level.py)|99%|润色和修正|
+|怪物|[Monsters.py](Monsters.py)| |名称和衍生名称完工|
+|变体怪物|[Variant.py](Variants.py)|0%||
+|稀有怪物|[RareMonsters.py](RareMonsters.py)| |名称和衍生名称完工|
+|通用|[CommonContent.py](CommonContent.py)| |校对|
+|神殿|[Shrines.py](Shrines.py)| |校对|
+|变体规则|[Mutators.py](Mutators.py)| |校对|
+|NPC|[NPCs.py](NPCs.py)|0%||
+
+* 左侧无法升级的用灰色。
+* 通过或战败的截图显示正确的可选升级数量。
 
 ## 考虑
 
@@ -45,15 +49,13 @@
 * 自动换行，但不切开ascii码字符，行首无`，、。：,.!`等标点。
 * 数字前后的空格问题。(目前在ascii词后都加了空格，方便不完全汉化时游戏，等完全汉化后就没问题)
 * 调用`draw_string`前查表替换。
-* 角色表中咒语和被动各分三列。再多需要写分页面。
-* 多选一的分支只算一个可选升级。（原版漏洞）
-* 左侧无法升级的用灰色。（原版不足，没做完）
+* 角色表中咒语和被动各分三列。
+* 左侧咒语分两列。
+* 多选一的分支只算一个可选升级。
 * 被动全满后升级按钮用灰色。
 * 声音文件改为`192kbps`的`.mp3`。
 * 缓存通关后的日志文件，防止循环读取文件。118行的日志会让游戏卡顿，只输出41行。（原版漏洞）
 * 调整一些界面函数和参数。
-* 咒语、被动和物品的名称翻译。
-* 物品描述的翻译。
 
 ## 说明
 
