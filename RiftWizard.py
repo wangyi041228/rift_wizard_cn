@@ -137,7 +137,7 @@ class TooltipExamineTarget(object):
 LEARN_SPELL_TARGET = TooltipExamineTarget("学习新咒语")
 LEARN_SKILL_TARGET = TooltipExamineTarget("学习新被动")
 CHAR_SHEET_TARGET = TooltipExamineTarget("学习新咒语和被动")
-INSTRUCTIONS_TARGET = TooltipExamineTarget("学习游戏规则")
+INSTRUCTIONS_TARGET = TooltipExamineTarget("帮助")
 OPTIONS_TARGET = TooltipExamineTarget("调整选项设置")
 
 WELCOME_TARGET = TooltipExamineTarget(text.welcome_text)
@@ -2206,7 +2206,7 @@ class PyGameView(object):
 
 				if upgrade.shrine_name:
 					color = COLOR_XP
-					fmt = upgrade.name.replace('(%s)' % spell.name, '')
+					fmt = upgrade.name.split('（')[0]
 				else:
 					color = (255, 255, 255)
 					fmt = upgrade.name
@@ -2313,8 +2313,8 @@ class PyGameView(object):
 		if self.shop_type == SHOP_TYPE_SHOP:
 			attr = self.chosen_purchase.name.replace(self.chosen_purchase.shrine_name + ' ', '').lower()
 			_name0 = loc.dic.get(self.game.cur_level.cur_shop.name, self.game.cur_level.cur_shop.name)
-			_name1 = loc.dic.get(self.chosen_purchase.prereq.name. self.chosen_purchase.prereq.name)
-			self.confirm_text = "对%s使用%s，确定吗？" % (_name1, _name0)
+			_name1 = loc.dic.get(self.chosen_purchase.prereq.name, self.chosen_purchase.prereq.name)
+			self.confirm_text = "使用%s强化%s，确定吗？" % (_name0, _name1)
 		else:
 			cost = self.game.get_upgrade_cost(self.chosen_purchase)
 			_name = loc.dic.get(self.chosen_purchase.name, self.chosen_purchase.name)
@@ -2916,7 +2916,7 @@ class PyGameView(object):
 
 		if not shoptions:
 			if self.shop_type == SHOP_TYPE_SHOP:
-				self.draw_string("没有可在此神殿升级的咒语。", self.middle_menu_display, 0, cur_y, content_width=self.middle_menu_display.get_width(), center=True)
+				self.draw_string("没有可在此神龛升级的咒语。", self.middle_menu_display, 0, cur_y, content_width=self.middle_menu_display.get_width(), center=True)
 			elif self.shop_type in [SHOP_TYPE_SPELLS, SHOP_TYPE_SPELLS]:
 				self.draw_string("没有满足筛选条件的咒语", self.middle_menu_display, cur_x, cur_y, HIGHLIGHT_COLOR)
 
@@ -3855,7 +3855,7 @@ class PyGameView(object):
 						_name = loc.dic.get(word, word)
 						if all((i.isascii() for i in _name)):  # i in '0123456789+-%'
 							_name += ' '
-						if _needspace and _name[0] in '0123456789+-%':
+						if _needspace and _name[0].isascii():  #  in '0123456789+-%'
 							_name = ' ' + _name
 						while _name:
 							_len = len(_name)
@@ -3875,7 +3875,7 @@ class PyGameView(object):
 								_name = _name[1:]
 							if _newname:
 								self.draw_string(_newname, surface, cur_x, cur_y, cur_color, content_width=width)
-								_needspace = False if _newname[0] in '，、。：,.! ' else True
+								_needspace = False if _newname[-1] in '，、。：,.!+ ' else True
 								cur_x += self.font.size(_newname)[0]
 							if _newline:
 								cur_y += linesize
@@ -4041,11 +4041,11 @@ class PyGameView(object):
 			cur_y += linesize
 			index += 1
 
+		cur_y = max(_y_end, cur_y)
+		cur_x = self.border_margin
 		cur_y += linesize
 
 		# Items
-		cur_x = self.border_margin
-		cur_y = max(_y_end, cur_y)
 		self.draw_string("物品", self.character_display, cur_x, cur_y)
 		cur_y += linesize
 		index = 1
@@ -4088,7 +4088,7 @@ class PyGameView(object):
 			cur_y += linesize
 			for buff_name, (buff, stacks, duration, color) in counts.items():
 
-				fmt = buff_name
+				fmt = loc.dic.get(buff_name, buff_name)
 
 				if stacks > 1:
 					fmt += ' x%d' % stacks
@@ -4436,7 +4436,7 @@ class PyGameView(object):
 
 		cur_y += linesize
 
-		width = self.examine_display.get_width() - 2 *border_margin
+		width = self.examine_display.get_width() - 2 * border_margin
 		if gen_params.shrine:
 			name = gen_params.shrine.name
 
@@ -4564,14 +4564,15 @@ class PyGameView(object):
 			self.draw_string(fmt, self.examine_display, cur_x, cur_y, cur_color)
 			cur_y += linesize
 			hasattrs = False
+			# 汉化 检视单位
 			if hasattr(spell, 'damage'):
 				if hasattr(spell, 'damage_type') and isinstance(spell.damage_type, Tag):
 					_name = loc.dic.get(spell.damage_type.name, spell.damage_type.name)
-					fmt = '[_%d_] 点%s伤害' % (spell.get_stat('damage'), _name)
+					fmt = ' %d 点%s伤害' % (spell.get_stat('damage'), _name)
 				elif hasattr(spell, 'damage_type') and isinstance(spell.damage_type, list):
-					fmt = '[_%d_] 点%s伤害' % (spell.damage, '或'.join([loc.dic.get(t.name, t.name) for t in spell.damage_type]))
+					fmt = ' %d 点%s伤害' % (spell.damage, '或'.join([loc.dic.get(t.name, t.name) for t in spell.damage_type]))
 				else:
-					fmt = '[_%d_] 点伤害' % spell.get_stat('damage')
+					fmt = ' %d 点伤害' % spell.get_stat('damage')
 				lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, self.examine_display.get_width() - 2*border_margin, color=COLOR_DAMAGE.to_tup())
 				cur_y += lines * linesize
 				hasattrs = True
@@ -4590,7 +4591,7 @@ class PyGameView(object):
 				if not rem_cd:
 					fmt = ' %d 回合冷却' % spell.cool_down
 				else:
-					fmt = ' %d 回合冷却 (%d)' % (spell.cool_down, rem_cd)
+					fmt = ' %d 回合冷却（还剩 %d 回合）' % (spell.cool_down, rem_cd)
 				self.draw_string(fmt, self.examine_display, cur_x, cur_y)
 				cur_y += linesize
 				hasattrs = True
@@ -4608,7 +4609,7 @@ class PyGameView(object):
 			cur_y += linesize
 
 		if unit.stationary:
-			self.draw_string("静止", self.examine_display, cur_x, cur_y)
+			self.draw_string("固定", self.examine_display, cur_x, cur_y)
 			cur_y += linesize
 
 		if unit.flying or unit.stationary:
@@ -4670,7 +4671,7 @@ class PyGameView(object):
 			cur_y += linesize
 			for buff_name, (buff, stacks, duration, color) in counts.items():
 
-				fmt = buff_name
+				fmt = loc.dic.get(buff_name, buff_name)
 
 				if stacks > 1:
 					fmt += ' x%d' % stacks
@@ -4703,7 +4704,7 @@ class PyGameView(object):
 			opts.append((TITLE_SELECTION_NEW, "开始游戏"))
 
 		opts.extend([(TITLE_SELECTION_OPTIONS, "选项设置"),
-					 (TITLE_SELECTION_INSTRUCTIONS, "游戏规则"),
+					 (TITLE_SELECTION_INSTRUCTIONS, "帮助"),
 					 (TITLE_SELECTION_BESTIARY, "怪物图鉴"),
 					 (TITLE_SELECTION_DISCORD, "DISCORD"),
 					 (TITLE_SELECTION_QQ, "QQ群"),
@@ -4972,13 +4973,13 @@ class PyGameView(object):
 
 		rect_w = self.font.size("动画速度：最快")[0]
 
-		self.draw_string("游戏规则", self.screen, cur_x, cur_y, mouse_content=OPTION_HELP, content_width=rect_w)
+		self.draw_string("帮助", self.screen, cur_x, cur_y, mouse_content=OPTION_HELP, content_width=rect_w)
 		cur_y += self.linesize
 
-		self.draw_string("音效音量：%3d" % self.options['sound_volume'], self.screen, cur_x, cur_y, mouse_content=OPTION_SOUND_VOLUME, content_width=rect_w)
+		self.draw_string("音效大小：%3d" % self.options['sound_volume'], self.screen, cur_x, cur_y, mouse_content=OPTION_SOUND_VOLUME, content_width=rect_w)
 		cur_y += self.linesize
 
-		self.draw_string("音乐音量：%3d" % self.options['music_volume'], self.screen, cur_x, cur_y, mouse_content=OPTION_MUSIC_VOLUME, content_width=rect_w)
+		self.draw_string("音乐大小：%3d" % self.options['music_volume'], self.screen, cur_x, cur_y, mouse_content=OPTION_MUSIC_VOLUME, content_width=rect_w)
 		cur_y += self.linesize
 
 		if self.options['spell_speed'] == 0:

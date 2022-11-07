@@ -815,7 +815,7 @@ class ChaosBuddies(Upgrade):
 		self.damage_this_turn = set()
 
 	def get_description(self):
-		return ("每当敌人在同一回合受到 [fire]、[lightning] 和 [physical] 伤害时，在该敌人旁召唤钢铁小鬼、火花小鬼和火焰小鬼个一个。\n"
+		return ("每当敌人在同一回合受到 [fire]、[lightning] 和 [physical] 伤害时，在该敌人旁召唤钢铁小鬼、电光小鬼和火焰小鬼个一个。\n"
 				"小鬼有 [{minion_health}_点生命:minion_health]，可飞行。\n"
 				"小鬼的远程攻击造成 [{minion_damage}_点伤害:minion_damage]，射程为 [{minion_range}_格:minion_range]。\n"
 				"小鬼各持续 [{minion_duration}_回合:minion_duration]。\n").format(**self.fmt_dict())
@@ -825,7 +825,7 @@ class ChaosBuddies(Upgrade):
 			return
 		if evt.damage_type not in [Tags.Fire, Tags.Lightning, Tags.Physical]:
 			return
-		if evt.unit in self.procs_this_回合:
+		if evt.unit in self.procs_this_turn:
 			return
 
 		self.damage_this_turn.add((evt.damage_type, evt.unit))
@@ -1250,14 +1250,14 @@ class Faestone(Upgrade):
 		self.minion_damage = 20
 		self.minion_health = 120
 
-		self.description = ("每关开始时有一个友方的仙灵石。仙灵石是坚固而静止的近战单位。"
+		self.description = ("每关开始时有一个友方的仙灵石。仙灵石是坚固而固定不动的近战单位。"
 						    "\n\n每当你施放 [arcane] 咒语时，仙灵石传送到目标旁，获得 [1_点护盾:shields]。"
 						    "\n\n每当你施放 [nature] 咒语时，仙灵石治疗 [10_点生命:heal]。")
 		self.global_triggers[EventOnUnitAdded] = self.on_unit_added
 
 	def get_description(self):
 		return ("每当你进入新关卡时，在附近召唤一个仙灵石。\n"
-				"仙灵石有 [{minion_health}_点生命:minion_health]，且为静止。\n"
+				"仙灵石有 [{minion_health}_点生命:minion_health]，固定不动。\n"
 				"每当你施放 [nature] 咒语时，仙灵石治疗 [10_点生命:heal]。\n"
 				"每当你施放 [arcane] 咒语时，仙灵石传送到目标旁，获得 [1_点护盾:shields]。").format(**self.fmt_dict())
 
@@ -2116,7 +2116,7 @@ class InfernoEngines(Upgrade):
 
 	def get_description(self):
 		return ("每当你施放 [fire] 咒语时，你的所有 [metallic] 友军获得 [2_点伤害:damage] 的 [fire] 光环，半径为咒语等级，持续 [{duration}_回合:duration]。\n"
-			    "此伤害值固定，无法用神殿、被动或增益提升。\n").format(**self.fmt_dict())
+			    "此伤害值固定，无法用神龛、被动或增益提升。\n").format(**self.fmt_dict())
 
 	def on_spell_cast(self, evt):
 		if evt.spell.level <= 0:

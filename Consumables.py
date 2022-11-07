@@ -265,7 +265,7 @@ class DisruptShrinesSpell(Spell):
 def shrine_disruptor():
 	item = Item()
 	item.name = "Shrine Disruptor"
-	item.description = "重制当前关卡中的所有神殿。"
+	item.description = "重制当前关卡中的所有神龛。"
 	item.set_spell(DisruptShrinesSpell())
 	return item
 
@@ -371,7 +371,7 @@ class MemoryEnhancement(Buff):
 
 	def on_init(self):
 		self.name = "Memory Enhancement"
-		self.description = "记忆法珠的效果翻倍。"
+		self.description = "记忆球的效果翻倍。"
 		self.owner_triggers[EventOnItemPickup] = self.on_pickup
 
 	def on_pickup(self, evt):
@@ -381,7 +381,7 @@ class MemoryEnhancement(Buff):
 def memory_draught():
 	item = Item()
 	item.name = "Draught of Memories"
-	item.description = "你拾起的记忆法珠效果翻倍，持续 10 回合。"
+	item.description = "你拾起的记忆球效果翻倍，持续 10 回合。"
 	item.set_spell(PotionSpell(MemoryEnhancement, 10))
 	return item
 

@@ -1,0 +1,1 @@
+RiftWizard.exe cheatmode

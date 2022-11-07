@@ -690,7 +690,7 @@ class InfernoCloud(Cloud):
 		self.spread_chance = .7
 		self.duration = 5
 		self.name = "Inferno"
-		self.description = "一朵飘动的火云。每回合对捕捉的生物造成 %d 点伤害。"
+		self.description = "一朵飘动的火云。每回合对捕捉的单位造成 %d 点伤害。"
 
 	def on_advance(self):
 
@@ -2292,7 +2292,7 @@ class NightmareSpell(Spell):
 		self.upgrades['max_charges'] = (4, 2)
 
 		self.upgrades['dark_dream'] = (1, 5, "Dark Dream", "结束时，基于咒语的总伤害临时召唤乌鸦、狼人和老巫婆。", "dream")
-		self.upgrades['electric_dream'] = (1, 5, "Electric Dream", "结束时，基于咒语的总伤害临时召唤火花灵魂、雷鸟和精灵。", "dream")
+		self.upgrades['electric_dream'] = (1, 5, "Electric Dream", "结束时，基于咒语的总伤害临时召唤电光灵魂、雷鸟和精灵。", "dream")
 		self.upgrades['fever_dream'] = (1, 5, "Fever Dream", "结束时，基于咒语的总伤害临时召唤火蜥蜴、火灵魂和女巫。", "dream")
 
 		self.tags = [Tags.Enchantment, Tags.Dark, Tags.Arcane]
@@ -2308,7 +2308,7 @@ class NightmareSpell(Spell):
 
 	def get_description(self):
 		return ("每回合对 [{radius}_格:radius] 半径内的所有敌人各随机造成 [{aura_damage}_点奥术:arcane] 或 [{aura_damage}_点黑暗:dark] 伤害。\n"
-				"此伤害值固定，无法用神殿、被动或增益提升。\n"
+				"此伤害值固定，无法用神龛、被动或增益提升。\n"
 				"持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 class CockatriceSkinSpell(Spell):
@@ -2452,8 +2452,8 @@ class ImpGateSpell(Spell):
 		self.upgrades['minion_duration'] = (7, 2)
 		self.upgrades['minion_damage'] = (5, 4)
 
-		self.upgrades['metalswarm'] = (1, 6, "Metal Swarm", "小鬼群改为召唤铜质小鬼，而非火花小鬼，召唤熔炉小鬼，而非火焰小鬼。", "swarm")
-		self.upgrades['darkswarm'] = (1, 5, "Dark Swarm", "小鬼群改为召唤腐烂小鬼、虚空小鬼和疯狂小鬼，而非火焰、火花和钢铁小鬼。", "swarm")
+		self.upgrades['metalswarm'] = (1, 6, "Metal Swarm", "小鬼群改为召唤铜质小鬼，而非电光小鬼，召唤熔炉小鬼，而非火焰小鬼。", "swarm")
+		self.upgrades['darkswarm'] = (1, 5, "Dark Swarm", "小鬼群改为召唤腐烂小鬼、虚空小鬼和疯狂小鬼，而非火焰、电光和钢铁小鬼。", "swarm")
 		self.upgrades['megaswarm'] = (1, 7, "Mega Swarm", "小鬼群改为召唤巨型小鬼，而非普通大小的。", "swarm")
 
 		self.imp_choices = [FireImp, SparkImp, IronImp]
@@ -2475,7 +2475,7 @@ class ImpGateSpell(Spell):
 		return ("每回合在施法者旁召唤 [{num_summons}_个小鬼:num_summons]。\n"
 				"小鬼有 [{minion_health}_点生命:minion_health]，可飞行。\n"
 				"小鬼的远程攻击造成 [{minion_damage}_点伤害:minion_damage]，射程 [{minion_range}_格:minion_range]。\n"
-				"小鬼分别可能是 [fire]、[钢铁:physical] 或 [火花:lightning] 小鬼。\n"
+				"小鬼分别可能是 [fire]、[钢铁:physical] 或 [电光:lightning] 小鬼。\n"
 				"小鬼分别持续 [{minion_duration}_回合:minion_duration]。此效果持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 class LightningHaloBuff(Buff):
@@ -2965,7 +2965,7 @@ class SummonIceDrakeSpell(Spell):
 	def get_description(self):
 		return ("在目标地块上召唤一个寒冰巨龙。\n"		
 				"寒冰巨龙有 [{minion_health}_点生命:minion_health] 和 [100_点寒冰:ice] 抗性，可飞行。\n"
-				"寒冰巨龙的吐息武器造成 [{minion_damage}_点寒冰:ice] 伤害并 [freezes] 单位。\n"
+				"寒冰巨龙的吐息武器造成 [{minion_damage}_点寒冰:ice] 伤害并 [freeze] 单位。\n"
 				"寒冰巨龙的近战攻击造成 [{minion_damage}_点物理:physical] 伤害。").format(**self.fmt_dict())
 
 
@@ -3484,7 +3484,7 @@ class VoidSpawn(Spell):
 		self.upgrades['requires_los'] = -1
 
 	def get_description(self):
-		return "召唤一个虚空孵卵者，持续 10 回合。虚空孵卵者是能召唤虚空轰炸者的静止 [arcane] 生物。"
+		return "召唤一个虚空孵卵者，持续 10 回合。虚空孵卵者是能召唤虚空轰炸者的固定 [arcane] 单位。"
 
 	def get_impacted_tiles(self, x, y):
 		targets = self.caster.level.get_tiles_in_ball(x, y, 1.5)
@@ -5689,7 +5689,7 @@ class HeavenlyIdol(Spell):
 
 	def get_description(self):
 		return ("召唤一个美丽雕像。\n"
-				"雕像有 [{minion_health}_点生命:minion_health] 和 [{shields}_点护盾:shields]，且为静止。\n"
+				"雕像有 [{minion_health}_点生命:minion_health] 和 [{shields}_点护盾:shields]，固定不动。\n"
 				"雕像的被动光环每回合影响视线内的所有单位。\n"
 				"治疗受影响的友军 [{heal}_点生命:heal]。施法者无法以此法被治疗。\n"
 				"对受影响的敌军造成 [1_点神圣:holy] 伤害。\n"
@@ -6288,7 +6288,7 @@ class VoidMaw(Spell):
 
 	def get_description(self):
 		return ("召唤一个饥肠怪。\n"
-				"饥肠怪有 [{minion_health}_点生命:minion_health] 和 [{shields}_点护盾:shields]，漂浮且静止。\n"
+				"饥肠怪有 [{minion_health}_点生命:minion_health] 和 [{shields}_点护盾:shields]，漂浮且固定不动。\n"
 				"饥肠怪的攻击造成 [{minion_damage}_点物理:physical]，把敌人拉向自己，射程为 [{minion_range}_格:minion_range]。\n"
 				"饥肠怪在 [{minion_duration}_回合:minion_duration] 后消失。").format(**self.fmt_dict())
 
@@ -7283,7 +7283,7 @@ class SummonFrostfireHydra(Spell):
 
 	def get_description(self):
 		return ("召唤一个霜火九头龙。\n"
-				"九头龙有 [{minion_health}_点生命:minion_health]，且为静止。\n"
+				"九头龙有 [{minion_health}_点生命:minion_health]，固定不动。\n"
 				"九头龙的一种束状攻击造成 [{minion_damage}_点火焰:fire] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
 				"九头龙的一种束状攻击造成 [{minion_damage}_点寒冰:ice] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
 				"九头龙在 [{minion_duration}_回合:minion_duration] 后消失。").format(**self.fmt_dict())
@@ -8203,7 +8203,7 @@ class GustOfWind(Spell):
 	def get_description(self):
 		return ("将 [{force}:range] 格锥形范围的单位推走。\n"
 				"若单位与墙、裂隙或其他单位碰撞，该单位被 [stunned] [{duration}_回合:duration]，受到 [{damage}_点物理:physical] 伤害。\n"
-				"静止的敌人不受影响。\n"
+				"固定不动的敌人不受影响。\n"
 				"摧毁范围内的风暴云和蛛网。\n").format(**self.fmt_dict())
 
 
@@ -8753,7 +8753,7 @@ class LightningSpire(Spell):
 
 	def get_description(self):
 		return ("召唤一个闪电尖塔。\n"
-				"闪电尖塔是静止的 [metallic] [construct]，有 [{minion_health}:minion_health] 点生命上限。\n"
+				"闪电尖塔是固定不动的 [metallic] [construct]，有 [{minion_health}:minion_health] 点生命上限。\n"
 				"每回合尖塔劈中 [{radius}:minion_range] 各内至多 [{num_targets}:num_targets] 个敌方单位，造成 [{minion_damage}_点闪电:lightning] 伤害。").format(**self.fmt_dict())
 
 

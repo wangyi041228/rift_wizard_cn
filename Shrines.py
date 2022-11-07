@@ -106,8 +106,9 @@ class ShrineBuff(Upgrade):
 		Upgrade.__init__(self)
 		
 		self.shrine_name = shrine.name
-
-		self.name = "%s Attunement (%s)" % (shrine.name, spell.name)
+		_name0 = loc.dic.get(shrine.name, shrine.name)
+		_name1 = loc.dic.get(spell.name, spell.name)
+		self.name = "%s调整（%s）" % (_name0, _name1)
 		self.description = self.description or shrine.description
 
 		self.prereq = spell

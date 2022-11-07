@@ -504,7 +504,7 @@ class FireCloud(Cloud):
 		self.color = Tags.Fire.color
 		self.strikechance = .5
 		self.name = "Firestorm"
-		self.description = "每回合对其中的生物造成 %d 火焰伤害" % self.damage
+		self.description = "每回合对其中的单位造成 %d 火焰伤害" % self.damage
 		self.asset_name = 'fire_cloud'
 
 	def on_advance(self):
