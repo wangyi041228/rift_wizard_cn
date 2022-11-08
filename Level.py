@@ -1400,8 +1400,8 @@ class Unit(object):
 			else:
 				action = self.level.requested_action
 				self.level.requested_action = None
-				
-			logging.debug("%s will %s" % (self, action))
+
+			logging.debug("%s 将会 %s" % (self, action))
 			assert(action is not None)
 
 			if isinstance(action, MoveAction):
@@ -2583,7 +2583,7 @@ class Level(object):
 		if unit.is_player_controlled:
 			self.spell_counts[spell] += 1
 
-		self.combat_log.debug("%s uses %s" % (unit.name, spell.name))
+		self.combat_log.debug("%s 使用 %s" % (loc.dic.get(unit.name, unit.name), loc.dic.get(spell.name, spell.name)))
 
 		# flip sprite if needed
 		if x < unit.x:
@@ -2754,7 +2754,7 @@ class Level(object):
 
 			if any(u.team != TEAM_PLAYER for u in self.units):
 				self.next_log_turn()
-				self.combat_log.debug("Level %d, Turn %d begins." % (self.level_no, self.turn_no))
+				self.combat_log.debug("第 %d 关，第 %d 回合开始。" % (self.level_no, self.turn_no))
 
 			# Cache unit list here to enforce summoning delay
 			turn_units = list(self.units)
@@ -3206,9 +3206,12 @@ class Level(object):
 			multiplier = (100 - resist_amount) / 100.0
 			amount = int(math.ceil(amount * multiplier))
 
+		_name0 = loc.dic.get(unit.name, unit.name)
+		_name1 = loc.dic.get(source.name, source.name)
+		_name2 = loc.dic.get(damage_type.name, damage_type.name)
 		if amount > 0 and unit.shields > 0:
 			unit.shields = unit.shields - 1
-			self.combat_log.debug("%s blocked %d %s damage from %s" % (unit.name, amount, damage_type.name, source.name))
+			self.combat_log.debug("%s 抵挡 %s 的 %d 点%s伤害" % (_name0, _name1, amount, _name2))
 			self.show_effect(unit.x, unit.y, Tags.Shield_Expire)				
 			return 0
 
@@ -3216,9 +3219,9 @@ class Level(object):
 		unit.cur_hp = unit.cur_hp - amount
 
 		if amount > 0:
-			self.combat_log.debug("%s took %d %s damage from %s" % (unit.name, amount, damage_type.name, source.name))
+			self.combat_log.debug("%s 受到 %s 的 %d 点%s伤害" % (_name0, _name1, amount, _name2))
 		elif amount < 0:
-			self.combat_log.debug("%s healed %d from %s" % (unit.name, -amount, source.name))
+			self.combat_log.debug("%s 受到 %s 的 %d 点治疗" % (_name0, _name1, -amount))
 
 		if (amount > 0):
 

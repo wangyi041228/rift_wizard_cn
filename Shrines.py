@@ -52,16 +52,16 @@ class Shrine(object):
 		if self.description:
 			bonus_list = bonus_list + [self.description]
 
-		tags_str = " or ".join('[' + t.name.lower() + ']' for t in self.tags)
-		spell_str = "spell"
+		tags_str = " 或 ".join('[' + t.name.lower() + ']' for t in self.tags)
+		spell_str = "咒语"
 		if self.conj_only:
-			spell_str = "[conjuration] spell"
+			spell_str = "[conjuration] 召唤"
 		target_str = "%s %s" % (tags_str, spell_str) if tags_str else spell_str
 
-		fmt = "Enhances %s with:\n%s" % (target_str, '\n'.join(bonus_list))
-		fmt += "\nLimit 1 shrine per spell."
+		fmt = "强化 %s ：\n%s" % (target_str, '\n'.join(bonus_list))
+		fmt += "\n每个咒语限一种神龛强化。"
 		if self.no_conj:
-			fmt += "\nCan be applied only to [sorcery] and [enchantment] spells."
+			fmt += "\n只能用于 [sorcery] 或 [enchantment] 咒语。"
 
 		return fmt
 
@@ -157,7 +157,7 @@ class LifeShrine(Shrine):
 	def on_init(self):
 		self.name = "Life"
 		self.tags = [Tags.Holy, Tags.Nature]
-		self.description = "Heal for 5 HP on cast"
+		self.description = "施放时回复 5 点生命。"
 		self.buff_class = LifeBuff
 
 class OtherworldyShrineBuff(ShrineBuff):
@@ -172,7 +172,7 @@ class OtherworldlyShrine(Shrine):
 		self.name = "Otherworldly"
 		self.tags = [Tags.Arcane]
 		self.no_conj = True
-		self.description = "Half of all [arcane] damage dealt by this spell is redealt as [holy] damage, and then again as [dark] damage."
+		self.description = "此咒语造成 [arcane] 伤害时，再对其造成一半的 [holy] 伤害，然后 [dark] 伤害也如此算。"
 		self.buff_class = OtherworldyShrineBuff
 
 class RedFlameShrine(Shrine):
@@ -267,7 +267,7 @@ class StormCloudShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Storm Cloud"
-		self.description = "On damaging an enemy in a thunderstorm or blizzard, redeal 75% of the damage as [lightning] and 75% of the damage as [ice]."
+		self.description = "对风暴云或暴风雪中的敌人造成伤害时，再对其造成 75% 的 [lightning] 伤害和 75% 的 [ice] 伤害。"
 		self.tags = [Tags.Lightning, Tags.Ice]
 		self.buff_class = StormCloudShrineBuff
 		self.no_conj = True
@@ -300,7 +300,7 @@ class OakenShrine(Shrine):
 		self.name = "Oaken"
 		self.attr_bonuses['minion_health'] = .25
 		self.attr_bonuses['minion_damage'] = .1
-		self.description = "Summoned minions gain [50_physical:physical] resist and [50_holy:holy] resist."
+		self.description = "召唤的小兵获得 [50_点物理:physical] 抗性和 [50_点神圣:holy] 抗性。"
 		self.tags = [Tags.Holy, Tags.Nature]
 		self.conj_only = True
 		self.buff_class = OakenShrineBuff
@@ -322,7 +322,7 @@ class AfterlifeShrine(Shrine):
 		self.name = "Afterlife"
 		self.conj_only = True
 		self.buff_class = AfterlifeShrineBuff
-		self.description = "Summoned minions reincarnate once"
+		self.description = "召唤的小兵复活一次。"
 
 class StillnessShrine(Shrine):
 
@@ -347,7 +347,7 @@ class FrozenSkullShrine(Shrine):
 		self.name = "Frozen Skull"
 		self.attr_bonuses['damage'] = .2
 		self.tags = [Tags.Dark, Tags.Ice]
-		self.description = "On kill, [freeze] up to [4:num_targets] enemies in line of sight of the slain unit for [2_turns:duration]."
+		self.description = "击杀时，[freeze] 被击杀单位视线内至多 [4:num_targets] 个敌人 [2_回合:duration]。"
 		self.buff_class = FrozenSkullShrineBuff
 		self.no_conj = True
 
@@ -361,7 +361,7 @@ class NightmareShrine(Shrine):
 
 	def on_init(self):
 		self.name = 'Nightmare'
-		self.description = "Half of all [arcane] damage dealt by this spell is redealt as [dark] damage and vice versa."
+		self.description = "此咒语造成 [arcane] 伤害时，再造成一半的 [dark] 伤害。反之亦然。"
 		self.buff_class = NightmareShrineBuff
 		self.tags = [Tags.Dark, Tags.Arcane]
 		self.no_conj = True
@@ -390,7 +390,7 @@ class ThunderShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Thunder"
-		self.description = "Damaged enemies and enemies adjacent to them are [stunned] for [1_turn:duration]"
+		self.description = "受伤的敌人和其相邻的敌人被 [stunned] [1_回合:duration]。"
 		self.buff_class = ThunderShrineBuff
 		self.tags = [Tags.Lightning]
 		self.attr_bonuses['damage'] = .2
@@ -404,7 +404,7 @@ class BurningBuff(Buff):
 
 	def on_init(self):
 		self.name = "Burning (%d)" % self.damage
-		self.description = "At end of this units turn, it takes %d damage and burning expires."
+		self.description = "此单位的回合结束时，受到 %d 点伤害，燃烧结束。"
 		self.asset = ['status', 'burning']
 
 	def on_advance(self):
@@ -425,7 +425,7 @@ class BurningShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Burning"
-		self.description = "Whenever this spell deals damage to an enemy, that enemy takes that much damage again as [fire] damage at the end of it's next turn."
+		self.description = "每当此咒语对敌人造成伤害时，该敌人下个回合结束时受到等量的 [fire] 伤害。"
 		self.tags = [Tags.Fire]
 		self.buff_class = BurningShrineBuff
 		self.no_conj = True
@@ -444,7 +444,7 @@ class CruelShrine(Shrine):
 	def on_init(self):
 		self.name = "Cruel"
 		self.tags = [Tags.Dark]
-		self.description = "Whenever this spell or a minion it summoned deals damage to an enemy, that enemy is [poisoned] for that many turns."
+		self.description = "每当此咒语或所召唤的小兵对敌人造成伤害时，该敌人 [poisoned] 等量回合。"
 		self.buff_class = CruelShrineBuff
 
 class TormentShrine(Shrine):
@@ -488,7 +488,7 @@ class WhiteCandleShrine(Shrine):
 		self.name = "White Candle"
 		self.conj_only = True
 		self.buff_class = WhiteCandleShrineBuff
-		self.description = "The chosen spell's summoned minions randomly gain a [holy] or [fire] bolt attack.  The attack deals damage equal to the spells minion damage stat, has a [2_turn:cooldown] cooldown and has a range of [4_tiles:range]."
+		self.description = "此咒语召唤的小兵随机获得 [holy] 或 [fire] 箭攻击的能力，造成等于小兵伤害数值的伤害，[2_回合:cooldown] 冷却，射程为 [4_格:range]。"
 		self.tags = [Tags.Fire, Tags.Holy]
 
 class FrostfireShrineBuff(ShrineBuff):
@@ -501,7 +501,7 @@ class FrostfireShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Frostfire"
-		self.description = "Half of all [ice] damage dealt by this shrine is redealt as [fire] damage and vice versa."
+		self.description = "此咒语造成 [ice] 伤害时，再造成一半的 [fire] 伤害。反之亦然。"
 		self.buff_class = FrostfireShrineBuff
 		self.tags = [Tags.Fire, Tags.Ice]
 		self.no_conj = True
@@ -526,7 +526,7 @@ class FaeShrine(Shrine):
 	def on_init(self):
 		self.name = "Fae"
 		self.buff_class = FaeShrineBuff
-		self.description = "Summoned minions gain a healing spell and passive short range teleportation.  The healing spell heals 2 plus the spell's level HP, and has a [4_tile:range] range."
+		self.description = "召唤的小兵可施放治疗咒语和短程传送。治疗咒语的治疗量为 2+ 咒语等级，射程为 [4_格:range]。"
 		self.tags = [Tags.Nature, Tags.Arcane]
 		self.conj_only = True
 
@@ -553,7 +553,7 @@ class LifeShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Life"
-		self.description = "Summoned minions heal for [4_HP:heal] each turn."
+		self.description = "召唤的小兵每回合治疗 [4_点生命:heal]。"
 		self.buff_class = LifeShrineBuff
 		self.tags = [Tags.Nature, Tags.Holy]
 		self.conj_only = True
@@ -573,7 +573,7 @@ class TundraShrine(Shrine):
 		self.name = "Tundra"
 		self.tags = [Tags.Ice, Tags.Nature]
 		self.buff_class = TundraShrineBuff
-		self.description = "Summoned minions gain [50_ice:ice] resistance and a ranged attack.\nThe ranged attack deals [ice] damage equal to the spell's minion damage and has range equal to the spell's level."
+		self.description = "召唤的小兵获得 [50_点寒冰:ice] 抗性和一种远程攻击能力。\n远程攻击造成等于小兵伤害数值的伤害的 [ice] 伤害，射程为咒语等级。"
 		self.conj_only = True
 
 class SwampShrineBuff(ShrineSummonBuff):
@@ -591,7 +591,7 @@ class SwampShrine(Shrine):
 		self.name = "Swamp"
 		self.conj_only = True
 		self.buff_class = SwampShrineBuff
-		self.description = "Summoned minions gain a [poison] damage aura and [100_poison:poison] resist.  The aura deals [2_poison:poison] damage to all enemies within the radius.  The radius is equal to the chosen spell's level plus 1."
+		self.description = "召唤的小兵获得 [poison] 伤害光环和 [100_点毒性:poison] 抗性。光环每回合对咒语等级 +1 格范围内的敌人造成 [2_点毒性:poison] 伤害。"
 		self.tags = [Tags.Nature, Tags.Dark]
 
 class BlackSkyShrine(Shrine):
@@ -630,7 +630,7 @@ class FrozenShrine(Shrine):
 		self.name = "Frozen"
 		self.tags = [Tags.Ice]
 		self.buff_class = FrozenShrineBuff
-		self.description = "[Ice] damage from this spell or minions summoned by this spell causes 2 turns of [freeze]."
+		self.description = "此咒语或所召唤小兵的 [Ice] 伤害施加 2 回合的 [freeze]。"
 
 class AngelicShrine(Shrine):
 
@@ -657,7 +657,7 @@ class DemonBaneShrine(Shrine):
 	def on_init(self):
 		self.name = "Demonbane"
 		self.tags = [Tags.Holy, Tags.Fire, Tags.Lightning]
-		self.description = "This spell regains 1 charge whenever it is used to kill a [demon]"
+		self.description = "每当此咒语消灭 [demon] 时，此咒语补充 1 点充能。"
 		self.buff_class = DemonBaneShrineBuff
 		self.no_conj = True
 
@@ -671,7 +671,7 @@ class CracklingShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Crackling"
-		self.description = "Half of all [lightning] damage dealt by this shrine is redealt as [fire] damage and vice versa."
+		self.description = "此咒语造成 [lightning] 伤害时，再造成一半的 [fire] 伤害。反之亦然。"
 		self.tags = [Tags.Fire, Tags.Lightning]
 		self.buff_class = CracklingShrineBuff
 		self.no_conj = True
@@ -688,7 +688,7 @@ class SandStoneShrine(Shrine):
 		self.name = "Sandstone"
 		self.tags = [Tags.Nature, Tags.Fire]
 		self.attr_bonuses['minion_health'] = .75
-		self.description = "Summoned minions gain [50_physical:physical] resist and [50_fire:fire] resist."
+		self.description = "召唤的小兵获得 [50_点物理:physical] 抗性和 [50_点火星:fire] 抗性。"
 		self.buff_class = SandStoneShrineBuff
 		self.conj_only = True
 
@@ -724,7 +724,7 @@ class CharredBoneShrine(Shrine):
 		self.name = "Charred Bone"
 		self.tags = [Tags.Fire, Tags.Dark]
 		self.buff_class = CharredBoneShrineBuff
-		self.description = "Whenever a minion summoned by this spell dies, it deals half its HP as [fire] damage to up to [4:num_summons] random enemy units up to [4_tiles:radius] away."
+		self.description = "每当此咒语召唤的小兵死亡时，随机对 [4_格:radius] 内的至多 [4:num_summons] 个敌人造成其生命一半的 [fire] 伤害。"
 		self.conj_only = True
 
 class RedStarShrineBuff(ShrineBuff):
@@ -757,7 +757,7 @@ class RedStarShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Red Star"
-		self.description = "Redeals all damage dealt by this spell or minions it summons to [arcane], [dark], or [fire] units as [holy] damage."
+		self.description = "此咒语或所召唤的小兵对 [arcane]、[dark] 或 [fire] 单位造成伤害时，再对齐造成等量的 [holy] 伤害。"
 		self.tags = [Tags.Fire, Tags.Arcane]
 		self.buff_class = RedStarShrineBuff
 
@@ -775,7 +775,7 @@ class BlueSkyShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Blue Sky"
-		self.description = "Summoned minions gain [100_lightning:lightning] resist, [2_HP:heal] regeneration per turn, and flying."
+		self.description = "召唤的小兵获得 [100_点闪电:lightning] 抗性，每回合治疗 [2_点生命:heal]，可飞行。"
 		self.buff_class = BlueSkyShrineBuff
 		self.tags = [Tags.Nature, Tags.Lightning]
 		self.conj_only = True
@@ -789,7 +789,7 @@ class EnergyShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Energy"
-		self.description = "On kill, gain [1_SH:shields]"
+		self.description = "击杀时，获得 [1_点护盾:shields]"
 		self.attr_bonuses['max_charges'] = 1
 		self.tags = [Tags.Arcane, Tags.Lightning]
 		self.buff_class = EnergyShrineBuff
@@ -815,7 +815,7 @@ class SoulpowerShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Soulpower"
-		self.description = "Whenever you kill a [living] or [demon] unit with this spell, all your spells gain [4_damage:damage] for [10_turns:duration]."
+		self.description = "每当你以此咒语击杀 [living] 或 [demon] 单位时，你的所有咒语获得 [4_点伤害:damage]，持续 [10_回合:duration]。"
 		self.buff_class = SoulpowerShrineBuff
 		self.tags = [Tags.Dark, Tags.Holy]
 		self.no_conj = True
@@ -850,7 +850,7 @@ class BrightShrine(Shrine):
 	def on_init(self):
 		self.name = "Bright"
 		self.tags = [Tags.Holy, Tags.Lightning]
-		self.description = "Damaged targets are [blinded] for [3_turns:duration]"
+		self.description = "受伤的目标 [blinded] [3_回合:duration]。"
 		self.buff_class = BrightShrineBuff
 		self.no_conj = True
 
@@ -868,7 +868,7 @@ class ProtectionShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Protection"
-		self.description = "Chosen spells summoned minions gain shields.  Spells that summon multiple minions get [1_SH:shields], other spells get [1_SH:shields] per spell level."
+		self.description = "此咒语召唤的小兵获得护盾。单体召唤的单位获得咒语等级的护盾数，多体召唤的单位各获得 [1_点护盾:shields]。"
 		self.tags = [Tags.Arcane, Tags.Holy, Tags.Nature]
 		self.conj_only = True
 		self.buff_class = ProtectionShrineBuff
@@ -887,7 +887,7 @@ class GreyBoneShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Grey Bone"
-		self.description = "Summoned minions split into [2:num_summons] bone shamblers on death.  Each bone shambler has 1/4th the HP of the original summon."
+		self.description = "召唤的小兵死去时，分裂为 [2:num_summons] 个白骨蹒跚者，其生命为原小兵的四分之一。"
 		self.conj_only = True
 		self.buff_class = GreyBoneShrineBuff
 
@@ -909,7 +909,7 @@ class StoningShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Stoning"
-		self.description = "Whenever this spell or a minion it summons kills an enemy unit, 2 random enemies in line of sight are [petrified] for [3_turns:duration]."
+		self.description = "每当此咒语或所召唤的小兵消灭敌方单位时，视线内随机两个敌人被 [petrified] [3_回合:duration]。"
 		self.tags = [Tags.Arcane, Tags.Holy, Tags.Dark]
 		self.buff_class = StoningShrineBuff
 
@@ -932,7 +932,7 @@ class BerserkShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Berserk"
-		self.description = "Damaged enemies go [berserk] for [1_turn:duration]"
+		self.description = "受伤的敌人 [berserk] [1_回合:duration]。"
 		self.tags = [Tags.Fire, Tags.Lightning, Tags.Nature]
 		self.buff_class = BerserkShrineBuff
 		self.no_conj = True
@@ -987,7 +987,7 @@ class EntropyShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Entropy"
-		self.description = "Damaged enemies gain a non-stacking -25 [dark] and [arcane] resist for [10_turns:duration]."
+		self.description = "受伤的敌人获得 -25 [dark] 和 [arcane] 抗性 [10_回合:duration]，不叠加。"
 		self.buff_class = EntropyShrineBuff
 		self.tags = [Tags.Lightning]
 		self.no_conj = True 
@@ -1022,7 +1022,7 @@ class EnervationShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Enervation"
-		self.description = "Damaged enemies gain a non stacking -25 [fire], [lightning], and [ice] resist for [10_turns:duration]."
+		self.description = "受伤的敌人获得 -25 [fire]、[lightning] 和 [ice] 抗性 [10_回合:duration]，不叠加。"
 		self.buff_class = EnervationShrineBuff
 		self.tags = [Tags.Arcane]
 		self.no_conj = True 
@@ -1053,7 +1053,7 @@ class ImpShrine(Shrine):
 	def on_init(self):
 		self.buff_class = ImpShrineBuff
 		self.tags = [Tags.Chaos]
-		self.description = "Whenever this spell is cast, summon chaos imps near the target for 17 turns.  The number of chaos imps summoned is equal to the level of the spell."
+		self.description = "每当施放此咒语时，在目标附近召唤混沌小鬼，持续 17 回合。小鬼数量等于此咒语等级。"
 		self.name = "Chaos Imp"
 
 
@@ -1078,7 +1078,7 @@ class WyrmEggShrine(Shrine):
 		self.buff_class = WyrmEggShrineBuff
 		self.name = "Wyrmbrood"
 		self.tags = [Tags.Nature, Tags.Fire, Tags.Ice, Tags.Dragon]
-		self.description = "On casting the last charge of this spell, create a friendly wyrm egg near the target."
+		self.description = "施放最后一个充能的此咒语时，在目标旁生成一个友方的浮龙蛋。"
 
 class BoonShrineBuff(ShrineBuff):
 
@@ -1109,7 +1109,7 @@ class BoonShrine(Shrine):
 	def on_init(self):
 		self.name = "Boon"
 		self.tags = [Tags.Enchantment]
-		self.description = "Self targeted spells only.\nWhenever you cast this spell, a random ally also casts it."
+		self.description = "只能用于以自身为目标的咒语。\n每当你施法此咒语时，随机一个友军也施放之。"
 		self.buff_class = BoonShrineBuff
 
 	def can_enhance(self, spell):
@@ -1161,7 +1161,7 @@ class ToxicAgonyShrine(Shrine):
 	def on_init(self):
 		self.name = "Toxic Agony"
 		self.tags = [Tags.Nature, Tags.Lightning]
-		self.description = "Whenever this spell or a minion it summoned deals damage to a [poisoned] enemy, deal that much [lightning] damage to up to [4:num_targets] enemy units in a [5_tile:radius] burst."
+		self.description = "每当此咒语或所召唤的小兵对 [poisoned] 的敌人造成伤害时，在 [5_格:radius] 冲程内对至多 [4:num_targets] 个敌人造成等量 [lightning] 伤害。"
 		self.buff_class = ToxicAgonyBuff
 
 class BoneSplinterBuff(OnKillShrineBuff):
@@ -1186,7 +1186,7 @@ class BoneSplinterShrine(Shrine):
 	def on_init(self):
 		self.name = "Bone Splinter"
 		self.tags = [Tags.Dark, Tags.Fire]
-		self.description = "When this spell kills a [living] or [undead] unit, deal [physical] damage equal to half that unit's max HP in a [3_tile:radius] burst."
+		self.description = "每当此咒语消灭 [living] 或 [undead] 单位时，在 [3_格:radius] 冲程内造成该单位生命上限一半的 [physical] 伤害。"
 		self.buff_class = BoneSplinterBuff
 		self.no_conj = True
 
@@ -1208,7 +1208,7 @@ class HauntingShrine(Shrine):
 		self.tags = [Tags.Holy, Tags.Dark]
 		self.name = "Haunting"
 		self.buff_class = HauntingShrineBuff
-		self.description = "For each 15 damage dealt by this spell or a minion it summons, summon a ghost near a unit it dealt damage to for 8 turns."
+		self.description = "此咒语或所召唤的单位每造成 15 点伤害，便在受到伤害的单位旁召唤一个幽灵，持续 8 回合。"
 
 
 class SwordShrine(Shrine):
@@ -1264,7 +1264,7 @@ class ButterflyWingShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Butterfly Wing"
-		self.description = "For each 50 damage dealt by this spell or a minion it summons, summon a butterfly demon near the target for 5 turns."
+		self.description = "此咒语或所召唤的单位每造成 50 点伤害，便在受到伤害的单位旁召唤一个蝴蝶恶魔，持续 5 回合。"
 		self.buff_class = ButterflyWingBuff
 		self.tags = [Tags.Dark, Tags.Nature, Tags.Arcane, Tags.Lightning]
 
@@ -1288,7 +1288,7 @@ class GoldSkullShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Gold Skull"
-		self.description = "On casting the last charge of this spell, summon a gold skull near the target."
+		self.description = "施放最后一个充能的此咒语时，在目标旁生成一个金颅。"
 		self.buff_class = GoldSkullBuff
 		self.tags = [Tags.Holy, Tags.Dark]
 
@@ -1309,7 +1309,7 @@ class FurnaceShrine(Shrine):
 		self.tags = [Tags.Fire, Tags.Dark]
 		self.name = "Furnace"
 		self.buff_class = FurnaceShrineBuff
-		self.description = "For each 100 damage dealt by this spell or a minion it summons, summon a furnace hound near a unit it dealt damage to."
+		self.description = "此咒语或所召唤的单位每造成 100 点伤害，便在受到伤害的单位旁召唤一个熔炉猎犬。"
 
 
 class HeavenstrikeBuff(OnKillShrineBuff):
@@ -1334,7 +1334,7 @@ class HeavenstrikeShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Heavenstrike"
-		self.description = "Whenever this spell kills an enemy unit, deal [18_holy:holy] damage to the closest enemy in line of sight."
+		self.description = "每当此咒语消灭敌方单位时，对视线内最近的敌人造成 [18_点神圣:holy] 伤害。"
 		self.buff_class = HeavenstrikeBuff
 		self.tags = [Tags.Lightning, Tags.Holy]
 		self.no_conj = True
@@ -1358,7 +1358,7 @@ class StormchargeShrine(Shrine):
 		self.name = "Stormcharge"
 		self.tags = [Tags.Ice, Tags.Lightning]
 		self.buff_class = StormchargeBuff
-		self.description = "For each 15 damage dealt by this spell or a minion it summons, deal [9_ice:ice] or [9_lightning:lightning] damage to a random enemy unit."
+		self.description = "此咒语或所召唤的单位每造成 15 点伤害，便随机对一个敌方单位造成 [9_点寒冰:ice] 或 [9_点闪电:lightning] 伤害。"
 
 
 class DisintegrationBuff(DamageCounterShrineBuff):
@@ -1378,7 +1378,7 @@ class DisintegrationShrine(Shrine):
 	def on_init(self):
 		self.name = "Disintegration"
 		self.tags = [Tags.Arcane, Tags.Lightning, Tags.Dark]
-		self.description = "For each 30 damage dealt by this spell, deal [1_arcane:arcane] or [1_physical:physical] damage to all enemies."
+		self.description = "此咒语或所召唤的单位每造成 30 点伤害，对所有敌人造成 [1_点奥术:arcane] 或 [1_点物理:physical] 伤害。"
 		self.buff_class = DisintegrationBuff
 
 class AlchemistShrineBuff(ShrineBuff):
@@ -1396,7 +1396,7 @@ class AlchemistShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Alchemist"
-		self.description = "Whenever you use an item, gain 1 charge of this spell."
+		self.description = "每当你使用物品时，次咒语获得 1 点充能。"
 		self.buff_class = AlchemistShrineBuff
 
 class WarpedBuff(ShrineBuff):
@@ -1423,7 +1423,7 @@ class WarpedShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Warped"
-		self.description = "Whenever you cast this spell and then also after it is resolved, deal [11_arcane:arcane] damage to all enemies within [4_tiles:radius] of the caster."
+		self.description = "每当你施放此咒语或此咒语结算后，对施法者 [4_格:radius] 内的所有敌人造成 [11_点奥术:arcane]。"
 		self.tags = [Tags.Translocation]
 		self.buff_class = WarpedBuff
 
@@ -1448,7 +1448,7 @@ class TroublerShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Troubler"
-		self.description = "Whenever you cast this spell, summon several troublers near the location it was cast from for [7_turns:minion_duration].  The number of troublers summoned is equal to the spell's level."
+		self.description = "每当你施放此咒语时，在施法位置旁召唤若干麻烦鬼，持续 [7_回合:minion_duration]。召唤数量为咒语等级。"
 		self.tags = [Tags.Translocation]
 		self.buff_class = TroublerShrineBuff
 
@@ -1492,7 +1492,7 @@ class FireClawShrine(Shrine):
 		self.name = "Fire Claw"
 		self.conj_only = True
 		self.tags = [Tags.Nature, Tags.Dragon]
-		self.description = "Redeal [physical] damage dealt by minions summoned as [fire] damage."
+		self.description = "此咒语召唤的小兵造成 [physical] 伤害时，再造成等量对的 [fire] 伤害。"
 		self.buff_class = FireClawBuff
 
 class IceClawBuff(ElementalClawBuff):
@@ -1507,7 +1507,7 @@ class IceClawShrine(Shrine):
 		self.name = "Ice Claw"
 		self.conj_only = True
 		self.tags = [Tags.Nature, Tags.Dragon]
-		self.description = "Redeal [physical] damage dealt by minions summoned as [ice] damage."
+		self.description = "此咒语召唤的小兵造成 [physical] 伤害时，再造成等量对的 [ice] 伤害。"
 		self.buff_class = IceClawBuff
 
 class FaewitchShrineBuff(OnKillShrineBuff):
@@ -1530,7 +1530,7 @@ class FaewitchShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Faewitch"
-		self.description = "Whenever this spell kills a unit, if that unit had atleast one debuff, summon a faewitch for [7_turns:minion_duration]."
+		self.description = "每当此咒语消灭单位时，若该单位有减益，召唤一个仙灵巫婆，持续 [7_回合:minion_duration]。"
 		self.buff_class = FaewitchShrineBuff
 		self.tags = [Tags.Arcane, Tags.Dark]
 		self.no_conj = True
@@ -1549,7 +1549,7 @@ class BomberShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Bomber"
-		self.description = "Whenever this spell kills a unit, summon a fire bomber or a void bomber at that units location."
+		self.description = "每当此咒语消灭单位时，在该单位处召唤一个火焰轰炸者或虚空轰炸者。"
 		self.buff_class = BomberShrineBuff
 		self.tags = [Tags.Fire, Tags.Arcane]
 		self.no_conj = True
@@ -1561,7 +1561,7 @@ class SorceryShieldStack(Buff):
 		Buff.__init__(self)
 
 	def on_init(self):
-		self.name = "%s Protection" % self.tag.name
+		self.name = "%s 保护" % loc.dic.get(self.tag.name, self.tag.name)  # 汉化 改名
 		self.stack_type = STACK_NONE
 		self.resists[self.tag] = 100
 		self.color = self.tag.color
@@ -1587,7 +1587,7 @@ class SorceryShieldShrine(Shrine):
 		self.name = "Sorcery Shield"
 		self.tags = [Tags.Sorcery]
 		self.buff_class = SorceryShieldShrineBuff
-		self.description = "Whenever this spell deals damage, you gain 100 resistance to that type of damage for 3 turns."
+		self.description = "每当此咒语造成伤害时，你获得该类型的 100 点抗性，持续 3 回合。"
 
 class FrostfaeShrineBuff(DamageCounterShrineBuff):
 
@@ -1605,7 +1605,7 @@ class FrostfaeShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Frost Faery"
-		self.description = "For each 33 damage dealt by this spell or a minion it summons, summon an Ice Faery near a unit it dealt damage to."
+		self.description = "此咒语或所召唤的单位每造成 33 点伤害，在受到伤害的单位旁召唤一个寒冰仙灵。"
 		self.tags = [Tags.Arcane, Tags.Ice]
 		self.buff_class = FrostfaeShrineBuff
 
@@ -1621,7 +1621,7 @@ class EssenceShrine(Shrine):
 	def on_init(self):
 		self.name = "Essence"
 		self.tags = [Tags.Dark, Tags.Arcane, Tags.Lightning]
-		self.description = "Whenever this spell kills a unit, all your temporary allies gain 1 extra turn of duration."
+		self.description = "每当此咒语消灭单位时，你的所有临时友军额外持续 1 回合。"
 		self.buff_class = EssenseShrineBuff
 		self.no_conj = True
 
@@ -1653,7 +1653,7 @@ class ChaosConductanceShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Chaos Relay"
-		self.description = "Whenever this spell or a minion it summoned deals damage to an allied unit, redeal that damage to all enemy units in a [4_tile:radius] radius."
+		self.description = "每当此咒语或所召唤的友军对友方单位造成伤害时，对 [4_格:radius] 半径内的所有敌方单位造成等量伤害。"
 		self.tags = [Tags.Fire, Tags.Lightning, Tags.Chaos]
 		self.buff_class = ChaosConductanceShrineBuff
 
@@ -1681,7 +1681,7 @@ class ElementalHarvestShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Elemental Harvest"
-		self.description = "Whenever a [fire], [lightning], or [ice] unit dies, this spell has a 10% chance of gaining a charge.\nIf the unit died to [fire], [lightning], or [ice] damage, this chance is increased to 30%."
+		self.description = "每当 [fire]、[lightning] 或 [ice] 单位死亡时，此咒语有 10% 的几率获得一点充能。\n若该单位死于 [fire]、[lightning] 或 [ice] 伤害，几率改为 30%。"
 		self.tags = [Tags.Fire, Tags.Lightning, Tags.Ice]
 		self.buff_class = ElementalHarvestShrineBuff
 
@@ -1706,7 +1706,7 @@ class IcySprigganShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Icy Spriggan"
-		self.description = "Whenever you cast this spell, summon an Ice Spriggan near the target."
+		self.description = "每当你施放此咒语时，在目标旁召唤一个寒冰斯皮肯。"
 		self.tags = [Tags.Nature, Tags.Ice]
 		self.buff_class = IceSprigganShrineBuff
 
@@ -1736,7 +1736,7 @@ class SunlightShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Sunlight"
-		self.description = "Whenever this spell deals damage to an enemy unit, all allied minions in line of sight of the damaged unit are healed for half that much damage."
+		self.description = "每当此咒语对敌方单位造成伤害时，治疗受伤单位视线内的所有友方小兵等量生命。"
 		self.tags = [Tags.Nature, Tags.Fire, Tags.Holy]
 		self.no_conj = True
 		self.buff_class = SunlightShrineBuff
@@ -1767,7 +1767,7 @@ class ConflagurationShrine(Shrine):
 
 	def on_init(self):
 		self.name = "Searing"
-		self.description = "Whenever this spell deals damage, redeal half that damage to another random enemy in line of sight."
+		self.description = "每当此咒语造成伤害时，随机对视线内的一个敌人造成一半伤害。"
 		self.tags = [Tags.Fire, Tags.Holy]
 		self.buff_class = ConflagurationBuff
 
@@ -1806,8 +1806,8 @@ class ChaosQuillShrine(Shrine):
 		self.buff_class = ChaosQuillShrineBuff
 		self.tags = [Tags.Chaos, Tags.Fire, Tags.Lightning]
 		self.name = "Chaos Quill"
-		self.description = ("Whenever this spell kills a [lightning] or [fire] unit, summon a living scroll of fire or lightning at that unit's location.\n"
-						    "Whenever you cast the last charge of this spell, summon a Chaos Quill for 36 turns.")
+		self.description = ("每当此咒语消灭 [lightning] 或 [fire] 单位时，在该单位处召唤一个火焰活体卷轴或闪电活体卷轴。\n"
+						    "每当你施放最后一个充能的此咒语时，召唤一个混沌笔毫，持续 36 回合。")
 
 class FireflyShrineBuff(OnKillShrineBuff):
 
@@ -1824,7 +1824,7 @@ class FireflyShrine(Shrine):
 		self.buff_class = FireflyShrineBuff
 		self.tags = [Tags.Nature, Tags.Fire, Tags.Dark]
 		self.name = "Firefly"
-		self.description = "Whenever this spell kills a unit, summon 2 firefly swarms near the caster for 20 turns."
+		self.description = "每当此咒语消灭单位时，在施法者旁召唤两个萤火虫群，持续 20 回合。"
 		self.no_conj = True
 
 class CauterizingShrineBuff(ShrineBuff):
@@ -1848,7 +1848,7 @@ class CauterizingShrine(Shrine):
 		self.buff_class = CauterizingShrineBuff
 		self.tags = [Tags.Dark, Tags.Fire]
 		self.name = "Cauterizing"
-		self.description = "Whenever this spell or a minion it summons deals damage to an enemy, that enemy loses that much max HP."
+		self.description = "每当此咒语或所召唤的小兵对敌人造成伤害时，该敌人失去等量的生命上限。"
 
 class DeathchillChimeraShrineBuff(DamageCounterShrineBuff):
 
@@ -1867,7 +1867,7 @@ class DeathchillChimeraShrine(Shrine):
 		self.tags = [Tags.Ice, Tags.Dark]
 		self.name = "Deathchill Chimera"
 		self.buff_class = DeathchillChimeraShrineBuff
-		self.description = "For each 80 damage dealt by this spell or a minion it summons, summon a deathchill chimera near a unit it dealt damage to."
+		self.description = "此咒语或所召唤的单位每造成 80 点伤害，便在受到伤害的单位旁召唤一个死寒奇美拉。"
 
 class BloodrageShrineBuff(OnKillShrineBuff):
 
@@ -1883,7 +1883,7 @@ class BloodrageShrine(Shrine):
 	def on_init(self):
 		self.tags = [Tags.Nature, Tags.Chaos, Tags.Dark]
 		self.name = "Bloodrage"
-		self.description = "Whenever this spell kills a unit, all allied minions in line of sight gain +3 damage for 5 turns."
+		self.description = "每当此咒语消灭单位时，所有视线内鄂友方小兵获得 +3 点伤害，持续 5 回合。"
 		self.buff_class = BloodrageShrineBuff
 		self.no_conj = True
 
@@ -1916,7 +1916,7 @@ class ShrapnelShrine(Shrine):
 	def on_init(self):
 		self.tags = [Tags.Metallic]
 		self.name = "Razor"
-		self.description = "Whenever you cast this spell, deal 27 [physical] damage to 1 enemy in line of sight per spell level."
+		self.description = "每当你施放此咒语时，对视线内的一个敌人造成 27 点 [physical] 伤害，执行次数为咒语等级"
 		self.buff_class = RazorShrineBuff
 
 COMMON = 1
@@ -2065,7 +2065,7 @@ for s in new_shrines:
 
 def make_shrine(shrine, player):
 	shrine_prop = ShrineShop(lambda : list(shrine.get_buffs(player)))
-	shrine_prop.name = "%s Shrine" % shrine.name
+	shrine_prop.name = "%s Shrine" % shrine.name  # 汉化
 	shrine_prop.description = shrine.get_description()
 
 	# Use custom asset if exists

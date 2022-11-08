@@ -30,11 +30,11 @@
 |游戏|[Game.py](Game.py)|99%|润色和修正|
 |物品|[Cunsumables.py](Consumables.py)|99%|润色和修正|
 |关卡|[Level.py](Level.py)|99%|润色和修正|
-|怪物|[Monsters.py](Monsters.py)| |名称和衍生名称完工|
-|变体怪物|[Variant.py](Variants.py)|0%||
-|稀有怪物|[RareMonsters.py](RareMonsters.py)| |名称和衍生名称完工|
+|怪物|[Monsters.py](Monsters.py)|30%|名称和衍生名称完工|
+|变体怪物|[Variant.py](Variants.py)|30%|名称和衍生名称完工|
+|稀有怪物|[RareMonsters.py](RareMonsters.py)|30%|名称和衍生名称完工|
 |通用|[CommonContent.py](CommonContent.py)| |校对|
-|神龛|[Shrines.py](Shrines.py)| |校对|
+|神龛|[Shrines.py](Shrines.py)|99%|润色和修正|
 |变体规则|[Mutators.py](Mutators.py)| |校对|
 |NPC|[NPCs.py](NPCs.py)|0%||
 
@@ -58,8 +58,9 @@
 * 多选一的分支只算一个可选升级。
 * 被动全满后升级按钮用灰色。
 * 声音文件改为`192kbps`的`.mp3`。
-* 缓存通关后的日志文件，防止循环读取文件。118行的日志会让游戏卡顿，只输出41行。（原版漏洞）
+* 缓存日志防止循环读取。118行的日志会让游戏卡顿，只输出41行。（原版漏洞）
 * 调整界面函数和参数。
+* 改进作弊模式，可开可关，调整键位
 
 ## 说明
 

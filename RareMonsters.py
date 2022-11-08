@@ -3069,7 +3069,7 @@ def roll_rare_spawn(difficulty, tags, min_level=None, max_level=None, prng=None)
 	spawner, diff, min_no, max_no, tag = chosen_opt
 
 	numspawn = prng.randint(min_no, max_no)
-	units = [spawner() for i in range(numspawn)]  
+	units = [spawner() for i in range(numspawn)]
 
 	if max_no == 1:
 		for u in units:

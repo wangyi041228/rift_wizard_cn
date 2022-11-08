@@ -1977,7 +1977,7 @@ class PyGameView(object):
 
 			global cheats_enabled
 			if can_enable_cheats and evt.key == pygame.K_z and keys[pygame.K_LSHIFT] and keys[pygame.K_LCTRL]:
-				cheats_enabled = True
+				cheats_enabled = not cheats_enabled
 
 			if cheats_enabled:
 				if evt.key == pygame.K_t and level_point:
@@ -1994,12 +1994,12 @@ class PyGameView(object):
 					self.game.p1.max_hp += 250
 					self.game.p1.cur_hp += 250
 
-				if evt.key == pygame.K_k:
+				if evt.key == pygame.K_k and keys[pygame.K_LSHIFT]:
 					for unit in list(self.game.cur_level.units):
 						if unit != self.game.p1:
 							unit.kill()
 
-				if evt.key == pygame.K_g:
+				if evt.key == pygame.K_g and keys[pygame.K_LSHIFT]:
 					self.game.p1.kill()
 
 				if evt.key == pygame.K_r:
@@ -2010,10 +2010,10 @@ class PyGameView(object):
 					for i, c in all_consumables:
 						self.game.p1.add_item(i())
 
-				if evt.key == pygame.K_s:
+				if evt.key == pygame.K_s and keys[pygame.K_LSHIFT]:
 					self.game.save_game('./cheat_save')
 
-				if evt.key == pygame.K_l:
+				if evt.key == pygame.K_l and keys[pygame.K_LSHIFT]:
 					self.game = continue_game('cheat_save')
 
 				if evt.key == pygame.K_c and keys[pygame.K_LSHIFT]:
@@ -2030,10 +2030,10 @@ class PyGameView(object):
 						gate.next_level = None
 						self.game.cur_level.flash(gate.x, gate.y, Tags.Arcane.color)
 
-				if evt.key == pygame.K_f:
+				if evt.key == pygame.K_f and keys[pygame.K_LSHIFT]:
 					self.examine_target = self.get_display_level().gen_params
 
-				if evt.key == pygame.K_v:
+				if evt.key == pygame.K_v and keys[pygame.K_LSHIFT]:
 					to_blit = self.screen
 					scale = 1
 					w = to_blit.get_width() * scale
@@ -2052,20 +2052,20 @@ class PyGameView(object):
 				if evt.key == pygame.K_MINUS:
 					self.game.level_num -= 1
 
-				if evt.key == pygame.K_m:
+				if evt.key == pygame.K_m and keys[pygame.K_LSHIFT]:
 					for monster, cost in spawn_options:
 						unit = monster()
 						p = self.game.cur_level.get_summon_point(0, 0, radius_limit=40)
 						if p:
 							self.game.cur_level.add_obj(unit, p.x, p.y)
 
-				if evt.key == pygame.K_b and level_point:
+				if evt.key == pygame.K_b and level_point and keys[pygame.K_LSHIFT]:
 					unit = Mordred()
 					p = self.game.cur_level.get_summon_point(level_point.x, level_point.y)
 					if p:
 						self.game.cur_level.add_obj(unit, p.x, p.y)
 
-				if evt.key == pygame.K_p:
+				if evt.key == pygame.K_p and keys[pygame.K_LSHIFT]:
 					import pdb
 					pdb.set_trace()
 
@@ -3853,10 +3853,10 @@ class PyGameView(object):
 								word = tokens[0].replace('_', ' ')
 								cur_color = tooltip_colors[tokens[1].lower()].to_tup()
 						_name = loc.dic.get(word, word)
+						if _needspace:
+							cur_x += char_width
 						if all((i.isascii() for i in _name)):  # i in '0123456789+-%'
-							_name += ' '
-						if _needspace and _name[0].isascii():  #  in '0123456789+-%'
-							_name = ' ' + _name
+							_needspace = True
 						while _name:
 							_len = len(_name)
 							_newline = False
@@ -4222,7 +4222,7 @@ class PyGameView(object):
 				_attr = loc.attrc_dic.get(attr, '') + loc.attr_dic.get(attr, attr)
 				# 汉化 量词
 				if attr in tooltip_colors:
-					fmt = "%s 获得 [_%s_%s:%s]" % (_name, val, _attr, attr)
+					fmt = "%s 获得 [%s_%s:%s]" % (_name, val, _attr, attr)
 				else:
 					fmt = "%s 获得 %d %s" % (_name, val, _attr)
 				lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, width=width)
@@ -4231,9 +4231,9 @@ class PyGameView(object):
 
 		for attr, val in self.examine_target.global_bonuses.items():
 			if val >= 0:
-				fmt = "所有咒语和被动获得 [_%d_] %s" % (val, format_attr(attr))
+				fmt = "所有咒语和被动获得 [%d] %s" % (val, format_attr(attr))
 			else:
-				fmt = "所有咒语和被动失去 [_%d_] %s" % (-val, format_attr(attr))
+				fmt = "所有咒语和被动失去 [%d] %s" % (-val, format_attr(attr))
 			lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, width)
 			cur_y += (lines+1) * self.linesize
 

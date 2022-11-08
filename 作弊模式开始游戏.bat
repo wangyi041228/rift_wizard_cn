@@ -1,1 +1,1 @@
-RiftWizard.exe cheatmode
+start RiftWizard.exe cheatmode

@@ -4871,7 +4871,7 @@ class MulticastBuff(Buff):
 
 	def on_init(self):
 		self.name = "Multicast"
-		self.description = "每当你施放 [sorcery]  咒语，将其复制。"
+		self.description = "每当你施放 [sorcery] 咒语，将其复制。"
 		self.can_copy = True
 		self.owner_triggers[EventOnSpellCast] = self.on_spell_cast
 
@@ -4911,7 +4911,7 @@ class MulticastSpell(Spell):
 		self.caster.apply_buff(MulticastBuff(self), self.get_stat('duration') + 1)
 
 	def get_description(self):
-		return ("每当你施放 [sorcery]  咒语，将其复制。\n"
+		return ("每当你施放 [sorcery] 咒语，将其复制。\n"
 				"持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 class FaeCourt(Spell):
