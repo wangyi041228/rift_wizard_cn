@@ -2395,7 +2395,7 @@ class WatcherFormSpell(Spell):
 		self.caster.apply_buff(WatcherFormDefenses(), self.get_stat('duration') + 1)
 
 	def get_description(self):
-		return ("Each turn, fire a lightning bolt at the farthest enemy in line of sight dealing [{damage}_点闪电:lightning] damage in a beam.\n"
+		return ("每回合向视线内最远的敌人发射一道闪电箭，在束状内造成 [{damage}_点闪电:lightning] 伤害。\n"
 				"你无法移动或施放咒语。\n"
 				"获得 100 [physical] 抗性。\n"
 				"获得 100 [fire] 抗性。\n"
@@ -7978,7 +7978,7 @@ class SlimeformSpell(Spell):
 				"史莱姆形态时获得 [50_点物理:physical] 抗性\n"
 				"史莱姆形态时获得 [100_点毒性:poison] 抗性。\n"
 				"史莱姆形态时每回合召唤一个友方的史莱姆。\n"
-				"史莱姆有 [{minion_health}_点生命:minion_health]，每回合有 50% 几率获得 1 点生命上限，生命上限打到起始生命的两倍时分裂为两个史莱姆。\n"
+				"史莱姆有 [{minion_health}_点生命:minion_health]，每回合有 50% 几率获得 1 点生命上限，生命上限达到起始生命的两倍时分裂为两个史莱姆。\n"
 				"史莱姆的近战攻击造成 [{minion_damage}_点毒性:poison] 伤害。").format(**self.fmt_dict())
 
 	def cast_instant(self, x, y):

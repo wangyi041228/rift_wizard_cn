@@ -1172,7 +1172,7 @@ class HypocrisyStack(Buff):
 		Buff.__init__(self)
 
 	def on_init(self):
-		self.name = "%s Hypocrisy %d" % (self.tag.name, self.level)
+		self.name = "%s虚伪 %d" % (loc.dic.get(self.tag.name, self.tag.name), self.level)
 		self.description = "若你施放的下个咒语是 %d 级或更低的 %s 咒语，其为免费。" % (self.level, loc.dic.get(self.tag.name, self.tag.name))
 		self.color = self.tag.color
 		self.owner_triggers[EventOnSpellCast] = self.on_spell_cast
@@ -2013,7 +2013,7 @@ class NecrostaticStack(Buff):
 		Buff.__init__(self)
 
 	def on_init(self):
-		self.name = "Necrostatics %d" % self.strength
+		self.name = "尸毒学 %d" % self.strength
 		self.tag_bonuses[Tags.Lightning]['damage'] = self.strength
 		self.color = Tags.Lightning.color
 		self.show_effect = False

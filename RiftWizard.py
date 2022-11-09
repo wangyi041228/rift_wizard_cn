@@ -975,6 +975,7 @@ class PyGameView(object):
 
 	def __init__(self):
 		self.game = None
+		self.re_words = re.compile(r"[\[\]:|\w\'%\-()+]+|.")
 
 		try:
 			with open('options2.dat', 'rb') as options_file:
@@ -1097,6 +1098,7 @@ class PyGameView(object):
 		# 字体锚点
 		font_path = os.path.join("rl_data", "sarasa-mono-sc-bold.ttf")
 		self.font = pygame.font.Font(font_path, 16)
+		self.space_width = self.font.size(' ')[0]
 		self.ascii_idle_font = pygame.font.Font(font_path, 16)
 		self.ascii_attack_font = pygame.font.Font(font_path, 16)
 		self.ascii_flinch_font = pygame.font.Font(font_path, 16)
@@ -1124,7 +1126,7 @@ class PyGameView(object):
 
 		self.deploy_target = None
 		self.border_margin = 12
-		self.linesize = self.font.get_linesize() + 2
+		self.linesize = self.font.get_linesize() + 0
 
 		self.state = None
 		self.return_to_title()
@@ -1135,7 +1137,7 @@ class PyGameView(object):
 		self.shop_upgrade_spell = None
 		self.shop_selection_index = 0
 		self.shop_page = 0
-		self.max_shop_objects = 35  # 汉化 每页上限 原始44
+		self.max_shop_objects = 38
 
 		self.tag_keys = {
 			'f': Tags.Fire,
@@ -2192,7 +2194,6 @@ class PyGameView(object):
 
 		#Spells
 		for spell in self.game.p1.spells:
-			# 汉化 分成两列
 			if cur_y > 820:
 				cur_y = self.linesize * 3
 				cur_x += 140
@@ -2902,6 +2903,8 @@ class PyGameView(object):
 			self.draw_string("类别", self.middle_menu_display, cur_x + tag_offset, cur_y)
 		if self.shop_type == SHOP_TYPE_UPGRADES:
 			self.draw_string("学习被动", self.middle_menu_display, cur_x, cur_y)
+			self.draw_string("SP", self.middle_menu_display, level_x - self.font.size('X')[0], cur_y, COLOR_XP)
+			self.draw_string("类别", self.middle_menu_display, cur_x + tag_offset, cur_y)
 		if self.shop_type == SHOP_TYPE_SPELL_UPGRADES:
 			_name = loc.dic.get(self.shop_upgrade_spell.name, self.shop_upgrade_spell.name)
 			self.draw_string("升级%s" % _name, self.middle_menu_display, cur_x, cur_y)
@@ -3811,11 +3814,10 @@ class PyGameView(object):
 		string_surface = font.render(string, True, color)
 		surface.blit(string_surface, (x, y))
 
-	# 汉化
+
 	def draw_wrapped_string(self, string, surface, x, y, width, color=(255, 255, 255), center=False, indent=False, extra_space=False):
 		lines = string.split('\n')
 
-		char_width = self.font.size(' ')[0]
 		cur_x = x
 		cur_y = y
 		linesize = self.linesize
@@ -3823,67 +3825,76 @@ class PyGameView(object):
 
 		for line in lines:
 			if line in loc.dic:
-				_name = loc.dic[line]
-				self.draw_string(' ' + _name, surface, cur_x, cur_y, color, content_width=width)
+				word = loc.dic[line]
+				self.draw_string(word, surface, cur_x + self.space_width, cur_y, color)
 			else:
-				cur_x = x + char_width
-				_needspace = False
-				exp = '[\[\]:|\w\|\'|%|-]+|.| |,|，|、|。|：'
-				words = re.findall(exp, line)
+				_not_line_start = False
+				_need_space = False
+				cur_x = x + self.space_width
+				words = self.re_words.findall(line)
 				words.reverse()
 				while words:
 					cur_color = color
 					word = words.pop()
-
-					if word != ' ':
-						if len(word) == 1 and word in '，、。：,.!':
-							self.draw_string(word, surface, cur_x, cur_y, cur_color, content_width=width)
-							cur_x += self.font.size(word)[0]
-							_needspace = False
-							continue
-						if word and word[0] == '[' and word[-1] == ']':
-							tokens = word[1:-1].split(':')
-							if len(tokens) == 1:
-								word = tokens[0]  # todo- fmt attribute?
-								if word.lower() in tooltip_colors:
-									cur_color = tooltip_colors[word.lower()].to_tup()
-								else:
-									word = word.replace('_', ' ')
-							elif len(tokens) == 2:
-								word = tokens[0].replace('_', ' ')
-								cur_color = tooltip_colors[tokens[1].lower()].to_tup()
-						_name = loc.dic.get(word, word)
-						if _needspace:
-							cur_x += char_width
-						if all((i.isascii() for i in _name)):  # i in '0123456789+-%'
-							_needspace = True
-						while _name:
-							_len = len(_name)
-							_newline = False
+					if word == ' ':
+						continue
+					if len(word) == 1 and word in "，、。：！,.!":
+						self.draw_string(word, surface, cur_x, cur_y, cur_color)
+						if word in '，、。：！':
+							_not_line_start = False
+						cur_x += self.font.size(word)[0]
+						continue
+					if word[0] == '[' and word[-1] == ']':
+						tokens = word[1:-1].split(':')
+						if len(tokens) == 1:
+							word = tokens[0]
+							if word.lower() in tooltip_colors:
+								cur_color = tooltip_colors[word.lower()].to_tup()
+							else:
+								word = word.replace('_', ' ')
+						elif len(tokens) == 2:
+							word = tokens[0].replace('_', ' ')
+							cur_color = tooltip_colors[tokens[1].lower()].to_tup()
+					word = loc.dic.get(word, word)  # 汉化 理论上全汉化后，这里不需要查表
+					if _not_line_start and (_need_space or all((cha.isascii() for cha in word))):
+						cur_x += self.space_width
+						if cur_x + self.font.size(word)[0] > width + x:
+							cur_y += linesize
+							num_lines += 1
+							cur_x = x + self.space_width
+						self.draw_string(word, surface, cur_x, cur_y, cur_color)
+						_not_line_start = True
+						cur_x += self.font.size(word)[0]
+						_need_space = word[-1].isascii()
+					else:
+						if _not_line_start and (_need_space or word[0].isascii()):
+							cur_x += self.space_width
+						while word:
+							_len = len(word)
+							_need_newline = False
+							_temp_result = width + x - cur_x
 							while _len:
-								if cur_x + self.font.size(_name[:_len])[0] > width + x:
+								if self.font.size(word[:_len])[0] > _temp_result:
 									_len -= 1
-									_newline = True
-								elif _len < len(_name) - 1 and _name[_len].isascii() and _name[_len+1].isascii():
+									_need_newline = True
+								elif _len < len(word) - 1 and word[_len].isascii() and word[_len+1].isascii():
 									_len -= 1
-									_newline = True
+									_need_newline = True
 								else:
 									break
-							_newname = _name[:_len]
-							_name = _name[_len:]
-							if _name and _name[0] == ' ':
-								_name = _name[1:]
-							if _newname:
-								self.draw_string(_newname, surface, cur_x, cur_y, cur_color, content_width=width)
-								_needspace = False if _newname[-1] in '，、。：,.!+ ' else True
-								cur_x += self.font.size(_newname)[0]
-							if _newline:
+							_temp_name = word[:_len]
+							word = word[_len:]
+							if word and word[0] == ' ':
+								word = word.lstrip()
+							if _temp_name:
+								self.draw_string(_temp_name, surface, cur_x, cur_y, cur_color)
+								_not_line_start = True
+								cur_x += self.font.size(_temp_name)[0]
+								_need_space = _temp_name[-1].isascii()
+							if _need_newline:
 								cur_y += linesize
 								num_lines += 1
-								cur_x = x + char_width
-								_needspace = False
-					# else:
-					#   	cur_x += char_width
+								cur_x = x + self.space_width
 
 			cur_y += linesize
 			num_lines += 1
@@ -4049,9 +4060,15 @@ class PyGameView(object):
 		self.draw_string("物品", self.character_display, cur_x, cur_y)
 		cur_y += linesize
 		index = 1
-		for item in self.game.p1.items:
 
-			hotkey_str = "A%d" % (index % 10)
+		_cur_y_head = cur_y
+		len_items = len(self.game.p1.items)
+		for i, item in enumerate(self.game.p1.items):
+
+			if i == (len_items + 1) // 2:
+				cur_x += 170
+				cur_y = _cur_y_head
+			hotkey_str = "A%d" % (index % 10) if index < 11 else "  "
 
 			cur_color = (255, 255, 255)
 			if item.spell == self.cur_spell:
@@ -4059,9 +4076,9 @@ class PyGameView(object):
 
 			if item.name in loc.dic:
 				_name = loc.dic.get(item.name)
-				_fill = f'{_name}{" "*(18-len(_name)*2)}'
+				_fill = f'{_name}{" "*(12-len(_name)*2)}'
 			else:
-				_fill = '%-18s' % item.name
+				_fill = '%-12s' % item.name
 			fmt = "%2s   %s%2d" % (hotkey_str, _fill, item.quantity)
 
 			self.draw_string(fmt, self.character_display, cur_x, cur_y, cur_color, mouse_content=item)
@@ -4124,7 +4141,7 @@ class PyGameView(object):
 		cur_y += linesize
 
 		color = self.game.p1.discount_tag.color.to_tup() if self.game.p1.discount_tag else (255, 255, 255)
-		self.draw_string("角色 (C)", self.character_display, cur_x, cur_y, color=color, mouse_content=CHAR_SHEET_TARGET)
+		self.draw_string("角色 (C) 开启作弊" if cheats_enabled else "角色 (C)", self.character_display, cur_x, cur_y, color=color, mouse_content=CHAR_SHEET_TARGET)
 
 		self.screen.blit(self.character_display, (0, 0))
 
@@ -4204,7 +4221,7 @@ class PyGameView(object):
 				#cur_color = tag.color
 				_namge = loc.dic.get(tag.name, tag.name)
 				_attr = loc.attrc_dic.get(attr, '') + loc.attr_dic.get(attr, attr)
-				fmt = "%s咒语和被动获得 [_%s_%s:%s]。" % (_namge, val, _attr, attr)
+				fmt = "%s咒语和被动获得 [%s_%s:%s]。" % (_namge, val, _attr, attr)
 				lines = self.draw_wrapped_string(fmt, self.examine_display, cur_x, cur_y, width=width)
 				cur_y += (lines+1) * self.linesize
 			cur_y += self.linesize
@@ -4220,7 +4237,6 @@ class PyGameView(object):
 			for attr, val in useful_bonuses:
 				_name = loc.dic.get(spell_ex.name, spell_ex.name)
 				_attr = loc.attrc_dic.get(attr, '') + loc.attr_dic.get(attr, attr)
-				# 汉化 量词
 				if attr in tooltip_colors:
 					fmt = "%s 获得 [%s_%s:%s]" % (_name, val, _attr, attr)
 				else:
@@ -4564,7 +4580,7 @@ class PyGameView(object):
 			self.draw_string(fmt, self.examine_display, cur_x, cur_y, cur_color)
 			cur_y += linesize
 			hasattrs = False
-			# 汉化 检视单位
+
 			if hasattr(spell, 'damage'):
 				if hasattr(spell, 'damage_type') and isinstance(spell.damage_type, Tag):
 					_name = loc.dic.get(spell.damage_type.name, spell.damage_type.name)

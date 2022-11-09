@@ -44,9 +44,9 @@ class Shrine(object):
 
 		def get_bonus_str(attr, amt):
 			if isinstance(amt, float):
-				return "+[%d%%_%s:%s]" % (amt*100, attr, attr)
+				return "+ [%d%%_的%s:%s]" % (amt*100, loc.attr_dic.get(attr, attr), attr)
 			else:
-				return "+[%d_%s:%s]" % (amt, attr, attr)
+				return "+ [%d_%s:%s]" % (amt, loc.attrc_dic.get(attr, attr) + loc.attr_dic.get(attr, attr), attr)
 
 		bonus_list = [get_bonus_str(attr, amt) for (attr, amt) in self.attr_bonuses.items()]
 		if self.description:
@@ -2064,8 +2064,8 @@ for s in new_shrines:
 # Returns a prop which points to a shifitng shop with the appropriate buffs
 
 def make_shrine(shrine, player):
-	shrine_prop = ShrineShop(lambda : list(shrine.get_buffs(player)))
-	shrine_prop.name = "%s Shrine" % shrine.name  # 汉化
+	shrine_prop = ShrineShop(lambda: list(shrine.get_buffs(player)))
+	shrine_prop.name = "%s神龛" % loc.dic.get(shrine.name, shrine.name)  # 汉化
 	shrine_prop.description = shrine.get_description()
 
 	# Use custom asset if exists

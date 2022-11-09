@@ -302,7 +302,7 @@ class Game():
 
 		player.tags = [Tags.Living]
 
-		player.xp = 1  # 汉化 初始SP
+		player.xp = 1
 		player.discount_tag = None
 		player.scroll_discounts = {}
 

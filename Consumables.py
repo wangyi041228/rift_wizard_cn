@@ -241,7 +241,7 @@ class DisruptPortalsSpell(Spell):
 def portal_disruptor():
 	item = Item()
 	item.name = "Portal Disruptor"
-	item.description = "变更当前关卡中所有传送门的目的地。"
+	item.description = "变更当前关卡中所有裂隙的目的地。"
 	item.set_spell(DisruptPortalsSpell())
 	return item
 

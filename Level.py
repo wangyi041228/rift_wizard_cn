@@ -2068,7 +2068,6 @@ class SpellScroll(Prop):
 	def __init__(self, spell):
 		self.spell = spell
 		_name = loc.dic.get(spell.name, spell.name)
-		# 汉化 唯一改动name的地方
 		self.name = '卷轴：%s' % _name
 		self.description = '学习 %s 的技能点降低 1 点' % _name
 		self.asset = ['tiles', 'library', 'library_white']

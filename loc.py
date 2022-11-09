@@ -598,6 +598,7 @@ dic = {
     'Voidflame Lantern': '虚空火灯',
     'White Flame': '白色火焰',
     # 玩家被动派生
+    'Crackling Frenzy': '爆响狂潮',
     'Rock Collection': '岩石收藏',
     'Hunger': '饥饿',
     'Burning Ghost': '燃烧的幽灵',
@@ -628,8 +629,8 @@ dic = {
     'Memory Enhancement': '记忆增强',
     'Oculus': '天眼',
     'Orb of Corruption': '腐败法球',
-    'Portal Disruptor': '传送门干扰器',
-    'Portal Key': '传送门钥匙',
+    'Portal Disruptor': '裂隙干扰器',
+    'Portal Key': '裂隙钥匙',
     'Shrine Disruptor': '神龛扰乱器',
     'Stone Shield': '石质护盾',
     'Storm Troll Crown': '风暴巨魔之冠',
@@ -1365,7 +1366,7 @@ dic = {
     "Life": "生命",
     "Otherworldly": "异界",
     "Red Flame": "红焰",
-    "Storm Cloud": "风云",
+    "Storm Cloud": "闪电云",
     "Oaken": "橡木",
     "Afterlife": "来世",
     "Stillness": "寂静",
@@ -1447,7 +1448,33 @@ dic = {
     # "Deathchill Chimera": "死寒奇美拉",
     "Bloodrage": "血怒",
     "Razor": "剃刀",
-
+    # 通用
+    "Ranged Attack": "远程攻击",
+    "Pull Attack": "拉动攻击",
+    "Heal Ally": "治疗友军",
+    "Firestorm": "火焰风暴",
+    "Spider Web": "蛛网",
+    "Glassed": "璃化",
+    "Ice Protection": "寒冰保护",
+    "Holy Protection": "神圣保护",
+    "Dark Protection": "黑暗保护",
+    "Troll Regeneration": "巨魔再生",
+    "Healing Aura": "治疗光环",
+    "Leap attack": "跳跃攻击",
+    "Teleport Attack": "传送攻击",
+    "Charge attack": "冲锋攻击",
+    "Elemental Eye": "元素之眼",
+    "Petrify Armor": "石化护甲",
+    "Shield Allies": "盾卫友军",
+    "Thorns": "荆棘",
+    "Death Explosion": "死亡爆炸",
+    "Call Kingdom": "召唤王国",
+    "Bloodlust": "嗜血",
+    "Sorcery Mirror": "法术镜像",
+    "Quakeport": "地震传送",
+    "Passive Teleportation": "被动传送",
+    "Acidified": "酸化",
+    "Electrified": "带电",
 }
 tag_dic = {
     'Fire': 'F 火焰',
@@ -1583,4 +1610,7 @@ attrc_dic = {
     'shot_cooldown': '个',
     'stun_duration': '个',
     'void_teleport': '个数',
+}
+DN = {
+
 }
