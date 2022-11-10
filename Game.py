@@ -194,14 +194,15 @@ class Game():
 						_name1 = loc.dic.get(u.prereq.name, u.prereq.name)
 						fmt = "%s：%s" % (_name1, fmt)
 					stats.write("%s\n" % fmt)
-			self.level_cache = None
 			self.recent_upgrades.clear()
+		self.level_cache = None
 
 	# For the consumer of the Game object
 	def __init__(self, generate_level=True, save_enabled=False, mutators=None, trial_name=None, seed=None):
 
 		self.build_compat_num = BUILD_NUM
 		self.seed = seed
+		self.level_cache = None
 		if self.seed:
 			random.seed(self.seed)
 		else:

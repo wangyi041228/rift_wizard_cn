@@ -273,7 +273,7 @@ def get_unit_asset(unit, forced_name=None):
 	else:
 		name = unit.get_asset_name()
 
-	if "skeletal" in name:
+	if "骷髅" in name:
 
 		if unit.stationary:
 			name = "skeletal_stationary"
@@ -930,45 +930,45 @@ default_key_binds = {
 }
 
 key_names = {
-	KEY_BIND_UP : "up",
-	KEY_BIND_DOWN : "down",
-	KEY_BIND_LEFT : "left",
-	KEY_BIND_RIGHT : "right",
-	KEY_BIND_UP_RIGHT : "up-right",
-	KEY_BIND_UP_LEFT: "up-left",
-	KEY_BIND_DOWN_RIGHT: "down-right",
-	KEY_BIND_DOWN_LEFT: "down-left",
-	KEY_BIND_PASS : "pass/channel",
-	KEY_BIND_CONFIRM : "confirm/cast",
-	KEY_BIND_ABORT : "abort/cast",
-	KEY_BIND_SPELL_1 : "Spell 1",
-	KEY_BIND_SPELL_2 : "Spell 2",
-	KEY_BIND_SPELL_3 : "Spell 3",
-	KEY_BIND_SPELL_4 : "Spell 4",
-	KEY_BIND_SPELL_5 : "Spell 5",
-	KEY_BIND_SPELL_6 : "Spell 6",
-	KEY_BIND_SPELL_7 : "Spell 7",
-	KEY_BIND_SPELL_8 : "Spell 8",
-	KEY_BIND_SPELL_9 : "Spell 9",
-	KEY_BIND_SPELL_10 : "Spell 10",
-	KEY_BIND_MODIFIER_1 : "Spell Modifier Key",
-	KEY_BIND_MODIFIER_2 : "Item Modifier Key",
-	KEY_BIND_TAB : "Next Target",
-	KEY_BIND_CTRL : "Show Line of Sight",
-	KEY_BIND_VIEW : "Look",
-	KEY_BIND_WALK : "Walk",
-	KEY_BIND_AUTOPICKUP : "Autopickup",
-	KEY_BIND_CHAR : "Character Sheet",
-	KEY_BIND_SPELLS : "Spells",
-	KEY_BIND_SKILLS : "Skills",
-	KEY_BIND_HELP : "Help",
-	KEY_BIND_INTERACT : "Interact",
-	KEY_BIND_MESSAGE_LOG : "Message Log",
-	KEY_BIND_THREAT : "Show Threat Zone",
-	KEY_BIND_LOS : "Show Line of Sight",
-	KEY_BIND_PREV_EXAMINE_TARGET : "Next tooltip",
-	KEY_BIND_NEXT_EXAMINE_TARGET : "Prev tooltip",
-	KEY_BIND_FF: "Fast Forward",
+	KEY_BIND_UP: "上",
+	KEY_BIND_DOWN: "下",
+	KEY_BIND_LEFT: "左",
+	KEY_BIND_RIGHT: "右",
+	KEY_BIND_UP_RIGHT: "右上",
+	KEY_BIND_UP_LEFT: "左上",
+	KEY_BIND_DOWN_RIGHT: "右下",
+	KEY_BIND_DOWN_LEFT: "左下",
+	KEY_BIND_PASS: "空过/引导",
+	KEY_BIND_CONFIRM: "确认/施放",
+	KEY_BIND_ABORT: "放弃/施放",
+	KEY_BIND_SPELL_1: "咒语 1",
+	KEY_BIND_SPELL_2: "咒语 2",
+	KEY_BIND_SPELL_3: "咒语 3",
+	KEY_BIND_SPELL_4: "咒语 4",
+	KEY_BIND_SPELL_5: "咒语 5",
+	KEY_BIND_SPELL_6: "咒语 6",
+	KEY_BIND_SPELL_7: "咒语 7",
+	KEY_BIND_SPELL_8: "咒语 8",
+	KEY_BIND_SPELL_9: "咒语 9",
+	KEY_BIND_SPELL_10: "咒语 10",
+	KEY_BIND_MODIFIER_1: "咒语换挡键",
+	KEY_BIND_MODIFIER_2: "物品换挡键",
+	KEY_BIND_TAB: "下个目标",
+	KEY_BIND_CTRL: "显示视线",
+	KEY_BIND_VIEW: "观察",
+	KEY_BIND_WALK: "走路",
+	KEY_BIND_AUTOPICKUP: "自动捡取",
+	KEY_BIND_CHAR: "角色页面",
+	KEY_BIND_SPELLS: "咒语",
+	KEY_BIND_SKILLS: "技能",
+	KEY_BIND_HELP: "帮助",
+	KEY_BIND_INTERACT: "互动",
+	KEY_BIND_MESSAGE_LOG: "消息日志",
+	KEY_BIND_THREAT: "显示危险区",
+	KEY_BIND_LOS: "显示视线",
+	KEY_BIND_PREV_EXAMINE_TARGET: "下个升级描述",
+	KEY_BIND_NEXT_EXAMINE_TARGET: "上个升级描述",
+	KEY_BIND_FF: "快进",
 }
 
 class PyGameView(object):
@@ -1416,10 +1416,10 @@ class PyGameView(object):
 	def on_level_finish(self):
 
 		# Log obj graph
-		mem_log.debug("After level %d:" % self.game.level_num)
+		mem_log.debug("第 %d 关后：" % self.game.level_num)
 		import objgraph
 		for t, c in objgraph.most_common_types():
-			mem_log.debug("%s: %d" % (t, c))
+			mem_log.debug("%s：%d" % (t, c))
 		mem_log.debug('\n')
 
 		# Clear examine target to show summary
@@ -2404,9 +2404,9 @@ class PyGameView(object):
 		col_xs = [100, 400, 700]
 
 
-		self.draw_string("FUNCTION", self.screen, col_xs[0], cur_y)
-		self.draw_string("MAIN KEY", self.screen, col_xs[1], cur_y)
-		self.draw_string("SECONDARY KEY", self.screen, col_xs[2], cur_y)
+		self.draw_string("功能", self.screen, col_xs[0], cur_y)
+		self.draw_string("主按键", self.screen, col_xs[1], cur_y)
+		self.draw_string("次按键", self.screen, col_xs[2], cur_y)
 
 
 		cur_y += self.linesize * 3
@@ -2420,7 +2420,7 @@ class PyGameView(object):
 			index = 0
 			for k in [key1, key2]:
 				cur_x = col_xs[index + 1]
-				fmt = pygame.key.name(k) if k else "Unbound"
+				fmt = pygame.key.name(k) if k else "未绑定"
 				content = [bind, index] if not self.rebinding else None
 				cur_color = (0, 255, 0) if (self.rebinding and self.examine_target == [bind, index]) else (255, 255, 255)
 				self.draw_string(fmt, self.screen, cur_x, cur_y, color=cur_color, mouse_content=content, content_width=170)
@@ -2432,9 +2432,9 @@ class PyGameView(object):
 		cur_y += self.linesize*2
 
 
-		self.draw_string("Reset to Default", self.screen, cur_x, cur_y, mouse_content=KEY_BIND_OPTION_RESET if not self.rebinding else None)
+		self.draw_string("重设为默认键位", self.screen, cur_x, cur_y, mouse_content=KEY_BIND_OPTION_RESET if not self.rebinding else None)
 		cur_y += self.linesize
-		self.draw_string("Done", self.screen, cur_x, cur_y, mouse_content=KEY_BIND_OPTION_ACCEPT if not self.rebinding else None)
+		self.draw_string("完成", self.screen, cur_x, cur_y, mouse_content=KEY_BIND_OPTION_ACCEPT if not self.rebinding else None)
 
 
 	def process_key_rebind(self):
@@ -5236,6 +5236,7 @@ class PyGameView(object):
 		self.combat_log_lines = []
 
 		log_fn = os.path.join('saves', str(self.game.run_number), 'log', str(level), 'combat_log.%d.txt' % turn)
+
 		if os.path.exists(log_fn):
 			with open(log_fn, 'r', encoding='utf8') as logfile:
 				self.combat_log_lines = [s.strip() for s in logfile.readlines()]

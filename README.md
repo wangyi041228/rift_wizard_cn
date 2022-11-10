@@ -22,7 +22,7 @@ Rift Wizard 汉化版
   * `咒语`=`spell`，`被动`=`skill`，`法术`=`sorcery`
   * `附近的`=`nearby`，`相邻的`=`adjacent`
   * `毒性`=`poison`，`毒液`=`venom`，`中毒`=`poisoned`
-* 绝不改变单位、玩家咒语和玩家被动的 `name`，可直接改动神龛和增益的 `name`。
+* 绝不改变入图鉴的单位、玩家咒语和玩家被动的 `name`，可直接改动神龛和增益的 `name`。已改 `～～骷髅`的 `name`。
 ## 待办事项
 * 鼠标悬浮在左侧技能时，右侧窗口无法升级的用灰色，额外显示神龛强化。
 * 战败截图显示正确的可选升级数量。
@@ -32,21 +32,21 @@ Rift Wizard 汉化版
 * 调查汉化版新增的卡顿和性能问题。
 * 进一步优化原版和汉化版。
 
-|模块|文件|进度|备注|
+|模块|文件|没翻译完|备注|
 |----|----|----|----|
-|主文件|[RiftWizard.py](RiftWizard.py)|99%|润色和修正|
-|咒语|[Spells.py](Spells.py)|99%|润色和修正|
-|被动|[Upgrades.py](Upgrades.py)|99%|润色和修正|
-|游戏|[Game.py](Game.py)|99%|润色和修正|
-|物品|[Cunsumables.py](Consumables.py)|99%|润色和修正|
-|关卡|[Level.py](Level.py)|99%|润色和修正|
-|怪物|[Monsters.py](Monsters.py)|30%|名称和衍生名称完工|
-|变体怪物|[Variant.py](Variants.py)|30%|名称和衍生名称完工|
-|稀有怪物|[RareMonsters.py](RareMonsters.py)|30%|名称和衍生名称完工|
-|通用|[CommonContent.py](CommonContent.py)|99%|润色和修正|
-|神龛|[Shrines.py](Shrines.py)|99%|润色和修正|
-|变体规则|[Mutators.py](Mutators.py)|40%|校对|
-|NPC|[NPCs.py](NPCs.py)|0%||
+|主文件|[RiftWizard.py](RiftWizard.py)| | |
+|咒语|[Spells.py](Spells.py)| | |
+|被动|[Upgrades.py](Upgrades.py)| | |
+|游戏|[Game.py](Game.py)| | |
+|物品|[Cunsumables.py](Consumables.py)| | |
+|关卡|[Level.py](Level.py)| | |
+|怪物|[Monsters.py](Monsters.py)|是| |
+|变体怪物|[Variant.py](Variants.py)|是| |
+|稀有怪物|[RareMonsters.py](RareMonsters.py)|是| |
+|通用|[CommonContent.py](CommonContent.py)| | |
+|神龛|[Shrines.py](Shrines.py)| | |
+|变体规则|[Mutators.py](Mutators.py)| | |
+|NPC|[NPCs.py](NPCs.py)|是| |
 ## 已经完成
 * 改写 `draw_wrapped_string` 函数。
   * 自动换行，不切开 ascii 码单词，行首无标点。

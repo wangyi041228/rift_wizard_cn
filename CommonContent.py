@@ -1464,7 +1464,7 @@ def raise_skeleton(owner, unit, source=None):
 	unit.has_been_raised = True
 
 	skeleton = Unit()
-	skeleton.name = "%s骷髅" % loc.dic.get(unit.name, unit.name)
+	skeleton.name = "%s骷髅" % loc.dic.get(unit.name, unit.name)  # 骷髅名字
 	skeleton.sprite.char = 's'
 	if unit.max_hp >= 40:
 		skeleton.sprite.char = 'S'
