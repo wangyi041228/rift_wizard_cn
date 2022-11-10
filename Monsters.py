@@ -103,7 +103,7 @@ class StormBreath(BreathWeapon):
 		self.damage_type = Tags.Lightning
 
 	def get_description(self):
-		return "Breathes a cone of storm clouds, dealing %d damage" % self.damage
+		return "吐出锥形的风暴云，造成 %d 点伤害" % self.damage
 
 	def per_square_effect(self, x, y):
 		self.caster.level.add_obj(StormCloud(self.caster, self.damage), x, y)
@@ -117,7 +117,7 @@ class FireBreath(BreathWeapon):
 		self.damage_type = Tags.Fire
 
 	def get_description(self):
-		return "Breathes a cone of %s dealing %d damage" % (self.damage_type.name.lower(), self.damage)
+		return "吐出锥形的%s，造成 %d 点伤害" % (loc.dic.get(self.damage_type.name, self.damage_type.name), self.damage)
 
 	def per_square_effect(self, x, y):
 		self.caster.level.deal_damage(x, y, self.damage, self.damage_type, self)
@@ -131,7 +131,7 @@ class IceBreath(BreathWeapon):
 		self.freeze_duration = 2
 
 	def get_description(self):
-		return "Breathes a cone of ice dealing %d damage and freezing units for 2 turns" % self.damage
+		return "吐出锥形的寒冰，造成 %d 点伤害并冻结单位 2 回合" % self.damage
 
 	def per_square_effect(self, x, y):
 		self.caster.level.deal_damage(x, y, self.damage, self.damage_type, self)
@@ -151,7 +151,7 @@ class VoidBreath(BreathWeapon):
 		self.ignore_walls = True
 
 	def get_description(self):
-		return "Breathes a cone of void dealing arcane damage and melting walls"
+		return "吐出锥形的虚空，造成 [arcane] 伤害并熔化墙"
 
 	def per_square_effect(self, x, y):
 
@@ -164,7 +164,7 @@ class HolyBreath(BreathWeapon):
 
 	def on_init(self):
 		self.name = "Holy Breath"
-		self.description = "Breathes a cone of holy flame, dealing holy damage to enemies and healing allies"
+		self.description = "吐出锥形的圣火，对敌人造成 [holy] 伤害并治疗友军"
 		self.damage = 9
 		self.damage_type = Tags.Holy
 
@@ -181,7 +181,7 @@ class DarkBreath(BreathWeapon):
 
 	def on_init(self):
 		self.name = "Dark Breath"
-		self.description = "Breathes a cone of dark energy, dealing dark damage and reanimating slain units as skeletons."
+		self.description = "吐出锥形的黑暗能量，造成 [dark] 伤害并将消灭的单位复活为骷髅。"
 		self.damage = 11
 		self.damage_type = Tags.Dark
 
@@ -221,7 +221,7 @@ class SpiritBuff(Buff):
 
 
 	def get_tooltip(self):
-		return "Gain 5 max HP whenever witnessing %s spell" % self.tag.name
+		return "每次目睹%s咒语时，获得 5 点生命上限" % loc.dic.get(self.tag.name, self.tag.name)
 
 class LifeDrain(Spell):
 
@@ -249,7 +249,7 @@ class LifeDrain(Spell):
 		yield
 
 	def get_description(self):
-		return "Heals caster for damage dealt"
+		return "治疗施法者伤害量的生命"
 
 
 class NecromancyBuff(Buff):
@@ -267,7 +267,7 @@ class NecromancyBuff(Buff):
 		yield
 
 	def get_tooltip(self):
-		return "Whenever a non-undead unit dies, raises that unit as a skeleton."
+		return "每当非不死单位死亡时，将该单位复活为骷髅。"
 
 
 
@@ -290,7 +290,7 @@ class SporeBeastBuff(Buff):
 			yield
 
 	def get_tooltip(self):
-		return "When damaged, has a 30%% chance to heal all units within %d tiles %d HP" % (self.radius, self.healing)
+		return "受到伤害时，有 30%% 的几率治疗 %d 格内的所有友军 %d 点生命" % (self.radius, self.healing)
 
 class SpikeBeastBuff(Buff):
 
@@ -313,7 +313,7 @@ class SpikeBeastBuff(Buff):
 			yield
 
 	def get_tooltip(self):
-		return "When damaged, has a 30%% chance to deal %d physical damage to all units within %d tiles" % (self.damage, self.radius)
+		return "受到伤害时，有 30%% 的几率对 %d 格内的所有单位造成 %d 点 [physical] 伤害。" % (self.damage, self.radius)
 
 class BlizzardBeastBuff(Buff):
 
@@ -321,7 +321,7 @@ class BlizzardBeastBuff(Buff):
 		self.name = "Ice Spores"
 		self.radius = 2
 		self.owner_triggers[EventOnDamaged] = self.on_damaged
-		self.description = "When damaged, creates 2 blizzards up to %d tiles away" % self.radius
+		self.description = "受到伤害时，在至多 %d 格远处生成 2 个暴风雪" % self.radius
 
 	def on_damaged(self, evt):
 		for i in range(2):
@@ -347,7 +347,7 @@ class VoidBomberBuff(Buff):
 
 	def get_tooltip(self):
 		if self.clusters:
-			return "Spawns %d void bombers on death" % self.clusters
+			return "死亡时生成 %d 个虚空轰炸者" % self.clusters
 
 	def explode(self, level, x, y):
 		for p in level.get_points_in_rect(x - self.radius, y - self.radius, x + self.radius, y + self.radius):
@@ -376,7 +376,7 @@ class VoidBomberSuicide(Spell):
 		self.melee = True
 		self.name = "Suicide Explosion"
 
-		self.description = "Suicide attack\n3x3 square area\nAutocast on death"
+		self.description = "自杀攻击\n3x3 方形区域\n死亡时自动施放"
 
 		#For tooltips
 		self.damage = 12
@@ -429,7 +429,7 @@ class FireBomberSuicide(Spell):
 		self.damage = 12
 		self.damage_type = Tags.Fire
 
-		self.description = "Suicide attack\n2 tile radius\nAutocast on death"
+		self.description = "自杀攻击\n2 格半径\n死亡时自动施放"
 
 	def cast(self, x, y):
 		self.caster.kill()
@@ -449,7 +449,7 @@ def Kobold():
 	unit.sprite.char = 'k'
 	unit.sprite.color = Color(200, 140, 140)
 	unit.name = "Kobold"
-	unit.description = "A small wretched creature"
+	unit.description = "可怜的小生物"
 	unit.max_hp = 4
 	bow = SimpleRangedAttack(damage=1, range=10, proj_name="kobold_arrow")
 	bow.name = "Bow"
@@ -464,7 +464,7 @@ def Golem():
 	unit.sprite.color = Color(140, 140, 145)
 	unit.name = "Golem"
 	unit.max_hp = 25
-	unit.description = "An animated creation of stone and steel"
+	unit.description = "石头与钢铁组成能动造物"
 	unit.spells.append(SimpleMeleeAttack(8))
 	unit.tags = [Tags.Construct, Tags.Metallic]
 	return unit
@@ -520,7 +520,7 @@ def Cyclops():
 	boulder.onhit = lambda caster, target: target.apply_buff(Stun(), 1)
 	boulder.cooldown = 6
 	boulder.name = "Throw boulder"
-	boulder.description = "Stuns for 1 turn"
+	boulder.description = "击晕 1 回合"
 	unit.spells.append(boulder)
 	unit.spells.append(SimpleMeleeAttack(9))
 	unit.tags = [Tags.Living]
@@ -531,7 +531,7 @@ def StormDrake():
 	unit.sprite.char = 'D'
 	unit.sprite.color = Color(190, 190, 250)
 	unit.name = "Storm Drake"
-	unit.description = "Breathes stormclouds"
+	unit.description = "吐出风暴云"
 	unit.max_hp = 38
 	unit.flying = True
 	unit.spells.append(StormBreath())
@@ -545,7 +545,7 @@ def FireDrake():
 	unit.sprite.char = 'D'
 	unit.sprite.color = Color(250, 60, 80)
 	unit.name = "Fire Drake"
-	unit.description = "Breathes fire"
+	unit.description = "吐出火焰"
 	unit.max_hp = 38
 	unit.flying = True
 	unit.spells.append(FireBreath())
@@ -560,7 +560,7 @@ def VoidDrake():
 	unit.sprite.char = 'D'
 	unit.sprite.color = Tags.Arcane.color
 	unit.name = "Void Drake"
-	unit.description = "Breathes void, destroying walls"
+	unit.description = "吐出虚空，摧毁墙"
 	unit.max_hp = 38
 	unit.flying = True
 	unit.spells.append(VoidBreath())
@@ -574,7 +574,7 @@ def GoldDrake():
 	unit.sprite.char = 'D'
 	unit.sprite.color = Tags.Holy.color
 	unit.name = "Gold Drake"
-	unit.description = "Breathes holy fire, damaging enemies but healing allies"
+	unit.description = "吐出圣火，伤害敌人，质量友军"
 	unit.max_hp = 38
 	unit.flying = True
 	unit.spells.append(HolyBreath())
@@ -679,7 +679,7 @@ def FireImp():
 	unit.sprite.char = 'i'
 	unit.sprite.color = Color(200, 60, 70)
 	unit.name = "Fire Imp"
-	unit.description = "Fires projectiles"
+	unit.description = "发射弹丸"
 	unit.max_hp = 5
 	unit.resists[Tags.Fire] = 75
 	unit.resists[Tags.Ice] = -75
@@ -694,7 +694,7 @@ def SparkImp():
 	unit.sprite.char = 'i'
 	unit.sprite.color = Color(190, 190, 250)
 	unit.name = "Spark Imp"
-	unit.description = "Fires projectiles"
+	unit.description = "发射弹丸"
 	unit.max_hp = 5
 	unit.resists[Tags.Lightning] = 75
 	unit.resists[Tags.Dark] = 75
@@ -708,7 +708,7 @@ def IronImp():
 	unit.sprite.char = 'i'
 	unit.sprite.color = Color(140, 140, 145)
 	unit.name = "Iron Imp"
-	unit.description = "Fires projectiles"
+	unit.description = "发射弹丸"
 	unit.max_hp = 5
 	unit.resists[Tags.Dark] = 75
 	unit.spells.append(SimpleRangedAttack(name="Imp Shot", damage=3, range=3, damage_type=Tags.Physical))
@@ -775,7 +775,7 @@ def RotImp():
 		drain_max_hp(target, 1)
 
 	rot = SimpleRangedAttack(damage=3, range=4, damage_type=Tags.Dark, onhit=onhit)
-	rot.description = "Removes 1 max hp from the target"
+	rot.description = "移除目标 1 点生命上限"
 	rot.name = 'Rot Bolt'
 
 	unit.spells = [rot]
@@ -813,7 +813,7 @@ def InsanityImp():
 		randomly_teleport(target, 4)
 
 	insanity = SimpleRangedAttack(damage=3, range=6, damage_type=Tags.Arcane, onhit=onhit)
-	insanity.description = "Teleports target unit up to 4 tiles away"
+	insanity.description = "传送目标单位至多 4 格"
 	insanity.name = "Phase Bolt"
 	unit.spells = [insanity]
 
@@ -865,7 +865,7 @@ def FireSpirit():
 	unit.sprite.char = 'S'
 	unit.sprite.color = Color(200, 60, 70)
 	unit.name = "Fire Spirit"
-	unit.description = "Gains 6 HP whenever a fire spell is cast"
+	unit.description = "每次施法火焰法术时，获得 6 点生命"
 	unit.max_hp = 10
 	unit.buffs.append(SpiritBuff(Tags.Fire))
 	unit.buffs.append(Thorns(4, Tags.Fire))
@@ -880,7 +880,7 @@ def SparkSpirit():
 	unit.sprite.char = 'S'
 	unit.sprite.color = Color(190, 190, 250)
 	unit.name = "Spark Spirit"
-	unit.description = "Fires projectiles"
+	unit.description = "发射弹丸"
 	unit.max_hp = 10
 	unit.buffs.append(SpiritBuff(Tags.Lightning))
 	unit.buffs.append(Thorns(4, Tags.Lightning))
@@ -913,7 +913,7 @@ class BagOfBugsBuff(Buff):
 		self.owner_triggers[EventOnDeath] = self.on_death
 
 	def get_tooltip(self):
-		return "Spawns %d %ss on death" % (self.spawns, self.spawn().name)
+		return "死亡时生成 %d 个%s" % (self.spawns, loc.dic.get(self.spawn().name, self.spawn().name))
 
 	def on_death(self, evt):
 		self.make_flies()
@@ -994,7 +994,7 @@ def VoidBomber():
 	unit.sprite.char = 'v'
 	unit.sprite.color = Color(195, 42, 224)
 	unit.name = "Void Bomber"
-	unit.description = "Explodes on death, dealing arcane damage and melting adjacent walls"
+	unit.description = "死亡时爆炸，造成 [arcane] 伤害并熔化相邻的墙"
 	unit.max_hp = 1
 	unit.buffs.append(VoidBomberBuff())
 	unit.spells.append(VoidBomberSuicide())
@@ -1007,7 +1007,7 @@ def FireBomber():
 	unit.sprite.char = 'f'
 	unit.sprite.color = Tags.Fire.color
 	unit.name = "Fire Bomber"
-	unit.description = "Explodes on death, dealing fire damage"
+	unit.description = "死亡时爆炸，造成 [fire] 伤害"
 	unit.max_hp = 1
 	unit.buffs.append(FireBomberBuff())
 	unit.spells.append(FireBomberSuicide())
@@ -1019,7 +1019,7 @@ def DisplacerBeast():
 	unit.sprite.char = 'd'
 	unit.sprite.color = Color(217, 102, 255)
 	unit.name = "Displacer Beast"
-	unit.description = "A teleporting cat"
+	unit.description = "会传送的猫"
 	unit.max_hp = 10
 	unit.spells.append(SimpleMeleeAttack(3))
 	unit.buffs.append(TeleportyBuff(flash=True))
@@ -1042,7 +1042,7 @@ class SatyrWineSpell(Spell):
 
 	def on_init(self):
 		self.name = "Refresh"
-		self.description = "Heal self or ally for 5 HP"
+		self.description = "治疗自身或友军 5 点生命"
 		self.range = 1.5
 		self.melee = True
 		self.can_target_self = True
@@ -1099,7 +1099,7 @@ def MindMaggot():
 	unit.max_hp = 5
 
 	melee = SimpleMeleeAttack(3, damage_type=Tags.Arcane, onhit=drain_spell_charges)
-	melee.description = "On hit, drains a charge of a random spell"
+	melee.description = "击中时，随机汲取一个咒语的一点充能"
 	melee.name = "Brain Bite"
 	unit.spells.append(melee)
 
@@ -1115,7 +1115,7 @@ def MindMaggotQueen():
 
 	melee = SimpleMeleeAttack(9, onhit=drain_spell_charges)
 	melee.name = "Brain Bite"
-	melee.description = "On hit, drains a charge of a random spell"
+	melee.description = "击中时，随机汲取一个咒语的一点充能"
 	unit.spells.append(melee)
 
 	unit.buffs.append(GeneratorBuff(spawn_func=MindMaggot, spawn_chance=.1))
@@ -1150,7 +1150,7 @@ def Ogre():
 	unit.sprite.char = 'O'
 	unit.sprite.color = Color(255, 166, 71)
 	unit.name = "Ogre"
-	unit.description = "A fat and hideous abombination longing to consume the flesh of the young and beautiful"
+	unit.description = "渴望吃掉年轻漂亮肉体的肥大丑陋的怪物"
 	unit.max_hp = 45
 	unit.spells.append(SimpleMeleeAttack(15))
 	unit.tags = [Tags.Living]
@@ -1162,7 +1162,7 @@ def Troll():
 	unit.sprite.char = 'T'
 	unit.sprite.color = Color(73, 214, 21)
 	unit.name = "Troll"
-	unit.description = "A big dumb regenerating troll.  Regenerates 5hp per turn.  Regeneration is disabled for one turn upon taking fire damage."
+	unit.description = "巨大笨重的再生巨魔。每回合治疗 5 点生命。受到 [火焰] 伤害时，禁用治疗一回合。"
 	unit.max_hp = 30
 	unit.buffs.append(TrollRegenBuff())
 	unit.spells.append(SimpleMeleeAttack(10))
@@ -1183,7 +1183,7 @@ def StormTroll():
 	unit.asset_name = None
 	unit.sprite.color = Tags.Lightning.color
 	unit.name = "Storm Troll"
-	unit.description = "A troll touched by thunder spirits.  Storm clouds form in its wake."
+	unit.description = "被雷神感应的巨魔。暴风云随之形成。"
 	unit.resists[Tags.Lightning] = 100
 	unit.buffs.append(CloudGeneratorBuff(StormCloud, radius=3, chance=.1))
 	unit.tags = [Tags.Living, Tags.Lightning]
@@ -1194,7 +1194,7 @@ def Ghost():
 	unit.sprite.char = 'g'
 	unit.sprite.color = Color(220, 220, 220)
 	unit.name = "Ghost"
-	unit.description = "A Malevolent spirit"
+	unit.description = "恶毒的灵魂"
 	unit.max_hp = 4
 	unit.resists[Tags.Physical] = 100
 	unit.resists[Tags.Dark] = 50
@@ -1256,7 +1256,7 @@ class SlimeBuff(Buff):
 
 	def __init__(self, spawner, name='slimes'):
 		Buff.__init__(self)
-		self.description = "50%% chance to gain 1 hp and 1 max hp per turn.  Upon reaching double max HP, splits into 2 %s." % name
+		self.description = "每回合有 50%% 的几率治疗 1 点生命和 1 点生命上限。生命上限达到起始生命的两倍时分裂为两个%s." % loc.dic.get(name, name)
 		self.name = "Slime Growth"
 		self.color = Tags.Slime.color
 		self.spawner = spawner
@@ -1266,8 +1266,8 @@ class SlimeBuff(Buff):
 		self.start_hp = self.owner.max_hp
 		self.to_split = self.start_hp * 2
 		self.growth = self.start_hp // 10
-		self.description = "50%% chance to gain %d hp and max hp per turn.  Upon reaching %d HP, splits into 2 %s." % (self.growth, self.to_split, self.spawner_name)
-		
+		self.description = "每回合有 50%% 的几率治疗 %d 点生命和生命上限。生命达到 %d 时分裂为两个%s." % (self.growth, self.to_split, loc.dic.get(self.spawner_name, self.spawner_name))
+
 
 	def on_advance(self):
 		if random.random() < .5:
@@ -1380,7 +1380,7 @@ class GeneratorBuff(Buff):
 			self.owner.level.add_obj(new_monster, p.x, p.y)
 
 	def get_tooltip(self):
-		return "Has a %d%% chance each turn to spawn a %s" % (int(100 * self.spawn_chance), self.example_monster.name)
+		return "每回合有 %d%% 的几率生成一个%s" % (int(100 * self.spawn_chance), loc.dic.get(self.example_monster.name, self.example_monster.name))
 
 def DisplacerBeastMother():
 	unit = DisplacerBeast()
@@ -1388,7 +1388,7 @@ def DisplacerBeastMother():
 	unit.name = "Displacer Broodmother"
 	unit.spells[0].damage = 12
 	unit.max_hp = 72
-	unit.description = "Mother of displacer beasts"
+	unit.description = "移位兽巢母"
 	unit.buffs.append(GeneratorBuff(DisplacerBeast, .1))
 	unit.tags = [Tags.Living, Tags.Arcane]
 	return unit
@@ -1399,7 +1399,7 @@ def Efreet():
 	unit.sprite.color = Color(255, 0, 0)
 	unit.max_hp = 45
 	unit.name = "Efreet"
-	unit.description = "A Fiery demon which ignites the air around it, causing 2 fire damage to all creatures within 5 squares each turn."
+	unit.description = "点燃它周围的空气的炽热恶魔，每回合对 5 格内的所有单位造成 2 点 [fire] 伤害。"
 	unit.buffs.append(DamageAuraBuff(damage_type=Tags.Fire, damage=2, radius=5, friendly_fire=False))
 	unit.spells.append(SimpleRangedAttack(damage=5, range=3, damage_type=Tags.Fire))
 	unit.resists[Tags.Fire] = 100
@@ -1425,9 +1425,9 @@ class SplittingBuff(Buff):
 			if unit.max_hp == 0:
 				return
 			self.summon(unit)
-			
+
 	def get_tooltip(self):
-		return "On death, splits into %d smaller versions of itself" % self.children
+		return "死亡时，分裂为 %d 个更小的自己" % self.children
 
 def BoneShambler(HP=32):
 	unit = Unit()
@@ -1445,11 +1445,10 @@ def BoneShambler(HP=32):
 	else:
 		unit.name = "Bone Shambler Fragment"
 
-
-	unit.description = "A disgusting mass of bone, animated by dark magic."
+	unit.description = "被黑暗魔法激活的一团令人作呕的骨头。"
 	if HP >= 8:
-		unit.description += "  Splits into smaller chunks when destroyed."
-		unit.buffs.append(SplittingBuff(spawner=lambda : BoneShambler(unit.max_hp // 2), children=2))
+		unit.description += "被摧毁时分裂为更小的团块。"
+		unit.buffs.append(SplittingBuff(spawner=lambda: BoneShambler(unit.max_hp // 2), children=2))
 
 	unit.spells.append(SimpleMeleeAttack(HP // 4))
 	unit.tags = [Tags.Undead]
@@ -1479,7 +1478,7 @@ def WormShambler(HP=20):
 	
 	spitworms.name = "Spit Worms"
 	spitworms.cool_down = 3
-	spitworms.description = "Summons a small worm ball adjacent to to the target"
+	spitworms.description = "在目标旁召唤一个小型虫球"
 
 	unit.spells.insert(0, spitworms)
 
@@ -1528,7 +1527,7 @@ def EvilFairy():
 	unit.sprite.color = Color(252, 141, 249)
 	unit.name = "Evil Faery"
 	unit.flying = True
-	unit.description = "A capricious creature who delights in providing comfort to evil beings"
+	unit.description = "任性的生物，乐于慰藉邪恶的生物"
 	unit.max_hp = 9
 	unit.shields = 1
 	unit.buffs.append(TeleportyBuff(chance=.5))
@@ -1570,7 +1569,7 @@ def Minotaur():
 	unit.sprite.char = 'M'
 	unit.sprite.color = Color(158, 134, 100)
 	unit.name = "Minotaur"
-	unit.description = "A man with the head of a bull"
+	unit.description = "牛头人身"
 	unit.max_hp = 45
 	unit.spells.append(SimpleMeleeAttack(damage=8, trample=True))
 	unit.spells.append(LeapAttack(damage=12, damage_type=Tags.Physical, range=10, is_leap=False))
@@ -1598,14 +1597,14 @@ class CockatriceGaze(Spell):
 		yield
 
 	def get_description(self):
-		return "Petrifies target for 3 turns"
+		return "石化目标 3 回合"
 
 def Cockatrice():
 	unit = Unit()
 	unit.sprite.char = 'B'
 	unit.sprite.color = Color(50, 255, 50)
 	unit.name = "Cockatrice"
-	unit.description = "Its gaze turns foes to stone"
+	unit.description = "目光将敌人化作石头"
 	unit.max_hp = 35
 	peck = SimpleMeleeAttack(damage=4)
 	peck.name = "Peck"
@@ -1664,7 +1663,7 @@ class MonsterVoidBeam(Spell):
 		self.cool_down = 3
 
 	def get_description(self):
-		return "Deals damage and destroys walls in a line"
+		return "在一束内造成伤害并摧毁墙"
 
 	def cast_instant(self, x, y):
 		for p in self.caster.level.get_points_in_line(self.caster, Point(x, y))[1:]:
@@ -1683,7 +1682,7 @@ class ButterflyLightning(Spell):
 		self.cool_down = 3
 
 	def get_description(self):
-		return "Deals damage to all points in a line"
+		return "在一束内的造成伤害"
 
 	def cast_instant(self, x, y):
 
@@ -1717,7 +1716,7 @@ class ToadHop(Spell):
 
 	def on_init(self):
 		self.name = "Frog Hop"
-		self.description = "Hops to a random tile up to 4 tiles away"
+		self.description = "随机跳到至多 4 格远的地块"
 		self.range = 0
 		self.cool_down = 4
 
@@ -1794,7 +1793,7 @@ def VoidToad():
 	voidlick = SimpleRangedAttack(name="Void Lick", damage=7, range=6, damage_type=Tags.Arcane, beam=True, melt=True)
 	voidlick.onhit = lambda caster, target: pull(target, caster, 1)
 	voidlick.requires_los = False
-	voidlick.description = "Pulls the target towards the caster.\nMelts walls."
+	voidlick.description = "将目标拉向施法者。\n熔化墙。"
 	unit.spells.append(voidlick)
 
 	unit.tags = [Tags.Living, Tags.Arcane, Tags.Nature]
@@ -1810,7 +1809,7 @@ class SpiderBuff(Buff):
 		spawn_webs(self.owner)
 
 	def get_tooltip(self):
-		return "Weaves webs each turn"
+		return "每回合织网"
 
 def QueenMonster(base_spawner):
 	unit = base_spawner()
@@ -1923,11 +1922,11 @@ def VoidKnight():
 
 	melee = SimpleMeleeAttack(damage=6, damage_type=Tags.Physical, onhit=lambda caster, target: randomly_teleport(target, 5))
 	unit.spells.append(melee)
-	melee.get_description = lambda : "Teleports the target to a random location up to 5 tiles away"
+	melee.get_description = lambda: "将目标随机转送到至多 5 格远的地块"
 
 	charge = LeapAttack(damage=10, damage_type=Tags.Arcane, range=6, is_ghost=True)
 	charge.name = "Aether Charge"
-	charge.get_description = lambda : "Ignores obstacles"
+	charge.get_description = lambda: "无视障碍"
 	unit.spells.append(charge)
 	
 	unit.tags = [Tags.Arcane, Tags.Living]
@@ -1956,7 +1955,7 @@ def ChaosKnight():
 	# Melee attack with extra chaos damage
 	melee = SimpleMeleeAttack(damage=7)
 	melee.onhit = lambda caster, target: extra_chaos_damage(caster, target, melee)
-	melee.description = "Deals an additional 5 fire or lightning damage on hit."
+	melee.description = "击中时额外造成 5 点 [fire] 或 [lightning] 伤害。"
 
 	chaosball = SimpleRangedAttack(damage=11, radius=2, range=6, damage_type=[Tags.Fire, Tags.Lightning, Tags.Physical])
 	chaosball.name = "Chaos Ball"
@@ -1990,7 +1989,7 @@ def StormKnight():
 		target.apply_buff(FrozenBuff(), 2)
 	frost = SimpleBurst(damage=13, radius=2, damage_type=Tags.Ice, onhit=freeze)
 	frost.name = "Frost"
-	frost.description = "Applies frozen for 2 turns"
+	frost.description = "施加 [冻结] 2 回合"
 	frost.cool_down = 5
 	unit.spells.append(frost)
 
@@ -2003,7 +2002,7 @@ def StormKnight():
 
 	melee = SimpleMeleeAttack(damage=6, onhit=make_cloud)
 	melee.name = "Storm Strike"
-	melee.description = "Creates thunderstorms and blizzards"
+	melee.description = "生成风暴云和暴风雪"
 	unit.spells.append(melee)
 
 	unit.tags = [Tags.Ice, Tags.Lightning, Tags.Living]
@@ -2025,7 +2024,7 @@ def TwilightKnight():
 			drain_max_hp(target, 7)
 
 	melee.name = "Wight Blade"
-	melee.description = "Living targets lose 7 max hp"
+	melee.description = "[Living] 目标失去 7 点生命上限"
 
 	melee.onhit = drain
 
@@ -2052,7 +2051,7 @@ def EnergyKnight():
 
 	melee = SimpleMeleeAttack(damage=6, damage_type=Tags.Physical, onhit=lambda caster, target: randomly_teleport(target, 5))
 	unit.spells.append(melee)
-	melee.description = "Teleports the target to a random location up to 5 tiles away"
+	melee.description = "将目标随机转送到至多 5 格远的地块"
 
 	leap = LeapAttack(damage=10, range=7, damage_type=Tags.Lightning)
 	leap.name = "Flash of Lightning"
@@ -2114,7 +2113,7 @@ class TurtleBuff(Buff):
 			self.owner.apply_buff(TurtleDefenseBonus(), 3)
 
 	def get_tooltip(self):
-		return "Withdraws into its shell upon taking damage, gaining 50% physical, fire, and lightning resistance"
+		return "受到伤害时缩回壳中，获得 50% [physical]、[fire] 和 [lightning] 抗性。"
 
 def NightmareTurtle():
 
@@ -2169,7 +2168,7 @@ def Vampire():
 
 	melee = SimpleMeleeAttack(damage=7, damage_type=Tags.Dark, drain=True)
 	melee.name = "Drain Life"
-	melee.get_description = lambda : "Drains life"
+	melee.get_description = lambda: "Drains life"
 	unit.spells.append(melee)
 	unit.tags = [Tags.Undead, Tags.Dark]
 	unit.buffs.append(RespawnAs(VampireBat))
@@ -2194,7 +2193,7 @@ def BoneKnight():
 			drain_max_hp(target, 2)
 
 	melee.onhit = drain
-	melee.description = "Living targets lose 2 max hp"
+	melee.description = "[Living] 目标失去 2 点生命上限"
 	unit.spells.append(melee)
 
 	return unit
@@ -2207,7 +2206,7 @@ class WizardWheel(Spell):
 		self.damage_type = Tags.Dark
 		self.range = 0
 		self.cool_down = 27
-		self.description = "Hits a random target anywhere on the battlefield."
+		self.description = "随机击中地图上的一个目标。"
 
 	def cast(self, x, y):
 		delay = 15
@@ -2230,8 +2229,9 @@ class WizardSwap(Spell):
 		
 
 	def on_init(self):
-		self.name = "%s Swap" % self.tag.name
-		self.description = "Swaps places with a random %s unit" % self.tag.name
+		_name = loc.dic.get(self.tag.name, self.tag.name)
+		self.name = "%s换位" % _name
+		self.description = "与随机一个%s单位换位" % _name
 		self.cool_down = 18
 
 	def can_swap(self, u):
@@ -2276,7 +2276,7 @@ def BoneWizard():
 			caster.level.queue_spell(make_skeleton(caster, target))
 
 	dbolt = SimpleRangedAttack(damage=7, range=6, damage_type=Tags.Dark, onhit=try_raise)
-	dbolt.description = "Raises slain targets as skeletons"
+	dbolt.description = "将击杀的目标复活为骷髅"
 
 	# No wheel?
 	unit.spells = [nightmare, swap, summon, dbolt]
@@ -2291,7 +2291,6 @@ def BoneWizard():
 
 
 class MushboomBuff(Buff):
-
 	def __init__(self, buff, apply_duration):
 		self.buff = buff
 		self.apply_duration = apply_duration
@@ -2299,9 +2298,9 @@ class MushboomBuff(Buff):
 
 	def on_init(self):
 		self.owner_triggers[EventOnDeath] = self.on_death
-		self.description = "On death, applies %d turns of %s to adjacent units" % (self.apply_duration, self.buff().name)
+		self.description = "死亡时，对相邻的单位施加 %d 回合的%s。" % (self.apply_duration, loc.dic.get(self.buff().name, self.buff().name))
 		self.name = "Mushboom Burst"
-		
+
 	def on_death(self, evt):
 		self.owner.level.queue_spell(self.explode(self.owner.level, self.owner.x, self.owner.y))
 
@@ -2311,14 +2310,13 @@ class MushboomBuff(Buff):
 			unit = level.get_unit_at(p.x, p.y)
 			if unit:
 				unit.apply_buff(self.buff(), self.apply_duration)
-
 		yield
 
-class FalseProphetHolyBlast(Spell):
 
+class FalseProphetHolyBlast(Spell):
 	def on_init(self):
 		self.name = "Heavenly Blast"
-		self.description = "Beam Attack\nHeals allies in the area"
+		self.description = "束状攻击\n治疗范围内的友军"
 		self.radius = 1
 		self.range = 6
 		self.damage = 7
@@ -2396,7 +2394,7 @@ def GreenMushboom():
 	spores = SimpleRangedAttack(damage=1, damage_type=Tags.Poison, range=2, onhit=spores)
 	spores.cool_down = 3
 	spores.name = "Poison Puff"
-	spores.description = "Applies 4 turns of poison"
+	spores.description = "施加 [poison] 4 回合"
 	unit.spells.append(spores)
 	
 	unit.buffs.append(MushboomBuff(Poison, 12))
@@ -2423,7 +2421,7 @@ def GreyMushboom():
 	spores = SimpleRangedAttack(damage=1, damage_type=Tags.Poison, range=2, onhit=spores)
 	spores.cool_down = 5
 	spores.name = "Spore Puff"
-	spores.description = "Applies 2 turns of stun"
+	spores.description = "施加 [stun] 2 回合"
 	unit.spells.append(spores)
 	
 	unit.buffs.append(MushboomBuff(Stun, 3))
@@ -2440,7 +2438,7 @@ class RedMushboomBuff(Buff):
 	def on_init(self):
 		self.name = "Fire Spores"
 		self.owner_triggers[EventOnDeath] = self.on_death
-		self.description = "On death, deals 9 fire damage to adjacent units"
+		self.description = "死亡时，对相邻的单位造成 9 点 [fire] 伤害"
 
 	def on_death(self, evt):
 		self.owner.level.queue_spell(self.explode())
@@ -2467,7 +2465,7 @@ def GlassMushboom():
 	spores = SimpleRangedAttack(damage=1, damage_type=Tags.Physical, range=2, onhit=spores, effect=Tags.Glassification)
 	spores.cool_down = 4
 	spores.name = "Glass Gas"
-	spores.description = "Applies 2 turns of glassification to living enemies"
+	spores.description = "对 [living] 敌人施加 [glassification] 2 回合"
 
 	unit.spells.append(spores)
 
@@ -2507,7 +2505,7 @@ def SwampQueen():
 
 	s1 = SimpleSummon(mushboom, num_summons=5, cool_down=12)
 	s1.name = "Mushbloom"
-	s1.description = "Summons 5 grey or green mushbooms"
+	s1.description = "召唤 5 个灰色或绿色爆菇"
 	unit.spells.append(s1)
 
 	heal = HealAlly(heal=18, range=9)
@@ -2521,7 +2519,7 @@ def SwampQueen():
 	gaze = SimpleRangedAttack(damage=1, damage_type=Tags.Poison, onhit=spores, range=14)
 	gaze.onhit = spores
 	gaze.name = "Toxic Gaze"
-	gaze.description = "Applies poison for 4 turns"
+	gaze.description = "施加 [poison] 4 回合"
 	unit.spells.append(gaze)
 
 	unit.tags = [Tags.Poison, Tags.Living, Tags.Nature]
@@ -2582,7 +2580,7 @@ class Regrow(Spell):
 
 	def on_init(self):
 		self.name = "Regrow"
-		self.description = "Heals self for 12 HP"
+		self.description = "治疗自身 12 点生命"
 		self.cool_down = 3
 		self.range = 0
 
@@ -2643,7 +2641,7 @@ def GreaterVampire():
 
 	melee = SimpleMeleeAttack(damage=7, damage_type=Tags.Dark, onhit=drain)
 	melee.name = "Greater Life Drain"
-	melee.description = "Drains max hp"
+	melee.description = "汲取生命上限"
 	unit.spells.append(melee)
 
 	unit.buffs.append(RespawnAs(VampireMist))
@@ -2667,7 +2665,7 @@ def VampireEye():
 	drain.onhit = lambda caster, target: caster.deal_damage(-2, Tags.Heal, drain)
 	drain.name = "Life Drain"
 	drain.cool_down = 2
-	drain.description = "Drains life"
+	drain.description = "汲取生命"
 
 	unit.spells.append(drain)
 
@@ -2698,7 +2696,7 @@ def MindVampire():
 	
 	melee = SimpleMeleeAttack(damage=7, damage_type=Tags.Arcane, onhit=mind_drain)
 	melee.name = "Mind Drain"
-	melee.description = "Drains spell charges from the target and adds 1 shield to the caster, to a max of 3."
+	melee.description = "汲取目标的咒语充能，给施法者 1 点护盾，上限为 3。"
 
 	unit.spells.append(melee)
 
@@ -2728,7 +2726,7 @@ class ThornQueenFairySummonSpell(Spell):
 		self.range = 0
 		self.name = "Fae Queen's Guard"
 		self.cool_down = 10
-		self.description = "Summons 4 Evil Faeries for 15 turns"
+		self.description = "召唤 4 个邪恶仙灵，持续 15 回合"
 
 	def get_ai_target(self):
 		return Point(self.caster.x, self.caster.y)
@@ -2748,7 +2746,7 @@ class ThornQueenThornBuff(Buff):
 		self.radius = 6
 
 	def get_tooltip(self):
-		return "Summons a fae thorn up to %d tiles away each turn." % self.radius
+		return "每回合在至多 %d 格远处召唤一个仙灵荆棘。" % self.radius
 
 	def is_target_valid(self, t):
 		return self.owner.level.tiles[t.x][t.y].can_walk and self.owner.level.tiles[t.x][t.y].unit is None
@@ -2870,7 +2868,7 @@ def Redcap():
 			caster.level.summon(unit, thorn, p)
 
 	attack = SimpleRangedAttack(damage=1, range=4, damage_type=Tags.Physical, onhit=summon_thorn, cool_down=2)
-	attack.description = "Summons a red mushboom near the target"
+	attack.description = "在目标旁召唤一个红色爆菇"
 	attack.name = "Fire Seed"
 	
 	unit.spells.append(attack)
@@ -2893,7 +2891,7 @@ def Gnome():
 			caster.level.summon(unit, thorn, p)
 
 	attack = SimpleRangedAttack(damage=1, range=4, damage_type=Tags.Physical, onhit=summon_thorn)
-	attack.description = "Summons a fae thorn adjacent to the target"
+	attack.description = "在目标旁召唤一个仙灵荆棘"
 	attack.name = 'Thorn Bolt'
 	unit.spells.append(attack)
 
@@ -2948,7 +2946,7 @@ class MonsterChainLightning(Spell):
 				target = None			
 
 	def get_description(self):
-		return "Chains to targets up to %d tiles away." % self.arc_range
+		return "连锁到至多 %d 格远的目标处。" % self.arc_range
 
 	def can_threaten(self, x, y):
 		return self.can_threaten_corner(x, y, self.arc_range)
@@ -2997,7 +2995,7 @@ def FaeArcanist():
 
 	blast = SimpleRangedAttack(damage=4, range=5, radius=1, damage_type=Tags.Arcane, onhit=remove_buff)
 	blast.name = "Arcane Blast"
-	blast.description = "Removes 1 buff"
+	blast.description = "移除 1 个增益"
 
 	unit.spells.append(blast)
 
@@ -3161,7 +3159,7 @@ def RotFiend():
 		drain_max_hp(target, 3)
 
 	rotball = SimpleRangedAttack(damage=4, range=6, radius=2, damage_type=Tags.Dark, onhit=rot)
-	rotball.description = "Targets permenantly lose 3 max hp."
+	rotball.description = "目标永久失去 3 点生命上限。"
 	rotball.name = "Rot Blast"
 
 	unit.spells = [summon_imps, deathgaze, rotball]
@@ -3196,7 +3194,7 @@ class FiendStormBolt(Spell):
 
 	def on_init(self):
 		self.name = "Storm Bolt"
-		self.description = "A beam which leaves storm clouds along its path"
+		self.description = "沿束状路径留下暴风云"
 		self.damage = 9
 		self.damage_type = Tags.Lightning
 		self.cool_down = 2
@@ -3243,7 +3241,7 @@ def IronFiend():
 
 	ironshot = SimpleRangedAttack(damage=7, range=16, effect=Tags.Petrification)
 	ironshot.name = "Iron Gaze"
-	ironshot.description = "Petrifies target for 1 turn"
+	ironshot.description = "石化目标 1 回合"
 	ironshot.onhit = lambda caster, target: target.apply_buff(PetrifyBuff(), 1)
 	ironshot.cool_down = 5
 
@@ -3274,7 +3272,7 @@ def Troubler():
 	phasebolt = SimpleRangedAttack(damage=2, range=10, damage_type=Tags.Arcane)
 	phasebolt.onhit = lambda caster, target: randomly_teleport(target, 3)
 	phasebolt.name = "Phase Bolt"
-	phasebolt.description = "Teleports victims randomly up to 3 tiles away"
+	phasebolt.description = "随机将受害者传送至多 3 格"
 
 	unit.spells.append(phasebolt)
 	unit.flying=True
@@ -3358,7 +3356,7 @@ def WitchFire():
 			target.level.add_obj(ghost, p.x, p.y)
 
 	fireball = SimpleRangedAttack(damage=5, damage_type=[Tags.Fire, Tags.Dark], range=5, radius=2, onhit=burn_ghost)
-	fireball.description = "Slain living and undead units are raised as fire ghosts."
+	fireball.description = "将击杀的 [living] 和 [undead] 单位复活为火焰幽灵。"
 	fireball.name = "Infernal Fireball"
 
 	unit.tags.append(Tags.Fire)
@@ -3378,7 +3376,7 @@ def OldBloodWitch():
 
 	lifedrain.onhit = lambda caster, target: drain_frenzy(caster, target, lifedrain, 2)
 	lifedrain.name = "Life Drain Frenzy"
-	lifedrain.description = "Drains life.\nGains 2 damage for 10 turns on hit."
+	lifedrain.description = "汲取生命。\n击中时获得 2 点伤害，持续 10 回合。"
 
 	unit.spells.append(ghosty)
 	unit.spells.append(lifedrain)
@@ -3402,7 +3400,7 @@ def YoungBloodWitch():
 
 	lifedrain.onhit = lambda caster, target: drain_frenzy(caster, target, lifedrain, 1)
 	lifedrain.name = "Life Drain Frenzy"
-	lifedrain.description = "Drains life.\nGains 1 damage for 10 turns on hit."
+	lifedrain.description = "汲取生命。\n击中时获得 1 点生命，持续 10 回合。"
 
 	unit.spells.append(ghosty)
 	unit.spells.append(lifedrain)
@@ -3449,7 +3447,7 @@ class CultistPain(Spell):
 
 	def on_init(self):
 		self.name = "Pain"
-		self.description = "Deals 1 damage to caster\nIgnores walls"
+		self.description = "对施法者造成 1 点伤害\n无视墙壁"
 		self.requires_los = False
 		self.range = 6
 		self.damage = 1
@@ -3489,7 +3487,7 @@ class GreenGorgonBreath(BreathWeapon):
 		self.angle = math.pi / 6.0
 
 	def get_description(self):
-		return "Breathes poison gas, poisoning living enemies"
+		return "吐出毒气，使 [living] 敌人中毒"
 
 	def per_square_effect(self, x, y):
 		unit = self.caster.level.get_unit_at(x, y)
@@ -3528,7 +3526,7 @@ class GreyGorgonBreath(BreathWeapon):
 		self.angle = math.pi / 6.0
 
 	def get_description(self):
-		return "Breathes a petrifying gas dealing %d physical damage and petrifying living creatures" % self.damage
+		return "吐出石化气息，造成 %d 点 [physical] 伤害，石化 [living] 单位" % self.damage
 
 	def per_square_effect(self, x, y):
 		self.caster.level.show_effect(x, y, Tags.Petrification)
@@ -3560,7 +3558,7 @@ class LichSealSoulSpell(Spell):
 
 	def on_init(self):
 		self.name = "Soul Jar"
-		self.description = "Summon a soul jar.  The caster is unkillable while the soul jar exists.  Limit one jar per lich."
+		self.description = "召唤一个灵魂瓶。只要灵魂瓶存在，施法者便不会被消灭。每个巫妖限定一个灵魂瓶。"
 		self.range = 0
 		self.cool_down = 20
 
@@ -3600,7 +3598,7 @@ class HagDrain(Spell):
 
 	def on_init(self):
 		self.name = "Life Siphon"
-		self.description = "Steal health from all living creatures in line of sight"
+		self.description = "从视线内所有 [living] 单位汲取生命"
 		self.damage = 2
 		self.range = 0
 
@@ -3663,7 +3661,7 @@ class HagSwap(Spell):
 
 	def on_init(self):
 		self.name = "Aether Swap"
-		self.description = "Swaps places\nOnly targets the Wizard"
+		self.description = "换位\n只能以巫师为目标"
 		self.range = 12
 		self.cool_down = 9
 
@@ -3822,7 +3820,7 @@ class RavenBlind(Spell):
 
 	def on_init(self):
 		self.name = "Mass Blindness"
-		self.description = "Blind all enemies for 3 turns"
+		self.description = "[Blind] 所有敌人 3 回合"
 		self.cool_down = 12
 		self.range = 0
 
@@ -3847,7 +3845,7 @@ class CarrionChannel(Spell):
 
 	def on_init(self):
 		self.name = "Carrion Channel"
-		self.description = "Summons 2 fly swarms each turn.\nCan channel for 5 turns."
+		self.description = "每回合召唤两个 2 苍蝇群。\n可引导 5 回合。"
 		self.cool_down = 15
 		self.max_channel = 5
 		self.minion_duration = 10
@@ -3882,7 +3880,7 @@ def RavenMage():
 	windride.requires_los = True
 	windride.range = 20
 	windride.name = "Ride the Wind"
-	windride.description = "Teleports to a random tile in line of sight"
+	windride.description = "随机传送到视线内的一个地块"
 
 
 	ravens = SimpleSummon(Raven, num_summons=3, cool_down=13)
@@ -3918,7 +3916,7 @@ class Hibernate(Spell):
 
 	def on_init(self):
 		self.name = "Hibernate"
-		self.description = "Freezes self for 4 turns"
+		self.description = "冻结自身 4 回合"
 		self.duration = 4
 		self.healing = 20
 
@@ -3939,7 +3937,7 @@ class IcyMetabolism(Buff):
 		self.heal = 10
 
 	def get_tooltip(self):
-		return "Heals %d HP per turn while frozen" % self.heal 
+		return "被冻结时每回合治疗 %d 点生命" % self.heal
 
 	def on_advance(self):
 		if self.owner.has_buff(FrozenBuff):
@@ -3974,7 +3972,7 @@ def MindDevourer():
 
 	melee = SimpleMeleeAttack(8, damage_type=Tags.Arcane, onhit=drain_spell_charges)
 	melee.name = "Brain Bite"
-	melee.description = "On hit, drains a charge of a random spell"
+	melee.description = "击中时，随机汲取一个咒语的一点充能"
 	unit.spells.append(melee)
 
 	pull = PullAttack(damage=3, range=6, color=Tags.Tongue.color)
@@ -4042,7 +4040,7 @@ def PurpleHand():
 	melee = SimpleMeleeAttack(13, damage_type=Tags.Arcane)
 	melee.onhit = lambda caster, target: randomly_teleport(target, 5)
 	melee.name = "Void Flick"
-	melee.description = "Randomly teleport the target up to 5 tiles away."
+	melee.description = "随机将目标传送至多 5 格。"
 
 	unit.spells.append(melee)
 
@@ -4062,7 +4060,7 @@ def BloodBear():
 	melee = SimpleMeleeAttack(10)
 	melee.onhit = bloodrage(3)
 	melee.name = "Frenzy Claw"
-	melee.description = "Gain +3 damage for 10 turns with each attack"
+	melee.description = "每次攻击获得 +3 点伤害，持续 10 回合"
 
 	unit.spells.append(melee)
 	return unit
@@ -4074,7 +4072,7 @@ def Bloodghast():
 	unit.asset_name = "blood_ghost"
 	unit.spells[0].name = "Frenzy Haunt"
 	unit.spells[0].onhit = bloodrage(1)
-	unit.spells[0].description = "Gain +2 damage for 10 turns with each attack"
+	unit.spells[0].description = "每次攻击获得 +2 点伤害，持续 10 回合"
 
 	unit.tags.append(Tags.Demon)
 
@@ -4094,7 +4092,7 @@ def Bloodhound():
 	melee = SimpleMeleeAttack(6)
 	melee.onhit = bloodrage(2)
 	melee.name = "Frenzy Bite"
-	melee.description = "Gain +2 damage for 10 turns with each attack"
+	melee.description = "每次攻击获得 +2 点伤害，持续 10 回合"
 	unit.spells.append(melee)
 
 	unit.spells.append(LeapAttack(damage=6, damage_type=Tags.Physical, range=3))
@@ -4111,7 +4109,7 @@ def Wolf():
 	wolf.sprite.char = 'w'
 	wolf.sprite.color = Color(102, 77, 51)
 	wolf.name = "Wolf"
-	wolf.description = "A medium sized beast"
+	wolf.description = "中型野兽"
 	wolf.spells.append(SimpleMeleeAttack(5))
 
 	wolf.spells.append(LeapAttack(damage=5, damage_type=Tags.Physical, range=4))
@@ -4208,7 +4206,7 @@ def FrostfireTormentor():
 	def freeze(caster, target):
 		target.apply_buff(FrozenBuff(), 1)
 
-	burst = SimpleBurst(damage=7, damage_type=Tags.Ice, cool_down=5, radius=4, onhit=freeze, extra_desc="Applies 2 turns of freeze")
+	burst = SimpleBurst(damage=7, damage_type=Tags.Ice, cool_down=5, radius=4, onhit=freeze, extra_desc="施加 [freeze] 2 回合")
 	burst.name = "Frosty Torment"
 
 	unit.spells.append(burst)
@@ -4283,7 +4281,7 @@ def IcyTormentor():
 		target.apply_buff(FrozenBuff(), 1)
 
 	burst = SimpleBurst(damage=7, damage_type=Tags.Ice, cool_down=5, radius=4, onhit=freeze)
-	burst.description = "Applies frozen for 1 turn"
+	burst.description = "施加 [frozen] 1 回合"
 	burst.name = "Frosty Torment"
 
 	unit.spells.append(burst)
@@ -4322,7 +4320,7 @@ class GoatHeadBray(Spell):
 
 	def on_init(self):
 		self.name = "Horrid Braying"
-		self.description = "Increase the damage of an allied unit by 4"
+		self.description = "提升一个友军 4 点伤害"
 		self.duration = 6
 		self.range = 5
 		self.cool_down = 3
@@ -4550,9 +4548,9 @@ class BeginConstructingSiege(Spell):
 		self.must_target_empty = True
 		self.must_target_walkable = True
 		self.cool_down = 30
-
-		self.name = "Construct %s" % self.siegespawn().name
-		self.description = "Begins construction of a %s." % self.siegespawn().name
+		_name = loc.dic.get(self.siegespawn().name, self.siegespawn().name)
+		self.name = "建造%s" % _name
+		self.description = "开始建造一个%s。" % _name
 
 	def cast_instant(self, x, y):
 		unit = self.siegespawn()
@@ -4597,7 +4595,7 @@ class Approach(Spell):
 		# By default, only approach things in los
 		self.requires_los = False
 		self.name = "Wander"
-		self.description = "Walk towards a nearby %s" % self.target_name
+		self.description = "走向附近的一个%s" % loc.dic.get(self.target_name, self.target_name)
 		self.animate = False
 
 	def can_cast(self, x, y):
@@ -4647,11 +4645,12 @@ class OperateSiege(Spell):
 
 	
 	def on_init(self):
-		self.name = "Operate %s" % self.siege_name
+		_name = loc.dic.get(self.siege_name, self.siege_name)
+		self.name = "操作%s" % _name
 		self.melee = True
 		self.range = 1
 		self.heal = 2
-		self.description = "Activate's a %s" % self.siege_name
+		self.description = "启动%s" % _name
 		
 	def get_ai_target(self):
 		potentials = [u for u in self.caster.level.units if not are_hostile(u, self.caster) and u.name == self.siege_name]
@@ -4684,11 +4683,12 @@ class RepairSiege(Spell):
 		
 
 	def on_init(self):
-		self.name = "Repair %s" % self.siege_name
+		_name = loc.dic.get(self.siege_name, self.siege_name)
+		self.name = "修复%s" % _name
 		self.melee = True
 		self.range = 1
 		self.heal = 1
-		self.description = "Repair %d damage to a %s" % (self.heal, self.siege_name)
+		self.description = "修复%s的 %d 点伤害" % (_name, self.heal)
 		
 
 	def get_ai_target(self):
@@ -4731,9 +4731,10 @@ class ReloadSiege(Spell):
 		
 
 	def on_init(self):
-		self.name = "Resupply %s" % self.siege_name
+		_name = loc.dic.get(self.siege_name, self.siege_name)
+		self.name = "补给%s" % _name
 		self.melee = True
-		self.description = "Reduce cooldown of a %s by 1 turn" % self.siege_name
+		self.description = "降低%s 1 回合冷却" % _name
 		self.heal = 1
 		self.cool_down = 3
 		self.range = 1
@@ -4779,7 +4780,7 @@ class WizardTeleport(Spell):
 		self.name = "Void Tango"
 		self.cool_down = 11
 		self.requires_los = False
-		self.description = "Mordred teleports to a random tile.\nThe Wizard is teleported to Mordred's old location."
+		self.description = "莫德雷德随机传送到一个地块。\n巫师传送到莫德雷德之前的位置。"
 
 	def cast(self, x, y):
 		old_loc = Point(self.caster.x, self.caster.y)
@@ -4804,7 +4805,7 @@ class MordredCorruption(Spell):
 
 	def on_init(self):
 		self.name = "Planar Interposition"
-		self.description = "Mix the current realm with another.\nFriends and foes may be left behind, Mordred and the Wizard will always remain."
+		self.description = "将当前关卡与一个新关卡混合。\n友军和敌军都可能消失，莫德雷德和巫师必定存留。"
 		self.cool_down = 13
 		self.range = 0
 		self.num_exits = 0
@@ -4938,7 +4939,7 @@ class GlassyGaze(Spell):
 		yield
 
 	def get_description(self):
-		return "Turns victim to glass for %d turns" % self.duration
+		return "璃化受害者 %d 回合" % self.duration
 
 def GlassButterfly():
 	demon = ButterflyDemon()
@@ -4989,7 +4990,7 @@ class PhoenixBuff(Buff):
 		self.name = "Phoenix Fire"
 
 	def get_tooltip(self):
-		return "On death, deals 25 fire damage to all tiles within 6.  Friendly units are healed instead of damaged."
+		return "死亡时，对 6 格内的所有地块造成 25 点 [fire] 伤害。治疗友方单位，而非造成伤害"
 
 	def on_death(self, evt):
 
@@ -5025,10 +5026,10 @@ def Phoenix():
 class VolcanoTurtleBuff(Buff):
 
 	def on_init(self):
-		self.description = ("Spews 3 meteors each turn at random locations within a radius of 6.\n\n"
-						    "The meteors create explosions with 2 tiles radii, dealing 8 fire damage.\n\n"
-						    "Tiles directly hit take 11 additional physical damage and become floor tiles.\n\n"
-						    "Enemies directly hit are stunned for 1 turn.")
+		self.description = ("每回合随机在 6 格半径内的随机位置生成三个陨石。\n\n"
+						    "陨石生成 2 格半径的爆炸，造成 8 点 [fire] 伤害。\n\n"
+						    "直接击中的地块额外收到 11 点 [physical] 伤害，变为平地。\n\n"
+						    "直接击中的敌人被 [stunned] 1 回合。")
 		self.name = "Volcano Shell"
 
 	def on_advance(self):

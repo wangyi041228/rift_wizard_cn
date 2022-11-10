@@ -28,7 +28,7 @@ class DampenSpell(Spell):
 		self.damage_type = Tags.Holy
 
 		self.name = "Curse of the %s" % self.label
-		self.description = "Decreases player spell and skill %s by %d" % (self.attr, self.amt)
+		self.description = "降低玩家的咒语和被动 %d %s" % (self.amt, loc.attrc_dic.get(self.attr, '') + loc.attr_dic.get(self.attr, self.attr))
 
 		self.range = RANGE_GLOBAL
 		self.requires_los = False
@@ -38,7 +38,7 @@ class DampenSpell(Spell):
 
 	def get_buff(self):
 		buff = Dampen(self.attr, self.amt)
-		buff.name = "%sness Curse" % self.label
+		buff.name = "%s诅咒" % loc.dic.get(self.label, self.label)  # 汉化
 		return buff
 
 	def get_ai_target(self):

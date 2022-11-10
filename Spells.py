@@ -3152,9 +3152,9 @@ class DeathBolt(Spell):
 
 	def get_description(self):
 		return ("对一个目标造成 [{damage}_点黑暗:dark] 伤害。\n"
-				"击杀的 [living] 单位复活为骷髅妖。\n"
-				"复活的骷髅妖生命上限与被击杀的单位相同，近战攻击造成 [{minion_damage}_点物理:physical] 伤害。\n"
-				"飞行单位的骷髅妖可飞行。").format(**self.fmt_dict())
+				"击杀的 [living] 单位复活为骷髅。\n"
+				"复活的骷髅生命上限与被击杀的单位相同，近战攻击造成 [{minion_damage}_点物理:physical] 伤害。\n"
+				"飞行单位的骷髅可飞行。").format(**self.fmt_dict())
 
 class DeathrouletteStack(Buff):
 
@@ -8152,7 +8152,7 @@ class RestlessDeadBuff(Buff):
 		yield
 
 	def get_description(self):
-		return ("每当 [living] 敌人死亡时，将其复活为骷髅妖。")
+		return ("每当 [living] 敌人死亡时，将其复活为骷髅。")
 
 class RestlessDead(Spell):
 
@@ -8173,9 +8173,9 @@ class RestlessDead(Spell):
 		self.upgrades['spirit_catcher'] = (1, 5, "Elemental Spirits", "每当敌方的 [fire]、[ice] 或 [lightning] 单位死亡时，随机一个召唤的友军获得 100 点该元素抗性，可进行该元素的远程攻击。每个友军只能获得一个此增益。")
 
 	def get_description(self):
-		return ("每当 [living] 敌人死亡时，将其复活为骷髅妖。\n"
-				"骷髅妖的生命上限等于被击杀的单位，近战攻击造成 [{minion_damage}_点物理:physical] 伤害。\n"
-				"飞行单位的骷髅妖可飞行。\n"
+		return ("每当 [living] 敌人死亡时，将其复活为骷髅。\n"
+				"骷髅的生命上限等于被击杀的单位，近战攻击造成 [{minion_damage}_点物理:physical] 伤害。\n"
+				"飞行单位的骷髅可飞行。\n"
 				"此效果持续 [{duration}_回合:duration]。").format(**self.fmt_dict())
 
 	def cast_instant(self, x, y):

@@ -3,7 +3,7 @@ Rift Wizard 汉化版
 * [Rift Wizard](https://store.steampowered.com/app/1271280) 是一款侧重施法战斗和角色培养的高难度复古类 Rogue 游戏。
 * [SteamDB](https://steamdb.info/app/1271280) 显示：国区定价 50 元，史低 32.5 元，游戏整体特别好评，好评 718，差评 43。
 * 作者已停止更新 RW，全力投入 RW2 的开发。
-* 作者允许中文社区自行分发 RW 汉化版，希望喜欢游戏的玩家在 Steam 上购买一份支持作者。（增开测试频道及后续维护会分占用作者精力）
+* 作者允许中文社区自行分发 RW 汉化版，希望喜欢游戏的玩家在 Steam 上购买一份支持作者。（增开测试频道及后续维护会占用作者精力）
 * 项目基于2022年7月的客户端 `Rift.Wizard.Build.8752580` 进行开发。
 * 本项目仅供游戏玩家学习交流，切勿商用。
 * [Rift Wizard 官方 Discord](https://discord.gg/NngFZ7B)
@@ -32,7 +32,7 @@ Rift Wizard 汉化版
 * 调查汉化版新增的卡顿和性能问题。
 * 进一步优化原版和汉化版。
 
-|模块|文件|没翻译完|备注|
+|模块|文件|没翻译完|都需修正和润色|
 |----|----|----|----|
 |主文件|[RiftWizard.py](RiftWizard.py)| | |
 |咒语|[Spells.py](Spells.py)| | |
@@ -40,7 +40,7 @@ Rift Wizard 汉化版
 |游戏|[Game.py](Game.py)| | |
 |物品|[Cunsumables.py](Consumables.py)| | |
 |关卡|[Level.py](Level.py)| | |
-|怪物|[Monsters.py](Monsters.py)|是| |
+|怪物|[Monsters.py](Monsters.py)| | |
 |变体怪物|[Variant.py](Variants.py)|是| |
 |稀有怪物|[RareMonsters.py](RareMonsters.py)|是| |
 |通用|[CommonContent.py](CommonContent.py)| | |
