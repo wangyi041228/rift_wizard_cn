@@ -131,7 +131,7 @@ class SimpleRangedAttack(Spell):
 		#	desc += "Randomly deals %s damage\n" % ' or '.join(t.name for t in self.damage_type)
 		
 		if self.cast_after_channel:
-			desc += "施法施加：%d 回合\n" % self.max_channel
+			desc += "施法时间：%d 回合\n" % self.max_channel
 		elif self.max_channel:
 			desc += "可引导至多 %d 回合\n" % self.max_channel
 

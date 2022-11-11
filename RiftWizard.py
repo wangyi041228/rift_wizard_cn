@@ -215,7 +215,7 @@ import logging
 mem_log = logging.getLogger("memory")
 mem_log.setLevel(logging.DEBUG)
 mem_log.propagate = False
-mem_log.addHandler(logging.FileHandler('mem_log.txt', mode='w'))
+mem_log.addHandler(logging.FileHandler('mem_log.txt', mode='w', encoding='utf-8'))
 
 Channel = namedtuple('Channel', 'name channel base_volume')
 
@@ -2224,15 +2224,12 @@ class PyGameView(object):
 			_total = len([b for b in _upgrades if hasattr(b, 'exc_class') and b.exc_class is None]) + (
 				1 if [b for b in _upgrades if hasattr(b, 'exc_class') and b.exc_class] else 0) + len(
 				[b for b in _upgrades if not hasattr(b, 'exc_class')])
-			available_upgrades = _total - len([b for b in spell.spell_upgrades if b.applied])
+			available_upgrades = _total - len([b for b in _upgrades if b.applied])
 			if available_upgrades:
 				self.draw_string('  %d 项可选升级' % available_upgrades, self.middle_menu_display, cur_x, cur_y)
 				cur_y += self.linesize
 
-
-
 			spell_index += 1
-
 
 		learn_color = (255, 255, 255) if len(self.game.p1.spells) < 20 else (170, 170, 170)
 
@@ -3856,45 +3853,36 @@ class PyGameView(object):
 							word = tokens[0].replace('_', ' ')
 							cur_color = tooltip_colors[tokens[1].lower()].to_tup()
 					word = loc.dic.get(word, word)  # 汉化 理论上全汉化后，这里不需要查表
-					if _not_line_start and (_need_space or all((cha.isascii() for cha in word))):
+
+					if _not_line_start and (_need_space or word[0].isascii()):
 						cur_x += self.space_width
-						if cur_x + self.font.size(word)[0] > width + x:
+					while word:
+						_len = len(word)
+						_need_newline = False
+						_temp_result = width + x - cur_x
+						while _len:
+							if self.font.size(word[:_len])[0] > _temp_result:
+								_len -= 1
+								_need_newline = True
+							elif _len < len(word) - 1 and word[_len].isascii() and word[_len+1].isascii():
+								_len -= 1
+								_need_newline = True
+							else:
+								break
+						# print(word, _temp_result, _len, _need_newline)
+						_temp_name = word[:_len]
+						word = word[_len:]
+						if word and word[0] == ' ':
+							word = word.lstrip()
+						if _temp_name:
+							self.draw_string(_temp_name, surface, cur_x, cur_y, cur_color)
+							_not_line_start = True
+							cur_x += self.font.size(_temp_name)[0]
+							_need_space = _temp_name[-1].isascii()
+						if _need_newline:
 							cur_y += linesize
 							num_lines += 1
 							cur_x = x + self.space_width
-						self.draw_string(word, surface, cur_x, cur_y, cur_color)
-						_not_line_start = True
-						cur_x += self.font.size(word)[0]
-						_need_space = word[-1].isascii()
-					else:
-						if _not_line_start and (_need_space or word[0].isascii()):
-							cur_x += self.space_width
-						while word:
-							_len = len(word)
-							_need_newline = False
-							_temp_result = width + x - cur_x
-							while _len:
-								if self.font.size(word[:_len])[0] > _temp_result:
-									_len -= 1
-									_need_newline = True
-								elif _len < len(word) - 1 and word[_len].isascii() and word[_len+1].isascii():
-									_len -= 1
-									_need_newline = True
-								else:
-									break
-							_temp_name = word[:_len]
-							word = word[_len:]
-							if word and word[0] == ' ':
-								word = word.lstrip()
-							if _temp_name:
-								self.draw_string(_temp_name, surface, cur_x, cur_y, cur_color)
-								_not_line_start = True
-								cur_x += self.font.size(_temp_name)[0]
-								_need_space = _temp_name[-1].isascii()
-							if _need_newline:
-								cur_y += linesize
-								num_lines += 1
-								cur_x = x + self.space_width
 
 			cur_y += linesize
 			num_lines += 1
@@ -4372,9 +4360,12 @@ class PyGameView(object):
 
 			for upg in spell.spell_upgrades:
 
-				cur_color = (255, 255, 255)
 				if self.game.has_upgrade(upg):
 					cur_color = (0, 255, 0)
+				elif spell in self.game.p1.spells and not self.game.can_buy_upgrade(upg):
+					cur_color = (100, 100, 100)
+				else:
+					cur_color = (255, 255, 255)
 
 				_name = loc.dic.get(upg.name, upg.name)
 				self.draw_string(' %d - %s' % (upg.level, _name), self.examine_display, cur_x, cur_y, color=cur_color)
@@ -5238,7 +5229,7 @@ class PyGameView(object):
 		log_fn = os.path.join('saves', str(self.game.run_number), 'log', str(level), 'combat_log.%d.txt' % turn)
 
 		if os.path.exists(log_fn):
-			with open(log_fn, 'r', encoding='utf8') as logfile:
+			with open(log_fn, 'r', encoding='utf-8') as logfile:
 				self.combat_log_lines = [s.strip() for s in logfile.readlines()]
 
 	def draw_combat_log(self):
@@ -5389,7 +5380,7 @@ class PyGameView(object):
 		if self.game.level_cache:
 			lines = self.game.level_cache
 		else:
-			with open(stats_filename, 'r', encoding='utf8') as statfile:
+			with open(stats_filename, 'r', encoding='utf-8') as statfile:
 				lines = [s.strip() for s in statfile.readlines()]
 				self.game.level_cache = lines
 
@@ -5739,7 +5730,7 @@ except:
 		for mod in loaded_mods:
 			print(mod)
 
-	with open('crash.txt', 'w', encoding='utf8') as file:
+	with open('crash.txt', 'w', encoding='utf-8') as file:
 		traceback.print_exc(file=file)
 		if loaded_mods:
 			file.write("Loaded mods:\n")

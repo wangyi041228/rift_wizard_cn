@@ -2447,7 +2447,7 @@ class Level(object):
 		for h in list(self.combat_log.handlers):
 			self.combat_log.removeHandler(h)
 
-		self.combat_log.addHandler(logging.FileHandler(os.path.join(self.logdir if self.logdir else '.', 'combat_log.txt'), mode='a'))
+		self.combat_log.addHandler(logging.FileHandler(os.path.join(self.logdir if self.logdir else '.', 'combat_log.txt'), mode='a', encoding='utf-8'))
 		#print(self.turn_no)
 		#if self.turn_no:
 		#	self.next_log_turn()
@@ -2465,7 +2465,7 @@ class Level(object):
 			if not os.path.exists(dirname):
 				os.makedirs(dirname)
 
-			self.turn_log_handler = logging.FileHandler(turn_file)
+			self.turn_log_handler = logging.FileHandler(turn_file, encoding='utf-8')
 			self.combat_log.addHandler(self.turn_log_handler)
 
 	def calc_glyphs(self):

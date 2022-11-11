@@ -2168,7 +2168,7 @@ def Vampire():
 
 	melee = SimpleMeleeAttack(damage=7, damage_type=Tags.Dark, drain=True)
 	melee.name = "Drain Life"
-	melee.get_description = lambda: "Drains life"
+	melee.get_description = lambda: "汲取生命"
 	unit.spells.append(melee)
 	unit.tags = [Tags.Undead, Tags.Dark]
 	unit.buffs.append(RespawnAs(VampireBat))

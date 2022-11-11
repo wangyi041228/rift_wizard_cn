@@ -397,7 +397,7 @@ def bag_of_spikes():
 def bag_of_bags():
 	item = Item()
 	item.name = "Bag of Bags"
-	item.description = "召唤 8 个友方的一袋虫子。"
+	item.description = "召唤 8 个友方的虫子口袋。"
 	summon_spell = SimpleSummon(BagOfBugs, 8)
 	summon_spell.range = 0
 	item.set_spell(summon_spell)

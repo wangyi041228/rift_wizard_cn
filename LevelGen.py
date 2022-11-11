@@ -17,7 +17,7 @@ import logging
 level_logger = logging.getLogger("Level")
 level_logger.setLevel(logging.DEBUG)
 level_logger.propagate = False
-level_logger.addHandler(logging.FileHandler('level_log.txt', mode='w'))
+level_logger.addHandler(logging.FileHandler('level_log.txt', mode='w', encoding='utf-8'))
 
 class Biome():
 

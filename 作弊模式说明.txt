@@ -20,9 +20,9 @@ Shift + S - 保存当前状态，作为作弊存档
 Shift + L - 读取之前的作弊存档
 Shift + C - 尝试创建 9999x9999 的地图，使游戏崩溃
 Shift + M - 刷怪
-Shift + B- 生成莫德雷德
+Shift + B - 生成莫德雷德
 Shift + K - 消灭玩家之外的所有单位
 Shift + G - 消灭玩家
 Shift + F - 检视信息
-Shift + V - 截图 100 张
+Shift + V - 截图
 Shift + P - 追踪调用

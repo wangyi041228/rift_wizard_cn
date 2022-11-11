@@ -24,7 +24,7 @@ Rift Wizard 汉化版
   * `毒性`=`poison`，`毒液`=`venom`，`中毒`=`poisoned`
 * 绝不改变入图鉴的单位、玩家咒语和玩家被动的 `name`，可直接改动神龛和增益的 `name`。已改 `～～骷髅`的 `name`。
 ## 待办事项
-* 鼠标悬浮在左侧技能时，右侧窗口无法升级的用灰色，额外显示神龛强化。
+* 鼠标悬浮在左侧咒语时，额外显示神龛强化。
 * 战败截图显示正确的可选升级数量。
 * 拆分词典，得以能将同一英文单词映射成不同的中文词汇。
 * 调整字体大小、文本位置和界面布局。
@@ -32,21 +32,20 @@ Rift Wizard 汉化版
 * 调查汉化版新增的卡顿和性能问题。
 * 进一步优化原版和汉化版。
 
-|模块|文件|没翻译完|都需修正和润色|
-|----|----|----|----|
-|主文件|[RiftWizard.py](RiftWizard.py)| | |
-|咒语|[Spells.py](Spells.py)| | |
-|被动|[Upgrades.py](Upgrades.py)| | |
-|游戏|[Game.py](Game.py)| | |
-|物品|[Cunsumables.py](Consumables.py)| | |
-|关卡|[Level.py](Level.py)| | |
-|怪物|[Monsters.py](Monsters.py)| | |
-|变体怪物|[Variant.py](Variants.py)|是| |
-|稀有怪物|[RareMonsters.py](RareMonsters.py)|是| |
-|通用|[CommonContent.py](CommonContent.py)| | |
-|神龛|[Shrines.py](Shrines.py)| | |
-|变体规则|[Mutators.py](Mutators.py)| | |
-|NPC|[NPCs.py](NPCs.py)|是| |
+|模块|文件|都需修正和润色|
+|----|----|----|
+|主文件|[RiftWizard.py](RiftWizard.py)|
+|咒语|[Spells.py](Spells.py)|
+|被动|[Upgrades.py](Upgrades.py)|
+|游戏|[Game.py](Game.py)|
+|物品|[Cunsumables.py](Consumables.py)|
+|关卡|[Level.py](Level.py)|
+|怪物|[Monsters.py](Monsters.py)|
+|变体怪物|[Variant.py](Variants.py)|
+|稀有怪物|[RareMonsters.py](RareMonsters.py)|
+|通用|[CommonContent.py](CommonContent.py)|
+|神龛|[Shrines.py](Shrines.py)|
+|变体规则|[Mutators.py](Mutators.py)|
 ## 已经完成
 * 改写 `draw_wrapped_string` 函数。
   * 自动换行，不切开 ascii 码单词，行首无标点。
@@ -56,7 +55,9 @@ Rift Wizard 汉化版
 * 左侧界面中，咒语和物品分两列。
 * 多选一的分支只算一个可选升级。
 * 被动全满后学习被动按钮用灰色。
-* 声音文件改为 `192kbps` 的 `.mp3`。
+* 声音文件改为 192kbps 的 mp3。
 * 缓存部分日志，防止循环读取。
 * 调整部分界面函数和参数。
 * 改进作弊模式：显示状态，可开可关，调整键位。
+* 鼠标悬浮在左侧咒语时，右侧窗口无法升级的用灰色。学习咒语页面中，悬浮在尚未学习的咒语上时，右侧仍然显示为纯白。
+* 日志采用 utf-8 编码

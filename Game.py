@@ -141,7 +141,7 @@ class Game():
 		if not os.path.exists(dirname):
 			os.makedirs(dirname)
 
-		with open(filename, 'w', encoding='utf8') as stats:
+		with open(filename, 'w', encoding='utf-8') as stats:
 			stats.write("第 %d 关\n" % self.level_num)
 			if self.trial_name:
 				stats.write(self.trial_name + "\n")

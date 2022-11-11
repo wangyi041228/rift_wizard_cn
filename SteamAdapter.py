@@ -7,7 +7,7 @@ stats_log = None
 stats_log = logging.getLogger("Stats")
 stats_log.setLevel(logging.DEBUG)
 stats_log.propagate = False
-stats_log_handler = logging.FileHandler('stats_log.txt', mode='a')
+stats_log_handler = logging.FileHandler('stats_log.txt', mode='a', encoding='utf-8')
 stats_log_formatter = logging.Formatter('%(asctime)s: %(message)s')
 stats_log_handler.setFormatter(stats_log_formatter)
 stats_log.addHandler(stats_log_handler)
@@ -134,6 +134,7 @@ def unlock_bestiary(monster_name):
 
 def has_slain(monster_name):
 	return monster_name in stats["bestiary"]
+	# return True  # 汉化测试
 
 def get_num_slain():
 	return len([m for m in stats["bestiary"] if m in all_monster_names])
