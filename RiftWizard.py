@@ -3,6 +3,18 @@ import sys
 import re
 import webbrowser
 import loc
+import functools
+
+
+@functools.lru_cache(maxsize=None)
+def render1(font, string, anti, color):
+	return font.render(string, anti, color)
+
+
+@functools.lru_cache(maxsize=None)
+def size0(font, string):
+	return font.size(string)[0]
+
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
@@ -16,6 +28,7 @@ elif __file__:
 	dname = os.path.dirname(os.path.abspath(__file__))
 	can_enable_cheats = True
 os.chdir(dname)
+
 
 import pygame
 import pygame.locals
@@ -219,6 +232,8 @@ mem_log.addHandler(logging.FileHandler('mem_log.txt', mode='w', encoding='utf-8'
 
 Channel = namedtuple('Channel', 'name channel base_volume')
 
+
+
 image_cache = {}
 def get_image(asset, fill_color=None, alphafy=False):
 	assert(asset)
@@ -320,6 +335,7 @@ def get_glow(surface, color, outline=False):
 				glow_frame.set_at((i, j), color.to_tup())
 
 	return glow_frame
+
 
 
 class LookSpell(Spell):
@@ -451,9 +467,9 @@ class SpriteSheet(object):
 		if color == (0, 0, 0):
 			color = (255, 255, 255)
 
-		flinch = main_view.font.render(ascii_sprite.char, False, color)
-		attack = main_view.font.render(ascii_sprite.char, False, color)
-		idle = main_view.font.render(ascii_sprite.char, False, color)
+		flinch = render1(main_view.font, ascii_sprite.char, False, color)
+		attack = render1(main_view.font, ascii_sprite.char, False, color)
+		idle = render1(main_view.font, ascii_sprite.char, False, color)
 
 		for cur_image, anim in [(flinch, ANIM_FLINCH), (idle, ANIM_IDLE), (attack, ANIM_ATTACK)]:
 			x_margin = (SPRITE_SIZE - cur_image.get_width()) // 2 + 1
@@ -1098,7 +1114,7 @@ class PyGameView(object):
 		# 字体锚点
 		font_path = os.path.join("rl_data", "sarasa-mono-sc-bold.ttf")
 		self.font = pygame.font.Font(font_path, 16)
-		self.space_width = self.font.size(' ')[0]
+		self.space_width = size0(self.font, ' ')
 		self.ascii_idle_font = pygame.font.Font(font_path, 16)
 		self.ascii_attack_font = pygame.font.Font(font_path, 16)
 		self.ascii_flinch_font = pygame.font.Font(font_path, 16)
@@ -2342,14 +2358,14 @@ class PyGameView(object):
 		self.middle_menu_display.fill((0, 0, 0))
 
 		cur_y = self.linesize * 5
-		cur_x = (self.middle_menu_display.get_width() - self.font.size(self.confirm_text)[0]) // 2
+		cur_x = (self.middle_menu_display.get_width() - size0(self.font, self.confirm_text)) // 2
 		self.draw_string(self.confirm_text, self.middle_menu_display, cur_x, cur_y)
 
 		cur_y += 2*self.linesize
 		cur_x = (self.middle_menu_display.get_width()) // 4
 		self.draw_string("是", self.middle_menu_display, cur_x, cur_y, mouse_content=True)
 
-		cur_x = (self.middle_menu_display.get_width()) * 3 // 4 - self.font.size("No")[0]
+		cur_x = (self.middle_menu_display.get_width()) * 3 // 4 - size0(self.font, "No")
 		self.draw_string("否", self.middle_menu_display, cur_x, cur_y, mouse_content=False)
 
 		self.screen.blit(self.middle_menu_display, (self.h_margin, 0))
@@ -2896,11 +2912,11 @@ class PyGameView(object):
 
 		if self.shop_type == SHOP_TYPE_SPELLS:
 			self.draw_string("学习咒语", self.middle_menu_display, cur_x, cur_y)
-			self.draw_string("SP", self.middle_menu_display, level_x - self.font.size('X')[0], cur_y, COLOR_XP)
+			self.draw_string("SP", self.middle_menu_display, level_x - size0(self.font, 'X'), cur_y, COLOR_XP)
 			self.draw_string("类别", self.middle_menu_display, cur_x + tag_offset, cur_y)
 		if self.shop_type == SHOP_TYPE_UPGRADES:
 			self.draw_string("学习被动", self.middle_menu_display, cur_x, cur_y)
-			self.draw_string("SP", self.middle_menu_display, level_x - self.font.size('X')[0], cur_y, COLOR_XP)
+			self.draw_string("SP", self.middle_menu_display, level_x - size0(self.font, 'X'), cur_y, COLOR_XP)
 			self.draw_string("类别", self.middle_menu_display, cur_x + tag_offset, cur_y)
 		if self.shop_type == SHOP_TYPE_SPELL_UPGRADES:
 			_name = loc.dic.get(self.shop_upgrade_spell.name, self.shop_upgrade_spell.name)
@@ -2965,7 +2981,7 @@ class PyGameView(object):
 					if tag not in opt.tags:
 						continue
 					self.draw_string(self.reverse_tag_keys[tag], self.middle_menu_display, tag_x, cur_y, tag.color.to_tup())
-					tag_x += self.font.size(tag.name[0])[0]
+					tag_x += size0(self.font, tag.name[0])
 
 
 			cur_y += self.linesize
@@ -2989,7 +3005,7 @@ class PyGameView(object):
 
 				for c in _name:
 					if self.tag_keys.get(c.lower(), None) == tag:
-						self.draw_string(c, self.middle_menu_display, cur_x + self.font.size(_name[:idx])[0], cur_y, tag.color.to_tup())
+						self.draw_string(c, self.middle_menu_display, cur_x + size0(self.font, _name[:idx]), cur_y, tag.color.to_tup())
 						break
 					idx += 1
 
@@ -3007,12 +3023,12 @@ class PyGameView(object):
 			cur_color = (255, 255, 255) if can_prev else HIGHLIGHT_COLOR
 			self.draw_string(prev_fmt, self.middle_menu_display, cur_x, cur_y, cur_color, mouse_content=TOOLTIP_PREV if can_prev else None)
 
-			cur_x += self.font.size(prev_fmt + '   ')[0]
+			cur_x += size0(self.font, prev_fmt + '   ')
 			fmt = "第 %d/%d 页" % (self.shop_page + 1, self.get_max_shop_pages())
 			self.draw_string(fmt, self.middle_menu_display, cur_x, cur_y)
 
-			cur_x += self.font.size(fmt + '   ')[0]
-			#cur_x = spell_x_offset + spell_column_width - self.font.size(prev_fmt)[0]
+			cur_x += size0(self.font, fmt + '   ')
+			#cur_x = spell_x_offset + spell_column_width - size0(self.font, prev_fmt)
 
 			can_next = self.shop_page < max_shop_pages - 1
 			next_fmt = ">>>>"
@@ -3779,9 +3795,9 @@ class PyGameView(object):
 		if not font:
 			font = self.font
 
-		width = content_width if content_width else font.size(string)[0]
+		width = content_width if content_width else size0(font, string)
 		if center:
-			line_size = self.font.size(string)[0]
+			line_size = size0(self.font, string)
 			x = x + (width - line_size) // 2
 			width = line_size
 
@@ -3808,7 +3824,7 @@ class PyGameView(object):
 				if should_highlight:
 					pygame.draw.rect(surface, HIGHLIGHT_COLOR, rel_rect)
 
-		string_surface = font.render(string, True, color)
+		string_surface = render1(font, string, True, color)
 		surface.blit(string_surface, (x, y))
 
 
@@ -3839,7 +3855,7 @@ class PyGameView(object):
 						self.draw_string(word, surface, cur_x, cur_y, cur_color)
 						if word in '，、。：！':
 							_not_line_start = False
-						cur_x += self.font.size(word)[0]
+						cur_x += size0(self.font, word)
 						continue
 					if word[0] == '[' and word[-1] == ']':
 						tokens = word[1:-1].split(':')
@@ -3861,7 +3877,7 @@ class PyGameView(object):
 						_need_newline = False
 						_temp_result = width + x - cur_x
 						while _len:
-							if self.font.size(word[:_len])[0] > _temp_result:
+							if size0(self.font, word[:_len]) > _temp_result:
 								_len -= 1
 								_need_newline = True
 							elif _len < len(word) - 1 and word[_len].isascii() and word[_len+1].isascii():
@@ -3877,7 +3893,7 @@ class PyGameView(object):
 						if _temp_name:
 							self.draw_string(_temp_name, surface, cur_x, cur_y, cur_color)
 							_not_line_start = True
-							cur_x += self.font.size(_temp_name)[0]
+							cur_x += size0(self.font, _temp_name)
 							_need_space = _temp_name[-1].isascii()
 						if _need_newline:
 							cur_y += linesize
@@ -4076,6 +4092,7 @@ class PyGameView(object):
 			index += 1
 
 		# Buffs
+		cur_x = self.border_margin
 		status_effects = [b for b in self.game.p1.buffs if b.buff_type != BUFF_TYPE_PASSIVE]
 		counts = {}
 		for effect in status_effects:
@@ -4701,7 +4718,7 @@ class PyGameView(object):
 		cur_x = 770
 		cur_y = 560
 
-		rect_w = self.font.size("继续游戏")[0]
+		rect_w = size0(self.font, "继续游戏")
 
 		opts = []
 		if can_continue_game():
@@ -4807,8 +4824,8 @@ class PyGameView(object):
 				("魔导师的试炼", GAME_MODE_TRIALS),
 				("每周挑战", GAME_MODE_WEEKLY)]
 
-		rect_w = self.font.size("魔导师的试炼")[0]
-		cur_x = self.screen.get_width() // 2 - (self.font.size("魔导师的试炼")[0] // 2)
+		rect_w = size0(self.font, "魔导师的试炼")
+		cur_x = self.screen.get_width() // 2 - (size0(self.font, "魔导师的试炼") // 2)
 		cur_y = self.screen.get_height() // 2 - self.linesize * 4
 
 		cur_color = (255, 255, 255)
@@ -4891,7 +4908,7 @@ class PyGameView(object):
 
 	def draw_pick_trial(self):
 
-		rect_w = max(self.font.size(trial.name)[0] for trial in all_trials)
+		rect_w = max(size0(self.font, trial.name) for trial in all_trials)
 		cur_x = self.screen.get_width() // 2 - rect_w // 2
 		cur_y = self.screen.get_height() // 2 - self.linesize * 4
 
@@ -4907,7 +4924,7 @@ class PyGameView(object):
 		if isinstance(self.examine_target, Trial):
 			desc = self.examine_target.get_description()
 			for line in desc.split('\n'):
-				cur_x = (self.screen.get_width() // 2) - (self.font.size(line)[0] // 2)
+				cur_x = (self.screen.get_width() // 2) - (size0(self.font, line) // 2)
 				self.draw_string(line, self.screen, cur_x, cur_y)
 				cur_y += self.linesize
 
@@ -4975,10 +4992,10 @@ class PyGameView(object):
 
 	def draw_options_menu(self):
 
-		cur_x = self.screen.get_width() // 2 - self.font.size("Sound Volume")[0]
+		cur_x = self.screen.get_width() // 2 - size0(self.font, "音效大小")
 		cur_y = self.screen.get_height() // 2 - self.linesize * OPTION_MAX
 
-		rect_w = self.font.size("动画速度：最快")[0]
+		rect_w = size0(self.font, "动画速度：最快")
 
 		self.draw_string("帮助", self.screen, cur_x, cur_y, mouse_content=OPTION_HELP, content_width=rect_w)
 		cur_y += self.linesize
@@ -5377,22 +5394,14 @@ class PyGameView(object):
 		if not os.path.exists(stats_filename):
 			# Occurs when cheating in debug
 			return
-		if self.game.level_cache:
-			lines = self.game.level_cache
-		else:
-			with open(stats_filename, 'r', encoding='utf-8') as statfile:
-				lines = [s.strip() for s in statfile.readlines()]
-				self.game.level_cache = lines
 
 		border_margin = self.border_margin
 		cur_x = border_margin
 		cur_y = border_margin
 		self.draw_panel(self.examine_display)
-		for i, line in enumerate(lines):
+		for i, line in enumerate(self.game.level_cache):
 			num_lines = self.draw_wrapped_string(line, self.examine_display, cur_x, cur_y, width=self.examine_display.get_width() - (self.border_margin*2), indent=True)
 			cur_y += num_lines * self.linesize
-			if i > 40:
-				break
 
 	def make_game_end_screenshot(self):
 
@@ -5474,8 +5483,8 @@ class PyGameView(object):
 					cur_y += self.linesize
 
 			else:
-				end_message = "DEFEATED"
-				self.draw_string(end_message, self.screen, self.screen.get_width() // 2 - (self.font.size(end_message)[0] // 2), self.screen.get_height() // 2 - 100)
+				end_message = "失败"
+				self.draw_string(end_message, self.screen, self.screen.get_width() // 2 - (size0(self.font, end_message) // 2), self.screen.get_height() // 2 - 100)
 
 
 	def run(self):

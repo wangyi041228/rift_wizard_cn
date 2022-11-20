@@ -1802,7 +1802,7 @@ class BallLightning(OrbSpell):
 		self.upgrades['num_targets'] = (2, 3)
 		self.upgrades['range'] = (5, 2)
 		self.upgrades['minion_damage'] = (10, 5)
-		self.upgrades['orb_walk'] = (1, 1, "Magnetic Pulse", "Targeting an existing lightning orb causes it to emit a magnetic pulse that pulls [construct] and [lightning] units in line of sight 3 tiles towards the orb.")
+		self.upgrades['orb_walk'] = (1, 1, "Magnetic Pulse", "指向另一个目标存在的闪电法球以发射磁脉冲，将视线内的所有 [construct] 和 [lightning] 单位向法球拉动 3 格。")
 
 	def get_description(self):
 		return ("在施法者旁召唤一个闪电法球。\n"
@@ -2234,7 +2234,7 @@ class EyeOfRageSpell(Spell):
 		self.upgrades['shot_cooldown'] = (-1, 1)
 		self.upgrades['duration'] = 15
 		self.upgrades['berserk_duration'] = 2
-		self.upgrades['lycanthrophy'] = (1, 5, "Lycanthropy", "当愤怒之眼以生命不超过 25 的 [living] 单位为目标时，立刻消灭该单位并将其复活为友方的狼人。该狼人 [berserke] 14 回合。")
+		self.upgrades['lycanthrophy'] = (1, 5, "Lycanthropy", "当愤怒之眼以生命不超过 25 的 [living] 单位为目标时，立刻消灭该单位并将其复活为友方的狼人。该狼人 [berserk] 14 回合。")
 
 		self.tags = [Tags.Nature, Tags.Enchantment, Tags.Eye]
 		self.level = 2
@@ -3332,11 +3332,11 @@ class Volcano(Spell):
 		self.upgrades['flow_range'] = (2, 3)
 		self.upgrades['requires_los'] = (-1, 2, "Blindcasting", "火山术施放无需视线。")
 		self.upgrades['damage'] = (24, 3)
-		self.upgrades['wall_cast']= (1, 4, "Wallcano", "除了裂隙，火山术也可以墙为目标。如此作会将墙变为裂隙。")
+		self.upgrades['wall_cast']= (1, 4, "Wallcano", "除了虚空，火山术也可以墙为目标。如此作会将墙变为虚空。")
 
 	def get_description(self):
-		return ("在裂隙中生成 [{radius}_格:radius] 冲程的岩浆。\n"
-				"岩浆从裂隙喷出至多 [{flow_range}_格:radius]。\n"
+		return ("在虚空中生成 [{radius}_格:radius] 冲程的岩浆。\n"
+				"岩浆从虚空喷出至多 [{flow_range}_格:radius]。\n"
 				"岩浆造成 [{damage}_点火焰:fire] 伤害。").format(**self.fmt_dict())
 
 	def get_chasm_points(self, caster, x, y):
@@ -3436,8 +3436,8 @@ class UnderworldPortal(Spell):
 		self.upgrades['max_charges'] = 3
 
 	def get_description(self):
-		return ("传送到裂隙旁的地块上。\n"
-				"只能在裂隙旁施放此咒语。")
+		return ("传送到虚空旁的地块上。\n"
+				"只能在虚空旁施放此咒语。")
 
 	def can_cast(self, x, y):
 
@@ -3650,7 +3650,7 @@ class ConjureMemories(Spell):
 		self.upgrades['max_charges'] = (1, 2)
 
 	def get_description(self):
-		return "你的每种 [conjuration] 咒语各获得一个充能。"
+		return "你的所有其他 [conjuration] 咒语各获得一个充能。"
 
 	def cast_instant(self, x, y):
 
@@ -4553,7 +4553,7 @@ class ArcLightning(Spell):
 
 		self.upgrades['num_targets'] = (3, 4)
 		self.upgrades['damage'] = (9, 4)
-		self.upgrades['cascade'] = (1, 5, "Echo Flash", "Secondary flashes dealing half damage and stunning for half duration are triggered at each initial arc target.")
+		self.upgrades['cascade'] = (1, 5, "Echo Flash", "每个初始电弧目标触发的第二个电束分别造成一半的伤害，击晕一半的持续回合。")
 
 	def get_description(self):
 		return ("闪电从目标地块向 [{num_targets}_个:num_targets] 可见敌人弧动。\n"
@@ -4698,7 +4698,7 @@ class SummonBlueLion(Spell):
 		self.upgrades['shield_max'] = (2, 4)
 		self.upgrades['shield_cooldown'] = (-1, 2)
 		self.upgrades['minion_damage'] = (9, 2)
-		self.upgrades['holy_bolt'] = (1, 4, "Holy Bolt", "蓝狮子的近战攻击替换为射程为 6 的神圣弹攻击。")
+		self.upgrades['holy_bolt'] = (1, 4, "Holy Bolt", "蓝色狮子的近战攻击替换为射程为 6 的神圣弹攻击。")
 
 		self.must_target_empty = True
 
@@ -4733,10 +4733,10 @@ class SummonBlueLion(Spell):
 
 
 	def get_description(self):
-		return ("召唤一个蓝狮子。\n"
-				"蓝狮子有 [{minion_health}_点生命:minion_health]、[50_点奥术:arcane] 抗性和 [50_点物理:physical] 抗性，可飞行。\n"			
-				"蓝狮子有一种咒语，给自身和其视线内所有友军 [1_点护盾:shield] ，上限为 [{shield_max}_点护盾:shield]，冷却 [{shield_cooldown}_回合:duration]。\n"
-				"蓝狮子的近战攻击造成 [{minion_damage}_点物理:physical] 伤害。").format(**self.fmt_dict())
+		return ("召唤一个蓝色狮子。\n"
+				"蓝色狮子有 [{minion_health}_点生命:minion_health]、[50_点奥术:arcane] 抗性和 [50_点物理:physical] 抗性，可飞行。\n"			
+				"蓝色狮子有一种咒语，给自身和其视线内所有友军 [1_点护盾:shield] ，上限为 [{shield_max}_点护盾:shield]，冷却 [{shield_cooldown}_回合:duration]。\n"
+				"蓝色狮子的近战攻击造成 [{minion_damage}_点物理:physical] 伤害。").format(**self.fmt_dict())
 
 
 class DeathCleaveBuff(Buff):
@@ -5833,10 +5833,10 @@ class SummonSeraphim(Spell):
 
 		self.upgrades['minion_damage'] = (10, 4)
 		self.upgrades['minion_duration'] = (14, 2)
-		self.upgrades['moonblade'] = (1, 3, "Moonblade", "The Seraph deals arcane damage in addition to fire and holy damage with its cleave attack.")
-		self.upgrades['essence'] = (1, 5, "Essence Aura", "The Seraph increases the duration of all temporary allies within 5 tiles by 1 each turn.", "aura")
-		self.upgrades['heal'] = (5, 2, "Heal Aura", "The Seraph heals all your other minions allies within 5 tiles for 5 HP each turn.", "aura")
-		self.upgrades['holy_fire'] = (1, 5, "Holy Fire Aura", "The Seraph gains a damage aura, randomly dealing either [2_点火焰:fire] or [2_点神圣:holy] damage to enemies within 5 tiles each turn.", "aura")
+		self.upgrades['moonblade'] = (1, 3, "Moonblade", "炽天使的分裂攻击除 [fire] 和 [holy] 伤害外还造成 [arcane] 伤害。")
+		self.upgrades['essence'] = (1, 5, "Essence Aura", "炽天使每回合增加 5 格内所有其他临时友军 1 个持续回合。", "aura")
+		self.upgrades['heal'] = (5, 2, "Heal Aura", "炽天使每回合治疗 5 格内的所有其他临时友军 5 点生命。", "aura")
+		self.upgrades['holy_fire'] = (1, 5, "Holy Fire Aura", "炽天使每回合对 5 格内所有敌人造成 [2_点火焰:fire] 或 [2_点神圣:holy] 伤害。", "aura")
 		self.level = 4
 
 		self.must_target_empty = True
@@ -7282,11 +7282,11 @@ class SummonFrostfireHydra(Spell):
 		self.must_target_empty = True
 
 	def get_description(self):
-		return ("召唤一个霜火九头龙。\n"
-				"九头龙有 [{minion_health}_点生命:minion_health]，固定不动。\n"
-				"九头龙的一种束状攻击造成 [{minion_damage}_点火焰:fire] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
-				"九头龙的一种束状攻击造成 [{minion_damage}_点寒冰:ice] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
-				"九头龙在 [{minion_duration}_回合:minion_duration] 后消失。").format(**self.fmt_dict())
+		return ("召唤一个霜火多头龙。\n"
+				"多头龙有 [{minion_health}_点生命:minion_health]，固定不动。\n"
+				"多头龙的一种束状攻击造成 [{minion_damage}_点火焰:fire] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
+				"多头龙的一种束状攻击造成 [{minion_damage}_点寒冰:ice] 伤害，射程为 [{minion_range}_格:minion_range]。\n"
+				"多头龙在 [{minion_duration}_回合:minion_duration] 后消失。").format(**self.fmt_dict())
 
 	def cast_instant(self, x, y):
 
@@ -7331,7 +7331,7 @@ class StormNova(Spell):
 		self.range = 0
 
 		self.upgrades['duration'] = (2, 3)
-		self.upgrades['clouds'] = (1, 2, "Cloud Nova", "The nova leaves storm clouds and blizzards behind")
+		self.upgrades['clouds'] = (1, 2, "Cloud Nova", "新星留下风暴云和暴风雪")
 		self.upgrades['radius'] = (2, 3)
 
 	def get_description(self):
@@ -8052,7 +8052,7 @@ class IceVortex(Spell):
 
 	def get_description(self):
 		return ("只能以被 [frozen] 的单位为目标。\n"
-				"把[{radius}_格:radius] 半径内的所有敌人拉向该单位，[frozen] [{duration}_回合:duration]，造成 [{damage}_点奥术:arcane] 和 [{damage}_点寒冰:ice] 伤害。").format(**self.fmt_dict())
+				"把 [{radius}_格:radius] 半径内的所有敌人拉向该单位，[frozen] [{duration}_回合:duration]，造成 [{damage}_点奥术:arcane] 和 [{damage}_点寒冰:ice] 伤害。").format(**self.fmt_dict())
 
 	def modify_test_level(self, level):
 		first_enemy = [u for u in level.units if u.team != TEAM_PLAYER][0]
@@ -8169,7 +8169,7 @@ class RestlessDead(Spell):
 		self.upgrades['duration'] = (15, 2)
 		self.upgrades['max_charges'] = (2, 2)
 
-		self.upgrades['salvage'] = (1, 3, "Junk Golems", "每当敌方的 [constructs] 死亡时，将其复活为废料魔像。")
+		self.upgrades['salvage'] = (1, 3, "Junk Golems", "每当敌方的 [construct] 死亡时，将其复活为废料魔像。")
 		self.upgrades['spirit_catcher'] = (1, 5, "Elemental Spirits", "每当敌方的 [fire]、[ice] 或 [lightning] 单位死亡时，随机一个召唤的友军获得 100 点该元素抗性，可进行该元素的远程攻击。每个友军只能获得一个此增益。")
 
 	def get_description(self):
@@ -8202,7 +8202,7 @@ class GustOfWind(Spell):
 
 	def get_description(self):
 		return ("将 [{force}:range] 格锥形范围的单位推走。\n"
-				"若单位与墙、裂隙或其他单位碰撞，该单位被 [stunned] [{duration}_回合:duration]，受到 [{damage}_点物理:physical] 伤害。\n"
+				"若单位与墙、虚空或其他单位碰撞，该单位被 [stunned] [{duration}_回合:duration]，受到 [{damage}_点物理:physical] 伤害。\n"
 				"固定不动的敌人不受影响。\n"
 				"摧毁范围内的风暴云和蛛网。\n").format(**self.fmt_dict())
 
@@ -8638,7 +8638,7 @@ class SummonSiegeGolemsSpell(Spell):
 		return ("召唤 [{num_summons}:num_summons] 个攻城魔像。\n"
 				"攻城魔像会组装地狱火炮，若 [3_格:range] 内有则会操作之。\n"
 				"地狱火炮在 [{radius}_格:radius] 半径内造成 [{minion_damage}_点火焰:fire] 伤害。\n"
-				"地狱火炮被摧毁时会爆炸，在 [3_格:radius] 半径的单位造成其生命上限四分之一的 [fire] 伤害。（ [{minion_damage}_点火焰:fire] ？ ）\n".format(**self.fmt_dict()))
+				"地狱火炮被摧毁时会爆炸，在 [1_格:radius] 半径的单位造成 [{minion_damage}_点火焰:fire]。".format(**self.fmt_dict()))
 
 	def cannon(self):
 		unit = Unit()
@@ -8745,8 +8745,8 @@ class LightningSpire(Spell):
 		self.upgrades['minion_damage'] = (4, 3)
 		self.upgrades['num_targets'] = (3, 2)
 		self.upgrades['radius'] = (2, 4)
-		self.upgrades['blindcasting'] = (1, 5, "Wall Penetration", "The spires can zap enemies through walls.")
-		self.upgrades['resistance_debuff'] = (1, 5, "Resistance Penetration", "Zapped units permenantly lose 10 [lightning] resistance.")
+		self.upgrades['blindcasting'] = (1, 5, "Wall Penetration", "尖塔可穿墙劈中敌人。")
+		self.upgrades['resistance_debuff'] = (1, 5, "Resistance Penetration", "被劈中的单位永久失去 10 点 [lightning] 抗性。")
 
 
 		self.must_target_empty = True

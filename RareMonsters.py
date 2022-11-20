@@ -1304,7 +1304,7 @@ class BeckonDragons(Spell):
 
 	def on_init(self):
 		self.name = "Beckon Dragons"
-		self.description = "从裂隙随机召唤两个巨龙"
+		self.description = "在虚空处随机召唤两个巨龙"
 		self.cool_down = 22
 		self.range = 0
 

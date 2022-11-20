@@ -139,7 +139,7 @@ class SimpleRangedAttack(Spell):
 			desc += "施加 %s %d 回合\n" % (loc.dic.get(self.buff_name, self.buff_name), self.buff_duration)
 
 		if self.siege:
-			desc += "生命全满才能发射。\n发射时失去一半的生命上限。"
+			desc += "生命全满才能发射。\n发射时失去生命上限一半的生命。"
 
 		if self.drain:
 			desc += "治疗施法者伤害量的生命"
@@ -1488,7 +1488,7 @@ class DeathExplosion(Buff):
 
 	def __init__(self, damage, radius, damage_type):
 		Buff.__init__(self)
-		self.description = "死亡时，队 %d 格内的所有地块造成 %d 点%s伤害" % (radius, damage, loc.dic.get(damage_type.name, damage_type.name), )
+		self.description = "死亡时，对 %d 格内的所有地块造成 %d 点%s伤害" % (radius, damage, loc.dic.get(damage_type.name, damage_type.name), )
 		self.damage = damage
 		self.damage_type = damage_type
 		self.radius = radius

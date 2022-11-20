@@ -33,7 +33,7 @@ def continue_game(filename=None):
 	if filename and os.path.exists(filename):
 		with open(filename, 'rb') as savefile:
 			game = pickle.load(savefile)
-			
+
 			if getattr(game, 'build_compat_num', 0) != BUILD_NUM:
 				raise Exception("Error: Incompatible save file.")
 			game.on_loaded(filename)
@@ -85,10 +85,10 @@ class Game():
 		# Ideally pickle would not crash but this way atleast we retain a usable save file and can try to repro the bug
 		if main_save:
 			main_filename = os.path.join('saves', str(self.run_number), 'game.dat')
-			
+
 			if os.path.exists(main_filename):
 				os.remove(main_filename)
-			
+
 			os.rename(filename, main_filename)
 
 	def write_stats(self):
@@ -113,12 +113,12 @@ class Game():
 			os.mkdir('saves')
 			return 1
 
-	def on_loaded(self, filename):		
+	def on_loaded(self, filename):
 		# Infer logdir and run number from filename
 		self.logdir = os.path.join(os.path.dirname(filename), 'log')
 		if not os.path.exists(self.logdir):
 			os.mkdir(self.logdir)
-		
+
 		self.run_number = safe_int(os.path.split(os.path.dirname(filename))[1])
 
 		self.cur_level.setup_logging(logdir=self.logdir, level_num=self.level_num)
@@ -136,73 +136,71 @@ class Game():
 	def finalize_level(self, victory):
 		filename = os.path.join('saves', str(self.run_number), 'stats.level_%d.txt' % self.level_num)
 		self.total_turns += self.cur_level.turn_no
-
 		dirname = os.path.dirname(filename)
 		if not os.path.exists(dirname):
 			os.makedirs(dirname)
-
 		with open(filename, 'w', encoding='utf-8') as stats:
-			stats.write("第 %d 关\n" % self.level_num)
+			self.level_cache = ["第 %d 关" % self.level_num]
 			if self.trial_name:
-				stats.write(self.trial_name + "\n")
-			stats.write("结果：%s\n" % ("胜利" if victory else "失败"))
-			stats.write("\n回合数：\n")
-			stats.write("%d（本关）\n" % self.cur_level.turn_no)
-			stats.write("%d（全部）\n" % self.total_turns)
+				self.level_cache.append(self.trial_name)
+			self.level_cache.append("结果：%s" % ("胜利" if victory else "失败"))
+			self.level_cache.append('')
+			self.level_cache.append('回合数：')
+			self.level_cache.append("%d（本关）\n" % self.cur_level.turn_no)
+			self.level_cache.append("%d（全部）\n" % self.total_turns)
 
 			counts = sorted(self.cur_level.spell_counts.items(), key=lambda t: -t[1])
-
 			spell_counts = [(s, c) for (s, c) in counts if not s.item]
 			if spell_counts:
-				stats.write("\n施放咒语：\n")
+				self.level_cache.append('')
+				self.level_cache.append('施放咒语：')
 				for s, c in spell_counts:
-					_name = loc.dic.get(s.name, s.name)
-					stats.write("%s：%d\n" % (_name, c))
+					self.level_cache.append("%s：%d\n" % (loc.dic.get(s.name, s.name), c))
 
 			dealers = sorted(self.cur_level.damage_dealt_sources.items(), key=lambda t: -t[1])
 			if dealers:
-				stats.write("\n对敌伤害：\n")
+				self.level_cache.append('')
+				self.level_cache.append('对敌伤害：')
 				for s, d in dealers[:5]:
-					_name = loc.dic.get(s, s)
-					stats.write("%d %s\n" % (d, _name))
+					self.level_cache.append("%d %s\n" % (d, loc.dic.get(s, s)))
 				if len(dealers) > 6:
 					total_other = sum(d for s,d in dealers[5:])
-					stats.write("%d 其他\n" % total_other)
+					self.level_cache.append("%d 其他\n" % total_other)
 
 			sources = sorted(self.cur_level.damage_taken_sources.items(), key=lambda t: -t[1])
 			if sources:
-				stats.write("\n受到伤害：\n")
+				self.level_cache.append('')
+				self.level_cache.append('受到伤害：')
 				for s, d in sources[:5]:
-					_name = loc.dic.get(s, s)
-					stats.write("%d %s\n" % (d, _name))
+					self.level_cache.append("%d %s\n" % (d, loc.dic.get(s, s)))
 				if len(sources) > 6:
 					total_other = sum(d for s,d in sources[5:])
-					stats.write("%d 其他\n" % total_other)
+					self.level_cache.append("%d 其他\n" % total_other)
 
 			item_counts = [(s, c) for (s, c) in counts if s.item]
 			if item_counts:
-				stats.write("\n使用物品：\n")
+				self.level_cache.append('')
+				self.level_cache.append('使用物品：')
 				for s, c in item_counts:
-					_name = loc.dic.get(s.name, s.name)
-					stats.write("%s：%d\n" % (_name, c))
+					self.level_cache.append("%s：%d\n" % (loc.dic.get(s.name, s.name), c))
 
 			if self.recent_upgrades:
-				stats.write("\n习得技能：\n")
+				self.level_cache.append('')
+				self.level_cache.append('习得技能：')
 				for u in self.recent_upgrades:
 					fmt = loc.dic.get(u.name, u.name)
 					if getattr(u, 'prereq', None):
-						_name1 = loc.dic.get(u.prereq.name, u.prereq.name)
-						fmt = "%s：%s" % (_name1, fmt)
-					stats.write("%s\n" % fmt)
+						fmt = "%s：%s" % (loc.dic.get(u.prereq.name, u.prereq.name), fmt)
+					self.level_cache.append(fmt)
 			self.recent_upgrades.clear()
-		self.level_cache = None
+			print('\n'.join(self.level_cache), file=stats)
 
 	# For the consumer of the Game object
 	def __init__(self, generate_level=True, save_enabled=False, mutators=None, trial_name=None, seed=None):
 
 		self.build_compat_num = BUILD_NUM
 		self.seed = seed
-		self.level_cache = None
+		self.level_cache = []
 		if self.seed:
 			random.seed(self.seed)
 		else:
@@ -328,7 +326,7 @@ class Game():
 	def try_move(self, xdir, ydir):
 		if not self.cur_level.is_awaiting_input:
 			return False
-		
+
 		new_x = self.p1.x + xdir
 		new_y = self.p1.y + ydir
 
@@ -403,13 +401,13 @@ class Game():
 		level = upgrade.level
 		if level == 0:
 			return 0
-			
+
 		if self.p1.discount_tag in upgrade.tags:
 			level = level - 1
-		
+
 		level -= self.p1.scroll_discounts.get(upgrade.name, 0)
 		level = max(level, 1)
-		return level		
+		return level
 
 	def buy_upgrade(self, upgrade):
 		self.p1.xp -= self.get_upgrade_cost(upgrade)
@@ -419,7 +417,7 @@ class Game():
 			self.p1.add_spell(upgrade)
 
 	def get_upgrade_distance(self, upgrade):
-		
+
 		# To buy an upgrade of level n you need n-1 upgrades sharing tags
 		level_needed = upgrade.level - 1
 		level_posessed = 0
@@ -469,13 +467,13 @@ class Game():
 			pr = cProfile.Profile()
 
 			start = time.time()
-			
+
 			pr.enable()
 
 		advanced = self.cur_level.advance()
 		if not self.cur_level.active_spells:
 			self.check_triggers()
-		
+
 		if "profile" in sys.argv:
 			pr.disable()
 
@@ -487,16 +485,16 @@ class Game():
 				stats.sort_stats("cumtime")
 				stats.dump_stats("profile.stats")
 				stats.print_stats()
-		
+
 			print("frame time ms: %f" % (frame_time * 1000))
 
 	# Check if we should respond to something that happened in the current level
 	def check_triggers(self):
 		if self.cur_level.cur_portal and not self.deploying:
 			self.enter_portal()
-		
+
 		if all([u.team == TEAM_PLAYER for u in self.cur_level.units]):
-				
+
 			if not self.has_granted_xp:
 				#self.p1.xp += 3
 				self.has_granted_xp = True
@@ -519,12 +517,12 @@ class Game():
 
 		if self.next_level:
 			return True
-		
+
 		return self.cur_level.is_awaiting_input
 
 	# Internal stuff
 	def enter_portal(self):
-		
+
 		if self.generate_level:
 			if not self.cur_level.cur_portal.next_level:
 				self.cur_level.cur_portal.next_level = self.cur_level.cur_portal.level_gen_params.make_level()
@@ -553,7 +551,7 @@ class Game():
 
 		self.level_num += 1
 		self.has_granted_xp = False
-		
+
 		self.cur_level.setup_logging(logdir=self.logdir, level_num=self.level_num)
 
 		import gc
